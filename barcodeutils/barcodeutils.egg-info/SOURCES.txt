@@ -1,0 +1,9 @@
+README.md
+setup.py
+barcodeutils/__init__.py
+barcodeutils/barcodeutils.py
+barcodeutils.egg-info/PKG-INFO
+barcodeutils.egg-info/SOURCES.txt
+barcodeutils.egg-info/dependency_links.txt
+barcodeutils.egg-info/not-zip-safe
+barcodeutils.egg-info/top_level.txt
