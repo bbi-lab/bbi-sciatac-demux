@@ -174,7 +174,7 @@ def read_samplesheet( samplesheet_file ):
     for row in csv_reader:
       if( len( row[0] ) == 0 ):
         break
-//      print( '%s -> %s    %s -> %s  %s' % ( row[0], n7_well_to_index[row[0]], row[0], n5_well_to_index[row[0]], row[1] ) )
+#      print( '%s -> %s    %s -> %s  %s' % ( row[0], n7_well_to_index[row[0]], row[0], n5_well_to_index[row[0]], row[1] ) )
       well_samples.append( row[1] )
       well_genomes.append( row[2] )
       well_n7_indices.append( n7_well_to_index[row[0]] )

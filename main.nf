@@ -7,14 +7,14 @@
 ** Run in grid qlogin shell with at least 10G of memory (Andrew's allocation for barcode correction)
 ** Notes:
 **   o  save intermediate files option?
-**   o  think about how to deal with python and pypy virtual environments
-**   o  I have second thoughts about building a writing the args_json file in groovy. I
-**      wonder about re-structuring this script:
-**        o  continue to test for Illumina run_dir and the sample sheet file using groovy (in the main script body, as it is now)
-**        o  read the Illumina run_info and the sample sheet information, construct a json data structure, and save it in demux_dir
-**           as args.json using a python script run in a NextFlow process.
-**        o  read the args.json file and store the value 'illuminaRunInfoMap['reverse_complement_i5']' so that it
-**           is accessible where required...I am not confident that I can do this easily...try a test script
+**   o  think about how to deal with python and pypy virtual environment
+**   o  consider writing a script that builds files required for the run
+**      and sets up the output/run directory. Files created for run
+**
+**        o  samplesheet
+**        o  nextflow parameters file
+**        o  nextflow configuration file
+**        o  bash script to run this Nextflow script
 **      
 ** Suggested command line parameters to use when running this script
 **   nextflow run main.nf -w <work_dirname> -with-report <report_filename> -with-trace <trace_filename> -with-timeline <timeline_filename>
@@ -31,6 +31,7 @@ def script_dir="${pipeline_path}/src"
 
 /*
 ** Set errorStrategy directive policy.
+**
 ** Allowed values:
 **   "terminate"  (default NextFlow policy)
 **   "finish"
@@ -135,7 +136,8 @@ if( params.num_well == 384 ) {
 }
 
 /*
-** Use well ids as read names.
+** Use well ids as read names. This is required for downstream
+** quality control evaluation.
 */
 options_barcode_correct += ' --well_ids'
 
@@ -159,16 +161,11 @@ if( num_threads_bcl2fasta_process / 2 < 4 ) {
 
 /*
 ** Run bcl2fastq to make fastq files from Illumina bcl files.
-** input channels:
-**    sample_sheet
-** output channels:
-**    bcl2fastq_output
-**    fastqs_bcl2fastq
-**    fakes (optional channel)
 **
 ** Notes:
 **   o  copy 'Reports' and 'Stats' directories to an accessible directory.
 **   o  bcl2fastq/2.16 appears to be a special version. (bcl2fastq/2.20 does not write the required barcodes to sequence headers)
+**      I understand that the more recent bcl2fastq programs required a sample sheet with Ns as sequences.
 */
 Channel
     .fromList( [ "${sample_sheet_phantom}" ] )
@@ -184,12 +181,16 @@ process bcl2fastq {
   module 'mpfr/3.1.0:mpc/0.8.2:gmp/5.0.2:gcc/4.9.1:bcl2fastq/2.16'
 //  note: bge: the following publishDir statement is commented out in bbi_dmux. I want it to work for diagnostics during development.
   publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Undetermined_S0_*.fastq.gz", mode: 'copy'
+  publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Stats/*", mode: 'copy'
+  publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Reports/*", mode: 'copy'
 
   input:
     val inPhantom from bcl2fastqInChannel
 
   output:
-    set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into fastqs_bcl2fastq mode flatten
+    set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into bcl2fastq_fastqs mode flatten
+    set file("Stats/*") into  bcl2fastq_stats
+    set file("Reports/*") into bcl2fastq_reports
 
     /*
     ** Notes from bcl2fastq manual:
@@ -225,26 +226,18 @@ process bcl2fastq {
 
 /*
 ** Run bar code correction script (barcode_correct_sciatac.py).
-**  input channels:
-**    fastqs_bcl2fastq channel from bcl2fastq
-**  output channels:
-**    fastqs_barcode
-**    json_stats_barcode
 **
 ** Notes:
 **   o  need to activate pypy environment and then deactivate when done
 **   o  copy 'out.*.correction_stats.json' to an accessible directory
-**   o  sci-RNA-seq fastq files after splitting by sample have names like
-**        Barnyard-L004.fastq.gz
-**        CD19-L001.fastq.gz
-**      that is, <sample_name>.<lane id>.fastq.gz
-**      in addition, there are files with the names like
-**        Undetermined-L001.fastq.gz
 **   o  I suspect that splitting fastq files and combining them uses more
-**      time than one saves by distributing the barcode correction
+**      time than one saves by distributing the barcode correction. I base
+**      this on the observation that the file compressions takes about the
+**      same amount of time as the barcode correction. I assume that the
+**      two scale similarly with file size.
 **   o  barcode_correct_sciatac.py uses pigz to compress fastq files. pigz is
 **      supposed to use all available processors to compress files.
-**   o  the barcode_stats_json and barcode_counts_csv channels are dummy
+**   o  the barcode_stats_json and barcode_counts_csv output channels are dummy
 **      channels. It appears that the files do not get copied by the publishDir
 **      directive if these files are not in a channel.
 */
@@ -253,16 +246,18 @@ process barcode_correct {
   errorStrategy onError
   memory "16 GB"
   module 'java/latest:modules:modules-init:modules-gs:zlib/1.2.6:pigz/latest'
-  publishDir    path: "${params.demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*", mode: 'copy'
+  publishDir    path: "${params.demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*.fastq.gz", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.stats.json", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.barcode_counts.csv", mode: 'copy'
   
   input:
-    // set file(R1), file(R2) from fastqs_bcl2fastq.splitFastq(by: params.fastq_chunk_size, file: true, pe: true)
-    set file(R1), file(R2) from fastqs_bcl2fastq
+    // set file(R1), file(R2) from bcl2fastq_fastqs.splitFastq(by: params.fastq_chunk_size, file: true, pe: true)
+    set file(R1), file(R2) from bcl2fastq_fastqs
     
   output:
-    file "*.fastq.gz" into fastqs_barcode mode flatten
-    file "*.stats.json" into barcode_stats_json mode flatten
+    file "*.fastq.gz" into barcode_fastqs mode flatten
     file "*.barcode_counts.csv" into barcode_counts_csv mode flatten
+    file "*.stats.json" into barcode_stats_json mode flatten
 
   script:
   """
@@ -279,6 +274,7 @@ process barcode_correct {
                        --stats_out 1 \
                        $options_barcode_correct \
                        $sequencer_flag
+  deactivate
   """
 }
 
@@ -287,19 +283,15 @@ process barcode_correct {
 ** Trimmomatic processes read pairs using separate
 ** input/output files for reads 1 and 2.
 */
-get_prefix_fastqs_barcode = { file -> (file - ~/_R[12]\.fastq\.gz/) }
+get_prefix_barcode_fastqs = { file -> (file - ~/_R[12]\.fastq\.gz/) }
 
-fastqs_barcode
-  .map { file -> tuple( get_prefix_fastqs_barcode(file.name), file) }
+barcode_fastqs
+  .map { file -> tuple( get_prefix_barcode_fastqs(file.name), file) }
   .groupTuple()
-  .set { fastqs_barcode_paired }
+  .set { barcode_fastqs_paired }
 
 /*
 ** Run adapter trimming script.
-**  input channels:
-**     fastqs_barcode_paired
-**  output channels:
-**     fastqs_trim
 */
 def num_threads_trimmomatic = 4
 def mem_trimmomatic = 4.0 / num_threads_trimmomatic
@@ -315,12 +307,11 @@ process adapter_trimming {
   publishDir path: "$params.demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
   
   input:
-    set prefix, file(read_pair) from fastqs_barcode_paired
+  set prefix, file(read_pair) from barcode_fastqs_paired
   
   output:
-    set file("*_R1.trimmed.fastq.gz"), file("*_R2.trimmed.fastq.gz"), file("*_R1.trimmed_unpaired.fastq.gz"), file("*_R2.trimmed_unpaired.fastq.gz") into fastqs_trim
-    // stats files too
-
+  set file("*_R1.trimmed.fastq.gz"), file("*_R2.trimmed.fastq.gz"), file("*_R1.trimmed_unpaired.fastq.gz"), file("*_R2.trimmed_unpaired.fastq.gz") into fastqs_trim
+  
   script:
   """
   mkdir -p fastqs_trim
