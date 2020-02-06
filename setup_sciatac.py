@@ -5,7 +5,7 @@ import os
 
 nextflowExe = '/net/gs/vol1/home/bge/bin/nextflow'
 demuxNextflowScript = '/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux/main.nf'
-analyzeNextflowScript = '/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux/main.nf'
+analyzeNextflowScript = '/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-analyze/main.nf'
 
 #
 # TODO
