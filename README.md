@@ -58,6 +58,12 @@ The bbi-sciatac-demux repository includes a script called setup_sciatac.py, whic
 * Grid engine cluster options (optional)
 * Genomes JSON file
 
+Additionally, you will need to set the following values in the script
+
+* nextflowExe, the path to the Nextflow executable,
+* demuxNextflowScript, the path to the demux Nextflow script, which is called main.nf,
+* analyzeNextflowScript, the path to the analyze Nextflow script, which is called main.nf.
+
 #### Samplesheet file
 The samplesheet is a tab-delimited file with the format:
 
