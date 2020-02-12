@@ -74,7 +74,7 @@ valuesInit = { 'procDir'             : { 'index' : 0,
                                          'type' : 'string',
                                          'prompt' : 'Nextflow parameters filename',
                                          'optional' : 0,
-                                         'default' : 'nf.params.config',
+                                         'default' : 'params.config',
                                          'value' : None },
                'numCpu'              : { 'index' : 10,
                                          'type' : 'int',
@@ -204,7 +204,6 @@ def writeNextflowConfigFile( values ):
         s += 'process.queue = \"%s\"\n' % ( values['queue']['value'] )
     if( values['clusterOptions']['value'] != '' ):
         s += 'process.clusterOptions = \"%s\"\n' % ( values['clusterOptions']['value'] )
-
     fn = values['demuxDir']['value'] + '/nextflow.config'
     fp = open( fn, 'w+' )
     print( '%s' % ( s ), file=fp )          

@@ -10,6 +10,7 @@
 
 import sys
 import csv
+import re
 
 genomes_map = {
  'Human': 'hg19',
@@ -280,6 +281,11 @@ def make_pcr_ranges( pcr_rows, pcr_cols ):
   return( pcr_ranges_str )
 
 
+def sanitizeSamplename( inSamplename ):
+  outSamplename = re.sub( '[^a-zA-Z0-9_.]', '', inSamplename )
+  return( outSampleName )
+
+
 samplesheet_file = sys.argv[1]
 
 pcr_rows = sys.argv[2]
@@ -368,6 +374,6 @@ for sample in samples:
     n5_ranges_str += n5_ranges[i]
 #  print( 'n5 ranges: %s' % ( n5_ranges_str ) )
 
-  print( '%s\t%s:%s:%s\t%s' % ( sample, n7_ranges_str, pcr_ranges_str, n5_ranges_str, genomes_map[genomes_dict[sample]] ) ) 
+  print( '%s\t%s:%s:%s\t%s' % ( sanitizeSamplename( sample ), n7_ranges_str, pcr_ranges_str, n5_ranges_str, genomes_map[genomes_dict[sample]] ) ) 
 
 

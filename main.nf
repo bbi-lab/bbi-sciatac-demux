@@ -437,8 +437,8 @@ def checkSamplesheet( params ) {
     **   o  check sample sheet file content
     */
     def fhSampleSheet = new File( params.sample_sheet )
-    assert fhSampleSheet.exists() : "unable to find sample sheet file $sample_sheet"
-    assert fhSampleSheet.canRead() : "unable to read file sample sheet $sample_sheet"
+    assert fhSampleSheet.exists() : "unable to find sample sheet file ${params.sample_sheet}"
+    assert fhSampleSheet.canRead() : "unable to read file sample sheet ${params.sample_sheet}"
 }
 
 
@@ -482,15 +482,16 @@ def writeArgsJson( params ) {
     mapRunInfo.put( "run_date", today )
 
     /*
-    ** Add run parameters.
+    ** Add demux run parameters.
     */
-    mapRunInfo.put( "rundir", params.run_dir )
-    mapRunInfo.put( "outdir", params.demux_dir )
-    mapRunInfo.put( "samplesheet", params.sample_sheet )
-    mapRunInfo.put( "numwells", params.num_well )
-    mapRunInfo.put( "level", params.level )
-    mapRunInfo.put( "maxcores", params.max_cores )
-    mapRunInfo.put( "maxmembcl2fastq", params.max_mem_bcl2fastq )
+    demuxDict = [:]
+    demuxDict['run_dir'] = params.run_dir
+    demuxDict['demux_dir'] = params.demux_dir
+    demuxDict['sample_sheet'] = params.sample_sheet
+    demuxDict['num_well'] = params.num_well
+    demuxDict['level'] = params.level
+    demuxDict['params.max_cores'] = params.params.max_cores
+    demuxDict['max_mem_bcl2fastq'] = params.max_mem_bcl2fastq
 
     /*
     ** Add sample sheet information.
@@ -505,8 +506,9 @@ def writeArgsJson( params ) {
             genomeInfo.put( sample, genome )
         }
      }
-     mapRunInfo.put( "samples", samples )
-     mapRunInfo.put( "genomes", genomeInfo )
+     mapRunInfo['DEMUX'] = demuxDict
+     mapRunInfo['samples'] = samples
+     mapRunInfo['genomes'] = genomeInfo
 
     /*
     ** Add Illumina sequencing run parameters.
