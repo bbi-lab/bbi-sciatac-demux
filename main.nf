@@ -479,18 +479,18 @@ def writeArgsJson( params ) {
     ** Run date/time.
     */
     def today = new Date()
-    mapRunInfo.put( "run_date", today )
 
     /*
     ** Add demux run parameters.
     */
     demuxDict = [:]
+    demuxDict['run_date'] = today
     demuxDict['run_dir'] = params.run_dir
     demuxDict['demux_dir'] = params.demux_dir
     demuxDict['sample_sheet'] = params.sample_sheet
     demuxDict['num_well'] = params.num_well
     demuxDict['level'] = params.level
-    demuxDict['params.max_cores'] = params.params.max_cores
+    demuxDict['params.max_cores'] = params.max_cores
     demuxDict['max_mem_bcl2fastq'] = params.max_mem_bcl2fastq
 
     /*
