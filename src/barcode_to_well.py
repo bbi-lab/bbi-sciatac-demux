@@ -57,6 +57,24 @@ def get_well_id(i, row_ordered, nrow, ncol, zero_pad_col, id_length):
     return well_id
 
 
+# Convert index i to well in one of four 96 well plates with the form
+# P<plate id>-<row><col>
+def get_well_id_384_to_96(i384, row_ordered, zero_pad_col, id_length):
+    nrow = 8
+    ncol = 12
+    ipl = int( i384 / 96 )
+    i96 = i384 - ipl * 96
+    if row_ordered:
+        well_row = chr(65 + int(i96 / ncol))
+        well_col = (i96 % ncol) + 1
+    else:
+        well_row = chr(65 + (i96 % nrow))
+        well_col = int(i96 / nrow) + 1
+
+    well_id = 'P%d-%s%s' % (ipl + 1, well_row, pad_well_col(well_col, zero_pad_col, id_length))
+    return well_id
+
+
 def get_well_dict(index_set, row_ordered=True, zero_pad_col=True):
     """
     Transforms an set of indices into a well dict.
@@ -77,6 +95,30 @@ def get_well_dict(index_set, row_ordered=True, zero_pad_col=True):
     
     for i,element in enumerate(index_set):
         well_id = get_well_id(i, row_ordered, nrow, ncol, zero_pad_col, id_length)
+        mapping[element] = well_id
+
+    return mapping
+
+
+def get_well_dict_384_to_96(index_set, row_ordered=True, zero_pad_col=True):
+    """
+    Transforms an set of indices into a well dict.
+
+    Args:
+        index_set: list of all indices
+        row_ordered (bool): true if these indices are row ordered and false if column ordered
+        zero_pad_col (bool):  true if you want A01 vs. A1 for example
+
+    Returns:
+        dict: dict elements in the index set to a well.
+
+    """
+    # id_length = len(str(len(index_set)))
+    id_length = 2
+    mapping = dict()
+
+    for i,element in enumerate(index_set):
+        well_id = get_well_id_384_to_96(i, row_ordered, zero_pad_col, id_length)
         mapping[element] = well_id
 
     return mapping
@@ -126,7 +168,7 @@ def get_pcr_plate_dict(p5_pcr_plate, p7_pcr_plate, zero_pad_col=True):
             row_col_layout_mapping_final = {}
             for k,v in row_col_layout_mapping.items():
                 k_p5, k_p7 = k
-                row_col_string = '_row%s_col%s' % (p7_plate_map[k_p7], p5_plate_map[k_p5])
+                row_col_string = '-row%s-col%s' % (p7_plate_map[k_p7], p5_plate_map[k_p5])
                 row_col_layout_mapping_final[k] = '%s%s' % (v, row_col_string)
 
             full_layout_mapping = merge_dicts(full_layout_mapping, row_col_layout_mapping_final)
@@ -141,7 +183,7 @@ def get_two_level_barcode_string(tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, ta
         tagmentation_well_string = tagmentation_to_well[(tagmentation_i5_seq, tagmentation_i7_seq)]
         pcr_well_string = pcr_to_well[(pcr_i5_seq, pcr_i7_seq)]
         outputs = [tagmentation_well_string, pcr_well_string]
-        barcodes_string = '-'.join(outputs)
+        barcodes_string = '_'.join(outputs)
     else:
         outputs = [tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq]
         barcodes_string = ''.join(outputs)
@@ -157,7 +199,7 @@ def get_barcode_string(tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation
         pcr_well_string = pcr_to_well[(pcr_i5_seq, pcr_i7_seq)]
         tag_n5_string = tagmentation_i5_to_well[tagmentation_i5_seq]
         outputs = [tag_n7_string, tag_n5_string, pcr_well_string]
-        barcodes_string = '-'.join(outputs)
+        barcodes_string = '_'.join(outputs)
     else:
         outputs = [tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq]
         barcodes_string = ''.join(outputs)

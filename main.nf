@@ -189,8 +189,8 @@ process bcl2fastq {
 
   output:
     set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into bcl2fastq_fastqs mode flatten
-    set file("Stats/*") into  bcl2fastq_stats
-    set file("Reports/*") into bcl2fastq_reports
+    file("Stats/*") into  bcl2fastq_stats
+    file("Reports/*") into bcl2fastq_reports
 
     /*
     ** Notes from bcl2fastq manual:
@@ -394,6 +394,8 @@ def reportRunParams( params ) {
     s += String.format( "--------------\n" )
     s += String.format( "Sequencing data directory:     %s\n", params.run_dir )
     s += String.format( "Processing output directory:   %s\n", params.demux_dir )
+    s += String.format( "Launch directory:              %s\n", workflow.launchDir )
+    s += String.format( "Work directory:                %s\n", workflow.workDir )
     s += String.format( "Combinatorial levels:          %d\n", params.level )
     s += String.format( "Sample sheet file:             %s\n", params.sample_sheet )
     s += String.format( "Maximum cores:                 %d\n", params.max_cores )
