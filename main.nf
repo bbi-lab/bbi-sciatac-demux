@@ -21,6 +21,13 @@
 */
 
 import groovy.json.JsonOutput
+import java.nio.file.Files
+
+
+/*
+** Run date/time.
+*/
+def timeNow = new Date()
 
 /*
 ** Where to find scripts.
@@ -100,6 +107,11 @@ assert ( ( params.level == 2 && params.num_well == 96 ) || ( params.level == 3 &
 reportRunParams( params )
 
 /*
+** Archive configuration and samplesheet files in demux_dir.
+*/
+archiveRunFiles( params, timeNow )
+
+/*
 ** Check that required directories exist or can be made.
 */
 checkDirectories( params )
@@ -117,7 +129,7 @@ illuminaRunInfoMap = readIlluminaRunInfo( params )
 /*
 ** Write run information to args.json file.
 */
-writeArgsJson( params )
+writeArgsJson( params, timeNow )
 
 /*
 ** Does the i5 sequence require reverse complementing?
@@ -444,6 +456,22 @@ def checkSamplesheet( params ) {
 }
 
 
+def archiveRunFiles( params, timeNow )
+{
+  file_suffix = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
+  def src = params.sample_sheet
+  def dst = "${params.demux_dir}/${params.sample_sheet}.${file_suffix}"
+  Files.copy( src, dst )
+  def i = 1
+  workflow.configFiles.each { aFile ->
+    src = aFile
+    dst = "${aFile.getName()}.${file_suffix}.${i}"
+    Files.copy( src, dst )
+    i += 1
+  }
+}
+
+
 def readIlluminaRunInfo( params ) {
     def command = "/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux/src/run_info_read.py ${params.run_dir}"
     def strOut = new StringBuffer()
@@ -465,7 +493,7 @@ def readIlluminaRunInfo( params ) {
 }
 
 
-def writeArgsJson( params ) {
+def writeArgsJson( params, timeNow ) {
     def i
     
     /*
@@ -478,15 +506,10 @@ def writeArgsJson( params ) {
     def mapRunInfo = [:]
     
     /*
-    ** Run date/time.
-    */
-    def today = new Date()
-
-    /*
     ** Add demux run parameters.
     */
     demuxDict = [:]
-    demuxDict['run_date'] = today
+    demuxDict['run_date'] = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
     demuxDict['run_dir'] = params.run_dir
     demuxDict['demux_dir'] = params.demux_dir
     demuxDict['sample_sheet'] = params.sample_sheet
