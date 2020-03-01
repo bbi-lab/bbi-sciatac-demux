@@ -22,7 +22,8 @@
 
 import groovy.json.JsonOutput
 import java.nio.file.Files
-
+import java.nio.file.Path 
+import java.nio.file.Paths
 
 /*
 ** Run date/time.
@@ -459,13 +460,14 @@ def checkSamplesheet( params ) {
 def archiveRunFiles( params, timeNow )
 {
   file_suffix = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
-  def src = params.sample_sheet
-  def dst = "${params.demux_dir}/${params.sample_sheet}.${file_suffix}"
+  Path src = Paths.get( params.sample_sheet )
+  def ftmp = new File( params.sample_sheet )
+  Path dst =  Paths.get( "${params.demux_dir}/${ftmp.getName()}.${file_suffix}" )
   Files.copy( src, dst )
   def i = 1
   workflow.configFiles.each { aFile ->
     src = aFile
-    dst = "${aFile.getName()}.${file_suffix}.${i}"
+    dst = Paths.get( "${aFile.getName()}.${file_suffix}.${i}" )
     Files.copy( src, dst )
     i += 1
   }
