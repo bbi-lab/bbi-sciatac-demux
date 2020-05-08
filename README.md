@@ -44,7 +44,7 @@ The Nextflow pipeline components required for the bbi-sciatac pipeline consist o
 
 The bbi-sciatac pipeline consists of a pair of Nextflow scripts. The first converts an Illumina bcl file to fastq files, corrects barcode errors, partitions reads into fastq files by sample, and trims off adapter sequence from the reads. The second script continues processing with read alignments through to making count matrices.
 
-Note: I no longer support the *setup_sciatac.py* script. Instead, consider using the scripts *run.sciatac-demux.sh* and *run.sciatac-analyze.sh* I leave *setup_sciatac.py* here because it may have some value as a guide for setting up scripts.
+Note: I no longer support the *setup_sciatac.py* script. Instead, consider using the scripts *bbi-sciatac-demux/run.sciatac-demux.sh* and *bbi-sciatac-analyze/run.sciatac-analyze.sh* I leave *setup_sciatac.py* here because it may have some value as a guide for setting up scripts.
 
 The bbi-sciatac-demux repository includes a script called *setup_sciatac.py*, which sets up the required directories and files for the pipeline runs. The script prompts for required values and allows editing of values. The editable values consist of
 

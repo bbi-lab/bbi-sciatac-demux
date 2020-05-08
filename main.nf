@@ -21,6 +21,14 @@
 */
 
 import groovy.json.JsonOutput
+import java.nio.file.Files
+import java.nio.file.Path 
+import java.nio.file.Paths
+
+/*
+** Run date/time.
+*/
+def timeNow = new Date()
 
 /*
 ** Where to find scripts.
@@ -100,6 +108,11 @@ assert ( ( params.level == 2 && params.num_well == 96 ) || ( params.level == 3 &
 reportRunParams( params )
 
 /*
+** Archive configuration and samplesheet files in demux_dir.
+*/
+archiveRunFiles( params, timeNow )
+
+/*
 ** Check that required directories exist or can be made.
 */
 checkDirectories( params )
@@ -117,7 +130,7 @@ illuminaRunInfoMap = readIlluminaRunInfo( params )
 /*
 ** Write run information to args.json file.
 */
-writeArgsJson( params )
+writeArgsJson( params, timeNow )
 
 /*
 ** Does the i5 sequence require reverse complementing?
@@ -189,8 +202,8 @@ process bcl2fastq {
 
   output:
     set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into bcl2fastq_fastqs mode flatten
-    set file("Stats/*") into  bcl2fastq_stats
-    set file("Reports/*") into bcl2fastq_reports
+    file("Stats/*") into  bcl2fastq_stats
+    file("Reports/*") into bcl2fastq_reports
 
     /*
     ** Notes from bcl2fastq manual:
@@ -394,6 +407,8 @@ def reportRunParams( params ) {
     s += String.format( "--------------\n" )
     s += String.format( "Sequencing data directory:     %s\n", params.run_dir )
     s += String.format( "Processing output directory:   %s\n", params.demux_dir )
+    s += String.format( "Launch directory:              %s\n", workflow.launchDir )
+    s += String.format( "Work directory:                %s\n", workflow.workDir )
     s += String.format( "Combinatorial levels:          %d\n", params.level )
     s += String.format( "Sample sheet file:             %s\n", params.sample_sheet )
     s += String.format( "Maximum cores:                 %d\n", params.max_cores )
@@ -442,6 +457,23 @@ def checkSamplesheet( params ) {
 }
 
 
+def archiveRunFiles( params, timeNow )
+{
+  file_suffix = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
+  Path src = Paths.get( params.sample_sheet )
+  def ftmp = new File( params.sample_sheet )
+  Path dst =  Paths.get( "${params.demux_dir}/${ftmp.getName()}.${file_suffix}" )
+  Files.copy( src, dst )
+  def i = 1
+  workflow.configFiles.each { aFile ->
+    src = aFile
+    dst = Paths.get( "${aFile.getName()}.${file_suffix}.${i}" )
+    Files.copy( src, dst )
+    i += 1
+  }
+}
+
+
 def readIlluminaRunInfo( params ) {
     def command = "/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux/src/run_info_read.py ${params.run_dir}"
     def strOut = new StringBuffer()
@@ -463,7 +495,7 @@ def readIlluminaRunInfo( params ) {
 }
 
 
-def writeArgsJson( params ) {
+def writeArgsJson( params, timeNow ) {
     def i
     
     /*
@@ -476,15 +508,10 @@ def writeArgsJson( params ) {
     def mapRunInfo = [:]
     
     /*
-    ** Run date/time.
-    */
-    def today = new Date()
-
-    /*
     ** Add demux run parameters.
     */
     demuxDict = [:]
-    demuxDict['run_date'] = today
+    demuxDict['run_date'] = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
     demuxDict['run_dir'] = params.run_dir
     demuxDict['demux_dir'] = params.demux_dir
     demuxDict['sample_sheet'] = params.sample_sheet
