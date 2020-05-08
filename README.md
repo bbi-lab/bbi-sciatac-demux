@@ -1,12 +1,12 @@
-# bbi-sciatac-demux
+# bbi-sciatac-demux and bbi-sciatac-analyze
 
-*bbi-sciatac-demux* implements Andrew Hill's sci-ATAC-seq demultiplexing processing pipeline in the NextFlow domain-specific language.
+*bbi-sciatac-demux* implements Andrew Hill's sci-ATAC-seq demultiplexing processing pipeline in the NextFlow domain-specific language and *bbi-sciatac-analyze* implements Andrew Hill's sci-ATAC-seq analysis processing pipeline.
 
 ## Requirements
 
 In order to run these scripts, Nextflow must be installed on the system where you will run the processing pipeline. You can find Nextflow [installation instructions](https://www.nextflow.io/docs/latest/getstarted.html#installation) on the [Nextflow web site](https://www.nextflow.io).
 
-These scripts are written for the UW Genome Sciences computing cluster: they depend on the Univa Grid Engine and various installed modules.
+These scripts are written to run on the UW Genome Sciences computing cluster: they depend on the Univa Grid Engine and various installed modules.
 
 For efficiency and convenience, they are written to run certain stages in python virtual environments. The environments may need to be built on a node with the CPU architecture on which you will run the scripts. In order to build the environments use the commands
 
@@ -33,9 +33,9 @@ Nextflow is both a language specification for writing scientific processing pipe
 
 The Nextflow pipeline components required for the bbi-sciatac pipeline consist of the
 
-* nextflow program, which is the executable in the Nextflow distribution,
-* nextflow.config file, which gives processing parameters, for example, specifying the Univa Grid Engine,
-* params.config file, which gives parameters for a particular processing run,
+* nextflow program, the executable in the Nextflow distribution,
+* nextflow.config file, gives processing parameters, for example, the Univa Grid Engine,
+* params.config file, gives parameters for a particular processing run,
 * work directory, where Nextflow 'stages' the processing steps. In particular, files created during the processing are stored in sub-directories of work,
 * genome file sets,
 * computing resources.
@@ -44,7 +44,9 @@ The Nextflow pipeline components required for the bbi-sciatac pipeline consist o
 
 The bbi-sciatac pipeline consists of a pair of Nextflow scripts. The first converts an Illumina bcl file to fastq files, corrects barcode errors, partitions reads into fastq files by sample, and trims off adapter sequence from the reads. The second script continues processing with read alignments through to making count matrices.
 
-The bbi-sciatac-demux repository includes a script called setup_sciatac.py, which sets up the required directories and files for the pipeline runs. The script prompts for required values and allows editing of values. The editable values consist of
+Note: I no longer support the *setup_sciatac.py* script. Instead, consider using the scripts *run.sciatac-demux.sh* and *run.sciatac-analyze.sh* I leave *setup_sciatac.py* here because it may have some value as a guide for setting up scripts.
+
+The bbi-sciatac-demux repository includes a script called *setup_sciatac.py*, which sets up the required directories and files for the pipeline runs. The script prompts for required values and allows editing of values. The editable values consist of
 
 * Processing (parent) directory
 * Illumina run directory
@@ -64,9 +66,9 @@ The bbi-sciatac-demux repository includes a script called setup_sciatac.py, whic
 
 Additionally, you will need to set the following values in the script
 
-* nextflowExe, which is the path to the Nextflow executable,
-* demuxNextflowScript, which is the path to the demux Nextflow script, which is called main.nf,
-* analyzeNextflowScript, which is the path to the analyze Nextflow script, which is called main.nf.
+* nextflowExe, the path to the Nextflow executable,
+* demuxNextflowScript, the path to the demux Nextflow script, which is called main.nf,
+* analyzeNextflowScript, the path to the analyze Nextflow script, which is called main.nf.
 
 #### Samplesheet file
 
@@ -97,7 +99,15 @@ The required genome-related files are specified in the *bbi-sciatac-analyze/geno
 * genome whitelist regions
 * chromosome sizes
 
-The *bbi-sciatac-analyze* repository has some scripts in the *genomes* subdirectory to assist with building these files. These scripts are from Andrew Hill.
+The *bbi-sciatac-analyze* repository has some scripts for assisting with building these files in the *genomes* subdirectory. These scripts are from Andrew Hill.
+
+#### nextflow.config file
+
+#### Parameters configuration file
+
+#### Demultiplexing parameters
+
+#### Analyze parameters
 
 #### Running the pipeline scripts.
 
@@ -117,8 +127,8 @@ bash run.demux.sh
 bash run.analyze.sh
 ```
 
-The *bbi-sciatac-demux* pipeline creates the file *args.json* in the demux output directory. The *bbi-sciatac-analyze* pipeline script looks for *args.json* in the demux output directory, and uses it to read the trimmed fastq files from the *<sample_name>/fastqs_trim* sub-directory in the demux output directory, and continue the analysis with read alignments.
- 
+The *bbi-sciatac-demux* pipeline creates the file *args.json* in the demux output directory. The *bbi-sciatac-analyze* pipeline script looks for *args.json* in the demux output directory, and uses it to read the trimmed fastq files from the *<sample_name>/fastqs_trim* sub-directory in the demux output directory, and continues the analysis starting with read alignments.
+
 #### Additional information
 
 We advise users to run the pipelines in tmux sessions so closing the terminal window does not terminate the pipeline.
