@@ -33,8 +33,8 @@ def timeNow = new Date()
 /*
 ** Where to find scripts.
 */
-def pipeline_path="/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux"
-def script_dir="${pipeline_path}/src"
+def pipeline_path="/net/gs/vol1/home/bge/git/bbi-sciatac-demux"
+script_dir="${pipeline_path}/src"
 
 
 /*
@@ -475,7 +475,7 @@ def archiveRunFiles( params, timeNow )
 
 
 def readIlluminaRunInfo( params ) {
-    def command = "/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux/src/run_info_read.py ${params.run_dir}"
+    def command = "${script_dir}/run_info_read.py ${params.run_dir}"
     def strOut = new StringBuffer()
     def strErr = new StringBuffer()
     def proc = command.execute()
