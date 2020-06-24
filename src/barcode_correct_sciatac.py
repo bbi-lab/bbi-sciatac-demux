@@ -374,10 +374,14 @@ if __name__ == '__main__':
             validreads['tagmentation_i7'] += 1
         if tagmentation_i5_seq is not None:
             validreads['tagmentation_i5'] += 1
+        if( tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
+            validreads['tagmentation'] += 1
         if pcr_i7_seq is not None:
             validreads['pcr_i7'] += 1
         if pcr_i5_seq is not None:
             validreads['pcr_i5'] += 1
+        if pcr_i7_seq is not None and pcr_i5_seq is not None:
+            validreads['pcr'] += 1
         
         if tagmentation_i7_seq is None or pcr_i7_seq is None or pcr_i5_seq is None or tagmentation_i5_seq is None:
             continue
