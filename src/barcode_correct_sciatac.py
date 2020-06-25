@@ -401,15 +401,15 @@ if __name__ == '__main__':
         if tagmentation_i7_seq is not None:
             validreads['tagmentation_i7'] += 1
             tagmentation_i7_index = tagi7_to_index.get(tagmentation_i7_seq)
-            if tagmentation_i7_index is None:
-                print( 'tagmentation i7 index is none for sequence %s (%s)' % (tagmentation_i7_seq,tagi7_in) )
             tagmentation_i7_count[tagmentation_i7_index] += 1
+#            if tagmentation_i7_index is None:
+#                print( 'tagmentation i7 index is none for sequence %s (%s)' % (tagmentation_i7_seq,tagi7_in) )
         if tagmentation_i5_seq is not None:
             validreads['tagmentation_i5'] += 1
             tagmentation_i5_index = tagi5_to_index.get(tagmentation_i5_seq)
-            if tagmentation_i5_index is None:
-                print( 'tagmentation i5 index is none for sequence % (%s)s' % (tagmentation_i5_seq,tagi5_in) )
             tagmentation_i5_count[tagmentation_i5_index] += 1
+#            if tagmentation_i5_index is None:
+#                print( 'tagmentation i5 index is none for sequence % (%s)s' % (tagmentation_i5_seq,tagi5_in) )
         if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
             validreads['tagmentation'] += 1
             if tag_pairs.get((tagmentation_i7_index, tagmentation_i5_index)) is not None:
@@ -417,15 +417,15 @@ if __name__ == '__main__':
         if pcr_i7_seq is not None:
             validreads['pcr_i7'] += 1
             pcr_i7_index = pcri7_to_index.get(pcr_i7_seq)
-            if pcr_i7_index is None:
-                print( 'pcr i7 index is none for sequence %s (%s)' % (pcr_i7_seq,pcri7_in) )
             pcr_i7_count[pcr_i7_index] += 1
+#            if pcr_i7_index is None:
+#                print( 'pcr i7 index is none for sequence %s (%s)' % (pcr_i7_seq,pcri7_in) )
         if pcr_i5_seq is not None:
             validreads['pcr_i5'] += 1
             pcr_i5_index = pcri5_to_index.get(pcr_i5_seq)
-            if pcr_i5_index is None:
-                print( 'pcr i5 index is none for sequence %s (%s)' % (pcr_i5_seq,pcri5_in) )
             pcr_i5_count[pcr_i5_index] += 1
+#            if pcr_i5_index is None:
+#                print( 'pcr i5 index is none for sequence %s (%s)' % (pcr_i5_seq,pcri5_in) )
         if pcr_i7_seq is not None and pcr_i5_seq is not None:
             validreads['pcr'] += 1
             if pcr_pairs.get((pcr_i7_index, pcr_i5_index)) is not None:
@@ -480,9 +480,17 @@ if __name__ == '__main__':
             btmp = barcodes_string if (type( barcodes_string ) == str) else 'None'
             f.write(''.join([lane_num, ',', btmp, ',', str(barcodes_string_count[barcodes_string]),'\n']))
             
+    zero_pad_cal = True
+    id_length = 2
     with open(output_file_counts_indexes_csv,'wt') as f:
         for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
-            f.write(''.join([i,',',get_well_id_384_to_96(i, row_ordered = TRUE),',',counts[0],',',counts[1],',',get_well_id_384_to_96(i, row_ordered = FALSE),',',counts[2],',',counts[3],'\n']))
+            f.write(''.join([i,',',
+                             barcode_to_well.get_well_id_384_to_96(i, row_ordered = True, zero_pad_col, id_length),',',
+                             counts[0],',',
+                             counts[1],',',
+                             barcode_to_well.get_well_id_384_to_96(i, row_ordered = False, zero_pad_co, id_length),',',
+                             counts[2],',',
+                             counts[3],'\n']))
             
     # Error checking and compress output
     if validreads['all_barcodes'] < 0.05:
