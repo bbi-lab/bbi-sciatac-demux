@@ -10,6 +10,12 @@ lig_i7_to_well = barcode_to_well.get_well_dict_384_to_96(lig_i7_list, row_ordere
 pcr_to_well = barcode_to_well.get_pcr_plate_dict(pcr_i5_list, pcr_i7_list)
 lig_i5_to_well = barcode_to_well.get_well_dict_384_to_96(lig_i5_list, row_ordered=False)
 
+# dictionary of key=barcode sequence and value=barcode index
+lig_i7_to_index = barcode_to_well.barcode_index_dict(lig_i7_list)
+pcr_i7_to_index = barcode_to_well.barcode_index_dict(pcr_i7_list)
+pcr_i5_to_index = barcode_to_well.barcode_index_dict(pcr_i5_list)
+lig_i5_to_index = barcode_to_well.barcode_index_dict(lig_i5_list)
+
 lig_i7 = set(lig_i7_list)
 pcr_i7 = set(pcr_i7_list)
 pcr_i5 = set(pcr_i5_list)
@@ -32,6 +38,12 @@ lig_i5_to_well_384 = barcode_to_well.get_well_dict_384_to_96(lig_i5_list_384, ro
 #pcr_to_well_384 = barcode_to_well.get_pcr_plate_dict(pcr_i5_list_384, pcr_i7_list_384)
 #lig_i5_to_well_384 = barcode_to_well.get_well_dict(lig_i5_list_384, row_ordered=False)
 
+# dictionary of key=barcode sequence and value=barcode index
+lig_i7_to_index_384 = barcode_to_well.barcode_index_dict(lig_i7_list_384)
+pcr_i7_to_index_384 = barcode_to_well.barcode_index_dict(pcr_i7_list_384)
+pcr_i5_to_index_384 = barcode_to_well.barcode_index_dict(pcr_i5_list_384)
+lig_i5_to_index_384 = barcode_to_well.barcode_index_dict(lig_i5_list_384)
+
 lig_i7_384 = set(lig_i7_list_384)
 pcr_i7_384 = set(pcr_i7_list_384)
 pcr_i5_384 = set(pcr_i5_list_384)
@@ -46,6 +58,12 @@ nex_i5_two_level_indexed_tn5_list = ["TATAGCCT", "ATAGAGGC", "CCTATCCT", "GGCTCT
 nex_two_level_indexed_tn5_list = barcode_to_well.get_row_col_matrix(nex_i5_two_level_indexed_tn5_list, nex_i7_two_level_indexed_tn5_list)
 nex_two_level_indexed_tn5_to_well = barcode_to_well.get_well_dict_384_to_96(nex_two_level_indexed_tn5_list, row_ordered=True)
 pcr_two_level_indexed_tn5_to_well = barcode_to_well.get_pcr_plate_dict(pcr_i5_two_level_indexed_tn5_list, pcr_i7_two_level_indexed_tn5_list)
+
+# dictionary of key=barcode sequence and value=barcode index
+nex_i7_two_level_indexed_tn5_to_index = barcode_to_well.barcode_index_dict(nex_i7_two_level_indexed_tn5_list)
+pcr_i7_two_level_indexed_tn5_to_index = barcode_to_well.barcode_index_dict(pcr_i7_two_level_indexed_tn5_list)
+pcr_i5_two_level_indexed_tn5_to_index = barcode_to_well.barcode_index_dict(pcr_i5_two_level_indexed_tn5_list)
+nex_i5_two_level_indexed_tn5_to_index = barcode_to_well.barcode_index_dict(nex_i5_two_level_indexed_tn5_list)
 
 nex_i7_two_level_indexed_tn5 = set(nex_i7_two_level_indexed_tn5_list)
 pcr_i7_two_level_indexed_tn5 = set(pcr_i7_two_level_indexed_tn5_list)

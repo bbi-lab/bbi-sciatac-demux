@@ -18,6 +18,11 @@
 **      
 ** Suggested command line parameters to use when running this script
 **   nextflow run main.nf -w <work_dirname> -with-report <report_filename> -with-trace <trace_filename> -with-timeline <timeline_filename>
+**
+** Notes:
+**   o  see bbi-sciatac-analyze/main.nf header comments for notes
+**      aspects of Groovy and Nextflow. For example, variable
+**      scope in Groovy.
 */
 
 import groovy.json.JsonOutput
@@ -32,6 +37,9 @@ def timeNow = new Date()
 
 /*
 ** Where to find scripts.
+** Note: script_dir needs to be visible within Groovy functions
+**       so there is no 'def', which makes it global.
+**
 */
 def pipeline_path="/net/gs/vol1/home/bge/git/bbi-sciatac-demux"
 script_dir="${pipeline_path}/src"

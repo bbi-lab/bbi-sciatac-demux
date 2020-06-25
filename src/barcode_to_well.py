@@ -56,7 +56,6 @@ def get_well_id(i, row_ordered, nrow, ncol, zero_pad_col, id_length):
     well_id = '%s%s' % (well_row, pad_well_col(well_col, zero_pad_col, id_length))
     return well_id
 
-
 # Convert index i to well in one of four 96 well plates with the form
 # P<plate id>-<row><col>
 def get_well_id_384_to_96(i384, row_ordered, zero_pad_col, id_length):
@@ -73,7 +72,6 @@ def get_well_id_384_to_96(i384, row_ordered, zero_pad_col, id_length):
 
     well_id = 'P%d-%s%s' % (ipl + 1, well_row, pad_well_col(well_col, zero_pad_col, id_length))
     return well_id
-
 
 def get_well_dict(index_set, row_ordered=True, zero_pad_col=True):
     """
@@ -99,7 +97,6 @@ def get_well_dict(index_set, row_ordered=True, zero_pad_col=True):
 
     return mapping
 
-
 def get_well_dict_384_to_96(index_set, row_ordered=True, zero_pad_col=True):
     """
     Transforms an set of indices into a well dict.
@@ -122,7 +119,6 @@ def get_well_dict_384_to_96(index_set, row_ordered=True, zero_pad_col=True):
         mapping[element] = well_id
 
     return mapping
-
 
 def get_row_col_matrix(row_index_set, col_index_set):
     """
@@ -205,3 +201,10 @@ def get_barcode_string(tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation
         barcodes_string = ''.join(outputs)
 
     return barcodes_string
+
+def barcode_index_dict( barcode_list ):
+    out_dict = {}
+    for ( i, barcode ) in enumerate( barcode_list, start = 1):
+        out_dict[barcode] = i
+    return out_dict
+
