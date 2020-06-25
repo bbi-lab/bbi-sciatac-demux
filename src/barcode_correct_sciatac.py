@@ -412,7 +412,7 @@ if __name__ == '__main__':
             tagmentation_i5_count[tagmentation_i5_index] += 1
         if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
             validreads['tagmentation'] += 1
-            if tag_pairs[(tagmentation_i7_index, tagmentation_i5_index)] is not None:
+            if tag_pairs.get((tagmentation_i7_index, tagmentation_i5_index)) is not None:
                 validreads['tagmentation_match'] += 1
         if pcr_i7_seq is not None:
             validreads['pcr_i7'] += 1
@@ -428,7 +428,7 @@ if __name__ == '__main__':
             pcr_i5_count[pcr_i5_index] += 1
         if pcr_i7_seq is not None and pcr_i5_seq is not None:
             validreads['pcr'] += 1
-            if pcr_pairs[(pcr_i7_index, pcr_i5_index)] is not None:
+            if pcr_pairs.get((pcr_i7_index, pcr_i5_index)) is not None:
                 validreads['pcr_match'] += 1
         
         if tagmentation_i7_seq is None or pcr_i7_seq is None or pcr_i5_seq is None or tagmentation_i5_seq is None:
