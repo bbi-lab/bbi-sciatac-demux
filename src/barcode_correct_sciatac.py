@@ -329,10 +329,10 @@ if __name__ == '__main__':
             pcr_i5_whitelist = bc.pcr_i5_two_level_indexed_tn5
             tagmentation_i5_whitelist = bc.nex_i5_two_level_indexed_tn5
 
-    tagi7_to_index = barcode_index_dict( tagmentation_i7_whitelist )
-    pcri7_to_index = barcode_index_dict( pcr_i7_whitelist )
-    pcri5_to_index = barcode_index_dict( pcr_i5_whitelist )
-    tagi5_to_index = barcode_index_dict( tagmentation_i5_whitelist )
+    tagi7_to_index = barcode_to_well.barcode_index_dict( tagmentation_i7_whitelist )
+    pcri7_to_index = barcode_to_well.barcode_index_dict( pcr_i7_whitelist )
+    pcri5_to_index = barcode_to_well.barcode_index_dict( pcr_i5_whitelist )
+    tagi5_to_index = barcode_to_well.barcode_index_dict( tagmentation_i5_whitelist )
 
     tagmentation_i7_correction_map = construct_mismatch_to_whitelist_map(tagmentation_i7_whitelist, 2)
     pcr_i7_correction_map = construct_mismatch_to_whitelist_map(pcr_i7_whitelist, 2)
