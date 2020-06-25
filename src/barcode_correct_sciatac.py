@@ -240,12 +240,12 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     pcr_pairs = {}
     for (pcri7_list, pcri5_list) in zip( pcri7_indices, pcri5_indices):
       for combination in itertools.product(pcri7_list, pcri5_list):
-        pcr_pairs.setdefault( (combination[0], combination[1]), 1 )
+        pcr_pairs.setdefault( (combination[0]-1, combination[1]-1), 1 )
 
     tag_pairs = {}
     for (tagi7_list, tagi5_list) in zip( tagi7_indices, tagi5_indices):
       for combination in itertools.product(tagi7_list, tagi5_list):
-        tag_pairs.setdefault( (combination[0], combination[1]), 1 )
+        tag_pairs.setdefault( (combination[0]-1, combination[1]-1), 1 )
 
     return index_mask, sample_lookup_table, tag_pairs, pcr_pairs
 
@@ -279,10 +279,6 @@ if __name__ == '__main__':
         pcri7 = bc.pcr_i7_two_level_indexed_tn5_list
         pcri5 = bc.pcr_i5_two_level_indexed_tn5_list
         tagi5 = bc.nex_i5_two_level_indexed_tn5_list
-        tagi7_to_index = bc.nex_i7_two_level_indexed_tn5_to_index
-        pcri7_to_index = bc.pcr_i7_two_level_indexed_tn5_to_index
-        pcri5_to_index = bc.pcr_i5_two_level_indexed_tn5_to_index
-        tagi5_to_index = bc.nex_i5_two_level_indexed_tn5_to_index
     else:
         if args.wells_384:
             tagi7 = bc.lig_i7_list_384
@@ -292,10 +288,6 @@ if __name__ == '__main__':
             lig_i7_to_well = bc.lig_i7_to_well_384
             lig_i5_to_well = bc.lig_i5_to_well_384
             pcr_to_well = bc.pcr_to_well_384
-            tagi7_to_index = bc.lig_i7_to_index_384
-            pcri7_to_index = bc.pcr_i7_to_index_384
-            pcri5_to_index = bc.pcr_i5_to_index_384
-            tagi5_to_index = bc.lig_i5_to_index_384
         else:
             tagi7 = bc.lig_i7_list
             pcri7 = bc.pcr_i7_list
@@ -304,10 +296,6 @@ if __name__ == '__main__':
             lig_i7_to_well = bc.lig_i7_to_well
             lig_i5_to_well = bc.lig_i5_to_well
             pcr_to_well = bc.pcr_to_well
-            tagi7_to_index = bc.lig_i7_to_index
-            pcri7_to_index = bc.pcr_i7_to_index
-            pcri5_to_index = bc.pcr_i5_to_index
-            tagi5_to_index = bc.lig_i5_to_index
 
     # Build up sample mapping from indices to samples
     index_mask, sample_lookup, tag_pairs, pcr_pairs  = get_sample_lookup(open(args.samplesheet), pcri7, tagi7, tagi5, pcri5)
@@ -340,6 +328,11 @@ if __name__ == '__main__':
         else:
             pcr_i5_whitelist = bc.pcr_i5_two_level_indexed_tn5
             tagmentation_i5_whitelist = bc.nex_i5_two_level_indexed_tn5
+
+    tagi7_to_index = barcode_index_dict( tagmentation_i7_whitelist )
+    pcri7_to_index = barcode_index_dict( pcr_i7_whitelist )
+    pcri5_to_index = barcode_index_dict( pcr_i5_whitelist )
+    tagi5_to_index = barcode_index_dict( tagmentation_i5_whitelist )
 
     tagmentation_i7_correction_map = construct_mismatch_to_whitelist_map(tagmentation_i7_whitelist, 2)
     pcr_i7_correction_map = construct_mismatch_to_whitelist_map(pcr_i7_whitelist, 2)
@@ -410,13 +403,13 @@ if __name__ == '__main__':
             tagmentation_i7_index = tagi7_to_index.get(tagmentation_i7_seq)
             if tagmentation_i7_index is None:
                 print( 'tagmentation i7 index is none for sequence %s (%s)' % (tagmentation_i7_seq,tagi7_in) )
-            tagmentation_i7_count[tagmentation_i7_index-1] += 1
+            tagmentation_i7_count[tagmentation_i7_index] += 1
         if tagmentation_i5_seq is not None:
             validreads['tagmentation_i5'] += 1
             tagmentation_i5_index = tagi5_to_index.get(tagmentation_i5_seq)
             if tagmentation_i5_index is None:
                 print( 'tagmentation i5 index is none for sequence % (%s)s' % (tagmentation_i5_seq,tagi5_in) )
-            tagmentation_i5_count[tagmentation_i5_index-1] += 1
+            tagmentation_i5_count[tagmentation_i5_index] += 1
         if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
             validreads['tagmentation'] += 1
             if tag_pairs[(tagmentation_i7_index, tagmentation_i5_index)] is not None:
@@ -426,13 +419,13 @@ if __name__ == '__main__':
             pcr_i7_index = pcri7_to_index.get(pcr_i7_seq)
             if pcr_i7_index is None:
                 print( 'pcr i7 index is none for sequence %s (%s)' % (pcr_i7_seq,pcri7_in) )
-            pcr_i7_count[pcr_i7_index-1] += 1
+            pcr_i7_count[pcr_i7_index] += 1
         if pcr_i5_seq is not None:
             validreads['pcr_i5'] += 1
             pcr_i5_index = pcri5_to_index.get(pcr_i5_seq)
             if pcr_i5_index is None:
                 print( 'pcr i5 index is none for sequence %s (%s)' % (pcr_i5_seq,pcri5_in) )
-            pcr_i5_count[pcr_i5_index-1] += 1
+            pcr_i5_count[pcr_i5_index] += 1
         if pcr_i7_seq is not None and pcr_i5_seq is not None:
             validreads['pcr'] += 1
             if pcr_pairs[(pcr_i7_index, pcr_i5_index)] is not None:

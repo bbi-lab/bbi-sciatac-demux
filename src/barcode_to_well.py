@@ -204,7 +204,7 @@ def get_barcode_string(tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation
 
 def barcode_index_dict( barcode_list ):
     out_dict = {}
-    for ( i, barcode ) in enumerate( barcode_list, start = 1):
+    for ( i, barcode ) in enumerate( barcode_list, start = 0):
         out_dict[barcode] = i
     return out_dict
 
