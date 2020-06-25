@@ -226,10 +226,10 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     index_mask = [use_pcri7, use_tagi7, use_tagi5, use_pcri5]
     index_whitelists = [pcri7, tagi7, tagi5, pcri5]
     index_lists = [pcri7_indices, tagi7_indices, tagi5_indices, pcri5_indices]
-    index_flags = [index_lists_to_flags(pcri7_indices, 384),
-                   index_lists_to_flags(tagi7_indices, 384), 
-                   index_lists_to_flags(tagi5_indices, 384), 
-                   index_lists_to_flags(pcri5_indices, 384)]
+    index_flags = [barcode_to_well.index_lists_to_flags(pcri7_indices, 384),
+                   barcode_to_well.index_lists_to_flags(tagi7_indices, 384), 
+                   barcode_to_well.index_lists_to_flags(tagi5_indices, 384), 
+                   barcode_to_well.index_lists_to_flags(pcri5_indices, 384)]
     
     sample_lookup_table = {}
     for sample_index,sample in enumerate(samples):
