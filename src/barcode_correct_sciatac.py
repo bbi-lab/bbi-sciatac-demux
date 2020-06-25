@@ -485,10 +485,10 @@ if __name__ == '__main__':
     with open(output_file_counts_indexes_csv,'wt') as f:
         for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
             f.write(''.join([i,',',
-                             barcode_to_well.get_well_id_384_to_96(i, row_ordered = True, zero_pad_col, id_length),',',
+                             barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',',
                              counts[0],',',
                              counts[1],',',
-                             barcode_to_well.get_well_id_384_to_96(i, row_ordered = False, zero_pad_co, id_length),',',
+                             barcode_to_well.get_well_id_384_to_96(i, False, zero_pad_co, id_length),',',
                              counts[2],',',
                              counts[3],'\n']))
             
