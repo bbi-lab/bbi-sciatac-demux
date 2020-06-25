@@ -401,15 +401,15 @@ if __name__ == '__main__':
         tagmentation_i5_seq = correct_barcode(tagmentation_i5_seq, tagmentation_i5_correction_map)
         
         # Get barcode indexes and count them
-        tagmentation_i7_index = tagi7_to_index[tagmentation_i7_seq]
-        pcr_i7_index = pcri7_to_index[pcr_i7_seq]
-        pcr_i5_index = pcri5_to_index[pcr_i5_seq]
-        tagmentation_i5_index = tagi5_to_index[tagmentation_i5_seq]
+        tagmentation_i7_index = tagi7_to_index.get(tagmentation_i7_seq)
+        pcr_i7_index = pcri7_to_index.get(pcr_i7_seq)
+        pcr_i5_index = pcri5_to_index.get(pcr_i5_seq)
+        tagmentation_i5_index = tagi5_to_index.get(tagmentation_i5_seq)
         
-        tagmentation_i7_count[tagmentation_i7_index] += 1
-        pcr_i7_count[pcr_i7_index] += 1
-        pcr_i5_count[pcr_i5_index] += 1
-        tagmentation_i5_count[tagmentation_i5_index] += 1
+        tagmentation_i7_count[tagmentation_i7_index-1] += 1
+        pcr_i7_count[pcr_i7_index-1] += 1
+        pcr_i5_count[pcr_i5_index-1] += 1
+        tagmentation_i5_count[tagmentation_i5_index-1] += 1
       
         # Skip invalid reads and track valid read count for error checking
         if tagmentation_i7_seq is not None:
@@ -418,14 +418,14 @@ if __name__ == '__main__':
             validreads['tagmentation_i5'] += 1
         if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
             validreads['tagmentation'] += 1
+        if tag_pairs[(tagmentation_i7_index, tagmentation_i5_index)] is not None:
+            validreads['tagmentation_match'] += 1
         if pcr_i7_seq is not None:
             validreads['pcr_i7'] += 1
         if pcr_i5_seq is not None:
             validreads['pcr_i5'] += 1
         if pcr_i7_seq is not None and pcr_i5_seq is not None:
             validreads['pcr'] += 1
-        if tag_pairs[(tagmentation_i7_index, tagmentation_i5_index)] is not None:
-            validreads['tagmentation_match'] += 1
         if pcr_pairs[(pcr_i7_index, pcr_i5_index)] is not None:
             validreads['pcr_match'] += 1
            
