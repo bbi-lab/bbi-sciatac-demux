@@ -404,10 +404,14 @@ if __name__ == '__main__':
         if tagmentation_i7_seq is not None:
             validreads['tagmentation_i7'] += 1
             tagmentation_i7_index = tagi7_to_index.get(tagmentation_i7_seq)
+            if tagmentation_i7_index is None:
+                print( 'tagmentation i7 index is none for sequence %s' % (tagmentation_i7_seq) )
             tagmentation_i7_count[tagmentation_i7_index-1] += 1
         if tagmentation_i5_seq is not None:
             validreads['tagmentation_i5'] += 1
             tagmentation_i5_index = tagi5_to_index.get(tagmentation_i5_seq)
+            if tagmentation_i5_index is None:
+                print( 'tagmentation i5 index is none for sequence %s' % (tagmentation_i5_seq) )
             tagmentation_i5_count[tagmentation_i5_index-1] += 1
         if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
             validreads['tagmentation'] += 1
@@ -416,10 +420,14 @@ if __name__ == '__main__':
         if pcr_i7_seq is not None:
             validreads['pcr_i7'] += 1
             pcr_i7_index = pcri7_to_index.get(pcr_i7_seq)
+            if pcr_i7_index is None:
+                print( 'pcr i7 index is none for sequence %s' % (pcr_i7_seq) )
             pcr_i7_count[pcr_i7_index-1] += 1
         if pcr_i5_seq is not None:
             validreads['pcr_i5'] += 1
             pcr_i5_index = pcri5_to_index.get(pcr_i5_seq)
+            if pcr_i5_index is None:
+                print( 'pcr i5 index is none for sequence %s' % (pcr_i5_seq) )
             pcr_i5_count[pcr_i5_index-1] += 1
         if pcr_i7_seq is not None and pcr_i5_seq is not None:
             validreads['pcr'] += 1
