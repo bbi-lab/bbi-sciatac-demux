@@ -208,3 +208,12 @@ def barcode_index_dict( barcode_list ):
         out_dict[barcode] = i
     return out_dict
 
+# Note: 1-based indexes in index_lists
+def index_lists_to_flags( index_lists, num_well ):
+    flags = (0) * num_well
+    for index_list in index_lists:
+        for i in index_list:
+            flags[i-1] = 1
+    return flags
+    
+    

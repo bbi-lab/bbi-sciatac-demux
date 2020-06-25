@@ -226,6 +226,10 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     index_mask = [use_pcri7, use_tagi7, use_tagi5, use_pcri5]
     index_whitelists = [pcri7, tagi7, tagi5, pcri5]
     index_lists = [pcri7_indices, tagi7_indices, tagi5_indices, pcri5_indices]
+    index_flags = [index_lists_to_flags(pcri7_indices, 384),
+                   index_lists_to_flags(tagi7_indices, 384), 
+                   index_lists_to_flags(tagi5_indices, 384), 
+                   index_lists_to_flags(pcri5_indices, 384)]
     
     sample_lookup_table = {}
     for sample_index,sample in enumerate(samples):
@@ -247,7 +251,7 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
       for combination in itertools.product(tagi7_list, tagi5_list):
         tag_pairs.setdefault( (combination[0]-1, combination[1]-1), 1 )
 
-    return index_mask, sample_lookup_table, tag_pairs, pcr_pairs
+    return index_mask, sample_lookup_table, tag_pairs, pcr_pairs, index_flags
 
 
 if __name__ == '__main__':
@@ -298,8 +302,22 @@ if __name__ == '__main__':
             pcr_to_well = bc.pcr_to_well
 
     # Build up sample mapping from indices to samples
-    index_mask, sample_lookup, tag_pairs, pcr_pairs  = get_sample_lookup(open(args.samplesheet), pcri7, tagi7, tagi5, pcri5)
+    index_mask, sample_lookup, tag_pairs, pcr_pairs, index_flags = get_sample_lookup(open(args.samplesheet), pcri7, tagi7, tagi5, pcri5)
 
+    if args.two_level_indexed_tn5:
+        for i in range( 12, 384 ):
+            index_flags[1][i] = -1
+            index_flags[2][i] = -1
+    else:
+        if not args.wells_384:
+            for i in range( 96, 384 ):
+                index_flags[1][i] = -1
+                index_flags[2][i] = -1
+
+    for i in range( 96, 384 ):
+        index_flags[0][i] = -1
+        index_flags[3][i] = -1
+    
     tagmentation_i7_whitelist = tagi7
     pcr_i7_whitelist = pcri7
 
@@ -480,17 +498,22 @@ if __name__ == '__main__':
             btmp = barcodes_string if (type( barcodes_string ) == str) else 'None'
             f.write(''.join([lane_num, ',', btmp, ',', str(barcodes_string_count[barcodes_string]),'\n']))
             
-    zero_pad_cal = True
+    zero_pad_col = True
     id_length = 2
     with open(output_file_counts_indexes_csv,'wt') as f:
         for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
             f.write(''.join([i,',',
                              barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',',
                              counts[0],',',
+                             index_flags[1][i],',',
                              counts[1],',',
+                             index_flags[0][i],',',
                              barcode_to_well.get_well_id_384_to_96(i, False, zero_pad_co, id_length),',',
                              counts[2],',',
-                             counts[3],'\n']))
+                             index_flags[3][i],',',
+                             counts[3],
+                             index_flags[2][i],',',
+                             '\n']))
             
     # Error checking and compress output
     if validreads['all_barcodes'] < 0.05:
