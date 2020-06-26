@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 def get_row_col_count(index_set):
     if len(index_set) == 96:
         ncol = 12

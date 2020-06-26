@@ -270,6 +270,9 @@ process barcode_correct {
   publishDir    path: "${params.demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*.fastq.gz", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.stats.json", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.barcode_counts.csv", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.index_counts.csv", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.tag_pair_counts.csv", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.pcr_pair_counts.csv", mode: 'copy'
   
   input:
     // set file(R1), file(R2) from bcl2fastq_fastqs.splitFastq(by: params.fastq_chunk_size, file: true, pe: true)
