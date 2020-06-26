@@ -241,15 +241,15 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
         for combination in list(itertools.product(*indices_to_use)):
             sample_lookup_table[combination] = sample
     
-    pcr_pairs = {}
-    for (pcri7_list, pcri5_list) in zip( pcri7_indices, pcri5_indices):
-      for combination in itertools.product(pcri7_list, pcri5_list):
-        pcr_pairs.setdefault( (combination[0]-1, combination[1]-1), 1 )
-
     tag_pairs = {}
     for (tagi7_list, tagi5_list) in zip( tagi7_indices, tagi5_indices):
       for combination in itertools.product(tagi7_list, tagi5_list):
-        tag_pairs.setdefault( (combination[0]-1, combination[1]-1), 1 )
+        tag_pairs.setdefault( (combination[0], combination[1]), 1 )
+
+    pcr_pairs = {}
+    for (pcri7_list, pcri5_list) in zip( pcri7_indices, pcri5_indices):
+      for combination in itertools.product(pcri7_list, pcri5_list):
+        pcr_pairs.setdefault( (combination[0], combination[1]), 1 )
 
     return index_mask, sample_lookup_table, tag_pairs, pcr_pairs, index_flags
 
@@ -420,30 +420,25 @@ if __name__ == '__main__':
             validreads['tagmentation_i7'] += 1
             tagmentation_i7_index = tagi7_to_index.get(tagmentation_i7_seq)
             tagmentation_i7_count[tagmentation_i7_index] += 1
-#            if tagmentation_i7_index is None:
-#                print( 'tagmentation i7 index is none for sequence %s (%s)' % (tagmentation_i7_seq,tagi7_in) )
         if tagmentation_i5_seq is not None:
             validreads['tagmentation_i5'] += 1
             tagmentation_i5_index = tagi5_to_index.get(tagmentation_i5_seq)
             tagmentation_i5_count[tagmentation_i5_index] += 1
-#            if tagmentation_i5_index is None:
-#                print( 'tagmentation i5 index is none for sequence % (%s)s' % (tagmentation_i5_seq,tagi5_in) )
+
         if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
             validreads['tagmentation'] += 1
             if tag_pairs.get((tagmentation_i7_index, tagmentation_i5_index)) is not None:
                 validreads['tagmentation_match'] += 1
+
         if pcr_i7_seq is not None:
             validreads['pcr_i7'] += 1
             pcr_i7_index = pcri7_to_index.get(pcr_i7_seq)
             pcr_i7_count[pcr_i7_index] += 1
-#            if pcr_i7_index is None:
-#                print( 'pcr i7 index is none for sequence %s (%s)' % (pcr_i7_seq,pcri7_in) )
         if pcr_i5_seq is not None:
             validreads['pcr_i5'] += 1
             pcr_i5_index = pcri5_to_index.get(pcr_i5_seq)
             pcr_i5_count[pcr_i5_index] += 1
-#            if pcr_i5_index is None:
-#                print( 'pcr i5 index is none for sequence %s (%s)' % (pcr_i5_seq,pcri5_in) )
+
         if pcr_i7_seq is not None and pcr_i5_seq is not None:
             validreads['pcr'] += 1
             if pcr_pairs.get((pcr_i7_index, pcr_i5_index)) is not None:
@@ -502,17 +497,17 @@ if __name__ == '__main__':
     id_length = 2
     with open(output_file_counts_indexes_csv,'wt') as f:
         for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
-            f.write(''.join([i,',',
-                             barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',',
-                             counts[0],',',
-                             index_flags[1][i],',',
-                             counts[1],',',
-                             index_flags[0][i],',',
-                             barcode_to_well.get_well_id_384_to_96(i, False, zero_pad_col, id_length),',',
-                             counts[2],',',
-                             index_flags[3][i],',',
-                             counts[3],
-                             index_flags[2][i],',',
+            f.write(''.join([str(i),',', \
+                             barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',', \
+                             str(counts[0]),',', \
+                             str(index_flags[1][i]),',', \
+                             str(counts[1]),',', \
+                             str(index_flags[0][i]),',', \
+                             barcode_to_well.get_well_id_384_to_96(i, False, zero_pad_col, id_length),',', \
+                             str(counts[2]),',', \
+                             str(index_flags[3][i]),',', \
+                             str(counts[3]),',', \
+                             str(index_flags[2][i]),',', \
                              '\n']))
             
     # Error checking and compress output

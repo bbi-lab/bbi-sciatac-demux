@@ -213,7 +213,7 @@ def index_lists_to_flags( index_lists, num_well ):
     flags = [0] * num_well
     for index_list in index_lists:
         for i in index_list:
-            flags[i-1] = 1
+            flags[i] = 1
     return flags
     
     
