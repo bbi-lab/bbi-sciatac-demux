@@ -243,12 +243,12 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     tag_pairs_counts = {}
     for (tagi7_list, tagi5_list) in zip( tagi7_indices, tagi5_indices):
         for combination in itertools.product(tagi7_list, tagi5_list):
-            tag_pairs_counts.setdefault( (combination[0], combination[1]), 1 )
+            tag_pairs_counts.setdefault( (combination[0], combination[1]), 0 )
 
     pcr_pairs_counts = {}
     for (pcri7_list, pcri5_list) in zip( pcri7_indices, pcri5_indices):
         for combination in itertools.product(pcri7_list, pcri5_list):
-            pcr_pairs_counts.setdefault( (combination[0], combination[1]), 1 )
+            pcr_pairs_counts.setdefault( (combination[0], combination[1]), 0 )
 
     return index_mask, sample_lookup_table, tag_pairs_counts, pcr_pairs_counts, index_flags
 
@@ -493,7 +493,7 @@ if __name__ == '__main__':
 
     # write barcode count csv file
     with open(output_file_counts_barcodes_csv,'wt') as f:
-        f.write('lane_number,barcode_string,barcode_count')
+        f.write('lane_number,barcode_string,barcode_count\n')
         for barcodes_string in barcodes_string_count.keys():
             btmp = barcodes_string if (type( barcodes_string ) == str) else 'None'
             f.write(''.join([lane_num, ',', btmp, ',', str(barcodes_string_count[barcodes_string]),'\n']))
@@ -502,7 +502,7 @@ if __name__ == '__main__':
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_indexes_csv,'wt') as f:
-        f.write('well_index,i7_well,tagi7_count,tagi7_flag,pcri7_count,pcri7_flag,i5_well,pcri5_count,pcri5_flag,tagi7_count,tagi7_flag')
+        f.write('well_index,i7_well,tagi7_count,tagi7_flag,pcri7_count,pcri7_flag,i5_well,pcri5_count,pcri5_flag,tagi7_count,tagi7_flag\n')
         for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
             f.write(''.join([str(i+1),',', \
                              barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',', \
@@ -520,7 +520,7 @@ if __name__ == '__main__':
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_tag_pair_csv,'wt') as f:
-        f.write('tagi7_index,tagi7_well,tagi5_index,tagi5_well,tag_pair_count')
+        f.write('tagi7_index,tagi7_well,tagi5_index,tagi5_well,tag_pair_count\n')
         for pair_tuple in tag_pairs_counts.keys():
             f.write(''.join([str(pair_tuple[0]+1),',',
                             barcode_to_well.get_well_id_384_to_96(pair_tuple[0], True, zero_pad_col, id_length),',',
@@ -531,7 +531,7 @@ if __name__ == '__main__':
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_pcr_pair_csv,'wt') as f: 
-        f.write('pcri7_index,pcri7_well,pcri5_index,pcri5_well,pcr_pair_count')
+        f.write('pcri7_index,pcri7_well,pcri5_index,pcri5_well,pcr_pair_count\n')
         for pair_tuple in pcr_pairs_counts.keys():
             f.write(''.join([str(pair_tuple[0]+1),',',
                             barcode_to_well.get_well_id_384_to_96(pair_tuple[0], True, zero_pad_col, id_length),',',
