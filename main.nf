@@ -280,8 +280,11 @@ process barcode_correct {
     
   output:
     file "*.fastq.gz" into barcode_fastqs mode flatten
-    file "*.barcode_counts.csv" into barcode_counts_csv mode flatten
     file "*.stats.json" into barcode_stats_json mode flatten
+    file "*.barcode_counts.csv" into barcode_counts_csv mode flatten
+    file "*.index_counts.csv" into index_counts_csv mode flatten
+    file "*.tag_pair_counts.csv" into tag_pair_counts_csv mode flatten
+    file "*.pcr_pair_counts.csv" into pcr_pair_counts_csv mode flatten
 
   script:
   """
