@@ -508,7 +508,7 @@ if __name__ == '__main__':
                              index_flags[1][i],',',
                              counts[1],',',
                              index_flags[0][i],',',
-                             barcode_to_well.get_well_id_384_to_96(i, False, zero_pad_co, id_length),',',
+                             barcode_to_well.get_well_id_384_to_96(i, False, zero_pad_col, id_length),',',
                              counts[2],',',
                              index_flags[3][i],',',
                              counts[3],
