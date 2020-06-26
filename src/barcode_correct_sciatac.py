@@ -496,8 +496,8 @@ if __name__ == '__main__':
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_indexes_csv,'wt') as f:
-        for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 1):
-            f.write(''.join([str(i),',', \
+        for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
+            f.write(''.join([str(i+1),',', \
                              barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',', \
                              str(counts[0]),',', \
                              str(index_flags[1][i]),',', \
