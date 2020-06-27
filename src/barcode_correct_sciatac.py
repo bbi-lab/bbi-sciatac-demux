@@ -530,7 +530,7 @@ if __name__ == '__main__':
                             str(pair_tuple[1]+1),',',
                             barcode_to_well.get_well_id_384_to_96(pair_tuple[1], False, zero_pad_col, id_length),',',
                             str(tag_pairs_counts[pair_tuple]),'\n']))
-        
+
     # write pcr pair counts by pcr well
     zero_pad_col = True
     id_length = 2
