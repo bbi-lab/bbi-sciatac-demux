@@ -383,6 +383,7 @@ if __name__ == '__main__':
     totreads = 0
     total_not_specified_in_samplesheet = 0
     validreads = {}
+    validreads['Lane'] = '["Lane %s"]' % (lane_num)
     validreads['pcr_i5'] = 0
     validreads['pcr_i7'] = 0
     validreads['pcr'] = 0
@@ -517,6 +518,7 @@ if __name__ == '__main__':
                              str(index_flags[2][i]),',', \
                              '\n']))
 
+    # write tag pair counts by tag well
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_tag_pair_csv,'wt') as f:
@@ -528,6 +530,7 @@ if __name__ == '__main__':
                             barcode_to_well.get_well_id_384_to_96(pair_tuple[1], False, zero_pad_col, id_length),',',
                             str(tag_pairs_counts[pair_tuple]),'\n']))
         
+    # write pcr pair counts by pcr well
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_pcr_pair_csv,'wt') as f: 
