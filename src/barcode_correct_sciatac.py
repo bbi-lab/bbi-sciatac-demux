@@ -269,9 +269,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Note: args.filename may include (leading) directory information.
-    lane_num = args.filename
-    lane_num = re.sub('.*Undetermined_S0_L','L',lane_num)
-    lane_num = lane_num.replace('_R1_001.fastq.gz', '')
+    lane_str = args.filename
+    lane_str = re.sub('.*Undetermined_S0_L','L',lane_str)
+    lane_str = lane_str.replace('_R1_001.fastq.gz', '')
+    lane_num = int(re.sub('L', '', lane_str))
 
     if args.two_level_indexed_tn5 and args.wells_384:
         raise ValueError('There is no 384 well barcode set for indexed Tn5, may not specify both --two_level_indexed_tn5 and --wells_384.')
@@ -362,8 +363,8 @@ if __name__ == '__main__':
     
     output_files = {}
     for sample in list(set(sample_lookup.values())):
-        output_file_1 = os.path.join(args.out_dir, '%s-RUN001_%s_R1.fastq' % (sample, lane_num))
-        output_file_2 = os.path.join(args.out_dir, '%s-RUN001_%s_R2.fastq' % (sample, lane_num))
+        output_file_1 = os.path.join(args.out_dir, '%s-RUN001_%s_R1.fastq' % (sample, lane_str))
+        output_file_2 = os.path.join(args.out_dir, '%s-RUN001_%s_R2.fastq' % (sample, lane_str))
         output_files[sample] = {}
         output_files[sample]['r1'] = open(output_file_1, 'w')
         output_files[sample]['r1_name'] = output_file_1
@@ -371,11 +372,11 @@ if __name__ == '__main__':
         output_files[sample]['r2_name'] = output_file_2
 
     
-    output_file_stats_json = os.path.join(args.out_dir, 'RUN001_%s.stats.json' % (lane_num))
-    output_file_counts_barcodes_csv = os.path.join(args.out_dir, 'RUN001_%s.barcode_counts.csv' % (lane_num))
-    output_file_counts_indexes_csv = os.path.join(args.out_dir, 'RUN001_%s.index_counts.csv' % (lane_num))
-    output_file_counts_tag_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.tag_pair_counts.csv' % (lane_num))
-    output_file_counts_pcr_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.pcr_pair_counts.csv' % (lane_num))
+    output_file_stats_json = os.path.join(args.out_dir, 'RUN001_%s.stats.json' % (lane_str))
+    output_file_counts_barcodes_csv = os.path.join(args.out_dir, 'RUN001_%s.barcode_counts.csv' % (lane_str))
+    output_file_counts_indexes_csv = os.path.join(args.out_dir, 'RUN001_%s.index_counts.csv' % (lane_str))
+    output_file_counts_tag_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.tag_pair_counts.csv' % (lane_str))
+    output_file_counts_pcr_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.pcr_pair_counts.csv' % (lane_str))
 
     if1 = FastqGeneralIterator(args.input1)
     if2 = FastqGeneralIterator(args.input2)
@@ -383,7 +384,7 @@ if __name__ == '__main__':
     totreads = 0
     total_not_specified_in_samplesheet = 0
     validreads = {}
-    validreads['Lane'] = '["Lane %s"]' % (lane_num)
+    validreads['Lane'] = 'Lane %d' % (lane_num)
     validreads['pcr_i5'] = 0
     validreads['pcr_i7'] = 0
     validreads['pcr'] = 0
@@ -497,7 +498,7 @@ if __name__ == '__main__':
         f.write('lane_number,barcode_string,barcode_count\n')
         for barcodes_string in barcodes_string_count.keys():
             btmp = barcodes_string if (type( barcodes_string ) == str) else 'None'
-            f.write(''.join([lane_num, ',', btmp, ',', str(barcodes_string_count[barcodes_string]),'\n']))
+            f.write(''.join([lane_str, ',', btmp, ',', str(barcodes_string_count[barcodes_string]),'\n']))
             
     # write tag and pcr counts by tag/pcr well
     zero_pad_col = True
