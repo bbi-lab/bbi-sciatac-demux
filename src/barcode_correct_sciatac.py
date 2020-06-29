@@ -240,11 +240,10 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
         for combination in list(itertools.product(*indices_to_use)):
             sample_lookup_table[combination] = sample
 
-    tagi5_sample_list = [None] * 384
-    for sample_index,sample in enumerate(samples):
-        for index_list in tagi5_indices[sample_index]:
-            for index_i in index_list:
-                tagi5_sample_list[i] = sample
+    tagi5_sample_list = ['None'] * 384
+    for sample_i, tagi5_list in enumerate(tagi5_indices):
+        for tagi5_i in tagi5_list:
+            tagi5_sample_list[tagi5_i] = samples[sample_i]
     
     tag_pairs_counts = {}
     for (tagi7_list, tagi5_list) in zip( tagi7_indices, tagi5_indices):
@@ -509,9 +508,9 @@ if __name__ == '__main__':
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_indexes_csv,'wt') as f:
-        f.write('well_index,i7_well,tagi7_count,tagi7_flag,pcri7_count,pcri7_flag,i5_well,pcri5_count,pcri5_flag,tagi7_count,tagi7_flag,sample_name_tagi5\n')
+        f.write('well_index,i7_well,tagi7_count,tagi7_flag,pcri7_count,pcri7_flag,i5_well,pcri5_count,pcri5_flag,tagi5_count,tagi5_flag,sample_name_tagi5\n')
         for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
-            f.write(''.join([str(i+1),',', \
+            f.write(''.join([str(i),',', \
                              str(i+1),',', \
                              barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',', \
                              str(counts[0]),',', \
@@ -531,27 +530,27 @@ if __name__ == '__main__':
     id_length = 2
     with open(output_file_counts_tag_pair_csv,'wt') as f:
         f.write('tagi7_index,tagi7_well,tagi5_index,tagi5_well,tag_pair_count,sample_name_tagi5\n')
-        for pair_tuple in tag_pairs_counts.keys():
-            f.write(''.join([str(pair_tuple[0]+1),',',
+        for i, pair_tuple in enumerate(tag_pairs_counts.keys()):
+            f.write(''.join([str(i),',',
                              str(pair_tuple[0]+1),',',
                              barcode_to_well.get_well_id_384_to_96(pair_tuple[0], True, zero_pad_col, id_length),',',
                              str(pair_tuple[1]+1),',',
                              barcode_to_well.get_well_id_384_to_96(pair_tuple[1], False, zero_pad_col, id_length),',',
-                             str(tag_pairs_counts[pair_tuple]),'\n',
-                             tagi5_sample_list[pair_tuple[1]]]))
+                             str(tag_pairs_counts[pair_tuple]),',',
+                             tagi5_sample_list[pair_tuple[1]],'\n']))
 
     # write pcr pair counts by pcr well
     zero_pad_col = True
     id_length = 2
     with open(output_file_counts_pcr_pair_csv,'wt') as f: 
         f.write('pcri7_index,pcri7_well,pcri5_index,pcri5_well,pcr_pair_count\n')
-        for pair_tuple in pcr_pairs_counts.keys():
-            f.write(''.join([str(pair_tuple[0]+1),',',
+        for i, pair_tuple in enumerate(pcr_pairs_counts.keys()):
+            f.write(''.join([str(i),',',
                              str(pair_tuple[0]+1),',',
                              barcode_to_well.get_well_id_384_to_96(pair_tuple[0], True, zero_pad_col, id_length),',',
                              str(pair_tuple[1]+1),',',
                              barcode_to_well.get_well_id_384_to_96(pair_tuple[1], False, zero_pad_col, id_length),',',
-                             str(pcr_pairs_counts[pair_tuple[0]]),'\n']))
+                             str(pcr_pairs_counts[pair_tuple]),'\n']))
             
     # Error checking and compress output
     if validreads['all_barcodes'] < 0.05:
