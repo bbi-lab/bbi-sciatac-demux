@@ -402,7 +402,6 @@ if __name__ == '__main__':
 
     start = time.time()
 
-    barcodes_string_count = {}
     tagmentation_i7_count = [0] * 384
     pcr_i7_count = [0] * 384
     pcr_i5_count = [0] * 384
@@ -481,28 +480,15 @@ if __name__ == '__main__':
             output_files[sample]['r1'].write(''.join(['@', barcodes_string, ':', str(totreads), '\n', r1_seq, '\n+\n', r1_qual, '\n']))
             output_files[sample]['r2'].write(''.join(['@', barcodes_string, ':', str(totreads), '\n', r2_seq, '\n+\n', r2_qual, '\n']))
 
-        barcodes_string_count[barcodes_string] = barcodes_string_count.setdefault(barcodes_string, 0) + 1
-
     if totreads == 0:
         raise ValueError('No reads found in fastq input.')
 
     # Output basic stats
-    # Note: write counts; not fractions
-#    for stat in validreads:
-#        validreads[stat] = validreads[stat] / float(totreads)
-        
     validreads['total_input_reads'] = totreads
     validreads['total_not_specified_in_samplesheet'] = total_not_specified_in_samplesheet
-#    validreads['fraction_not_specified_in_samplesheet'] = total_not_specified_in_samplesheet / totreads
 
     with open(output_file_stats_json, 'wt') as f:
         f.write(json.dumps(validreads, indent=4))
-
-    # write barcode count csv file
-    with open(output_file_counts_barcodes_csv,'wt') as f:
-        for barcodes_string in barcodes_string_count.keys():
-            btmp = barcodes_string if (type( barcodes_string ) == str) else 'None'
-            f.write(''.join([lane_str, ',', btmp, ',', str(barcodes_string_count[barcodes_string]),'\n']))
             
     # write tag and pcr counts by tag/pcr well
     zero_pad_col = True
