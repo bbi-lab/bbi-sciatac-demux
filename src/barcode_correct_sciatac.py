@@ -187,7 +187,7 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     Takes a samplesheet file handle and returns a list of True/False indicating whether index was used in lookup and a lookup of tuples of index combinations to sample names.
 
     Args:
-        samplesheet (file handle): opened file handle to samplesheet
+        samplesheet (file handle): opened file handle to samplesheet data file (JSON format)
         tagi5 (list): list of tag/lig i5 indices
         pcri5 (list): list of pcr i5 indices
         pcri7 (list): list of pcr i7 indices
@@ -197,17 +197,25 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
         (list of bool, dict of tuple to sample name, dict of valid tagmentation index pair tuples, dict of valid PCR index pair tuples): [use_pcri7, use_tagi7, use_tagi5, use_pcri5] where each entry indicates usage of that barcode in indexing and lookup of (tagi7,tagi5), for example.
 
     """
+    sample_data = json.load(samplesheet)
+    sample_indices_list = sample_data['sample_indices_list']
+
     pcri7_indices = []
     tagi7_indices = []
     tagi5_indices = []
     pcri5_indices = []
     samples = []
-    for line in samplesheet:
-        if line.startswith('sample_id\tranges'):
-            continue
-
-        entries = line.strip().split()
-        sample, indices, genome = entries
+# the commented out lines below are for the CSV samplesheet, which is replaced by the JSON samplesheet file.
+#    for line in samplesheet:
+#        if line.startswith('sample_id\tranges'):
+#            continue
+#
+#        entries = line.strip().split()
+#        sample, indices, genome = entries
+    for sample_indices in sample_indices_list:
+        sample  = sample_indices['sample_id']
+        indices = sample_indices['ranges']
+        
         indexsplit = indices.split(':')
 
         # Note: indexsplitter takes 1-based indexes and returns 0-based indexes
@@ -268,7 +276,7 @@ if __name__ == '__main__':
     parser.add_argument('--out_dir', required=True, help='Output directory.')
     parser.add_argument('--stats_out', required=True, help='write JSON file with output stats about processed reads and correction rates (0=no;1=yes.')
     parser.add_argument('--two_level_indexed_tn5', action='store_true', help='Flag to run assuming that the library is a two-level indexed-TN5 sample.')
-    parser.add_argument('--wells_384', action='store_true', help='Flag to run assuming That the known barcode set is the 384 well set.')
+    parser.add_argument('--wells_384', action='store_true', help='Flag to run assuming that the known barcode set is the 384 well set.')
     parser.add_argument('--well_ids', action='store_true', help='Flag to output cell IDs that are composed of well IDs rather than the actual sequences.')
     parser.add_argument('-X', '--nextseq', help='NextSeq run indicator', dest='nextseq', action="store_true")
     args = parser.parse_args()

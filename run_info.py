@@ -27,6 +27,16 @@ def open_file(f, mode='rt'):
         return open(f, mode)
 
 
+# Notes on MiSeq runParameters.xml
+#   o  a MiSeq runParameters.xml file differs in comparison to a NextSeq RunParameters.xml
+#      file in at least the following ways
+#        o  file name differs as written above
+#        o  FlowcellRFIDTag vs FlowCellRfidTag
+#        o  ScannerID vs InstrumentID
+#        o  Read information format differs
+#             o  MiSeq: in <Reads> block
+#             o  NextSeq: in <Setup> block
+#
 def get_run_info(flow_cell_path):
     """
     Helper function to get some info about the sequencing runs.
