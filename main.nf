@@ -25,10 +25,13 @@
 **      scope in Groovy.
 */
 
-import groovy.json.JsonOutput
+
 import java.nio.file.Files
 import java.nio.file.Path 
 import java.nio.file.Paths
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 
 /*
 ** Run date/time.
@@ -136,6 +139,14 @@ checkSamplesheet( params )
 illuminaRunInfoMap = readIlluminaRunInfo( params )
 
 /*
+** Check that these are paired-end reads.
+*/
+if( illuminaRunInfoMap['paired_end'] == false )
+{
+  throw new Exception('Single-end reads detected: paired-end reads required')
+}
+
+/*
 ** Write run information to args.json file.
 */
 writeArgsJson( params, timeNow )
@@ -144,7 +155,7 @@ writeArgsJson( params, timeNow )
 ** Does the i5 sequence require reverse complementing?
 ** If yes, set sequence_flag.
 */
-def sequencer_flag = ( illuminaRunInfoMap['reverse_complement_i5'].toInteger() ) ? '-X' : ''
+def sequencer_flag = ( illuminaRunInfoMap['reverse_complement_i5'] ) ? '-X' : ''
 
 /*
 ** Add optional barcode correction parameters.
@@ -489,22 +500,19 @@ def archiveRunFiles( params, timeNow )
 
 
 def readIlluminaRunInfo( params ) {
-    def command = "${script_dir}/run_info_read.py ${params.run_dir}"
+    def command = "${script_dir}/read_run_info.py ${params.run_dir}"
     def strOut = new StringBuffer()
     def strErr = new StringBuffer()
     def proc = command.execute()
+    def jsonSlurper = new JsonSlurper()
+
     proc.consumeProcessOutput(strOut, strErr)
     proc.waitForProcessOutput()
     if( proc.exitValue() != 0 ) {
         System.err << strErr.toString()
         System.exit( -1 )
     }
-
-    def illuminaRunInfoMap = [:]
-    def tokens = strOut.tokenize()
-    for( i = 0; i < tokens.size; i += 2 ) {
-        illuminaRunInfoMap.put( tokens[i], tokens[i+1] )
-    }
+    illuminaRunInfoMap = jsonSlurper.parseText(strOut.toString())
     return( illuminaRunInfoMap )
 }
 
