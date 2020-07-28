@@ -350,8 +350,10 @@ if __name__ == '__main__':
     validreads = {}
     validreads['pcr_i5'] = 0
     validreads['pcr_i7'] = 0
+    validreads['pcr'] = 0
     validreads['tagmentation_i5'] = 0
     validreads['tagmentation_i7'] = 0
+    validreads['tagmentation'] = 0
     validreads['all_barcodes'] = 0
 
     start = time.time()
