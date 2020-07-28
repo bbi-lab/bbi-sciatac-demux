@@ -544,18 +544,12 @@ def writeArgsJson( params, timeNow ) {
     ** Add sample sheet information.
     */
     def genomeInfo = [:]
-    def samples = []
     def fhSampleSheet = new File( params.sample_sheet )
-    fhSampleSheet.eachLine { line ->
-        def (sample, wells, genome) = line.split(/[ \t]+/)
-        if( sample != "sample_id" ) {
-            samples.add( sample )
-            genomeInfo.put( sample, genome )
-        }
-     }
-     mapRunInfo['DEMUX'] = demuxDict
-     mapRunInfo['samples'] = samples
-     mapRunInfo['genomes'] = genomeInfo
+    def jsonSlurper = new JsonSlurper()
+    samples = jsonSlurper.parse( fhSampleSheet )
+    mapRunInfo['DEMUX'] = demuxDict
+    mapRunInfo['samples'] = samples
+    mapRunInfo['genomes'] = genomeInfo
 
     /*
     ** Add Illumina sequencing run parameters.
