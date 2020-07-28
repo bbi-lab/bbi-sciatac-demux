@@ -386,7 +386,6 @@ if __name__ == '__main__':
 
     
     output_file_stats_json = os.path.join(args.out_dir, 'RUN001_%s.stats.json' % (lane_str))
-    output_file_counts_barcodes_csv = os.path.join(args.out_dir, 'RUN001_%s.barcode_counts.csv' % (lane_str))
     output_file_counts_indexes_csv = os.path.join(args.out_dir, 'RUN001_%s.index_counts.csv' % (lane_str))
     output_file_counts_tag_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.tag_pair_counts.csv' % (lane_str))
     output_file_counts_pcr_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.pcr_pair_counts.csv' % (lane_str))
