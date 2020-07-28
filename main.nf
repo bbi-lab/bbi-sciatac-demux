@@ -269,8 +269,8 @@ process bcl2fastq {
 **      two scale similarly with file size.
 **   o  barcode_correct_sciatac.py uses pigz to compress fastq files. pigz is
 **      supposed to use all available processors to compress files.
-**   o  the barcode_stats_json and barcode_counts_csv output channels are dummy
-**      channels. It appears that the files do not get copied by the publishDir
+**   o  the barcode_stats_json output channel is a dummy channel. It appears
+**      that the files do not get copied by the publishDir
 **      directive if these files are not in a channel.
 */
 process barcode_correct {
@@ -280,7 +280,6 @@ process barcode_correct {
   module 'java/latest:modules:modules-init:modules-gs:zlib/1.2.6:pigz/latest'
   publishDir    path: "${params.demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*.fastq.gz", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.stats.json", mode: 'copy'
-  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.barcode_counts.csv", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.index_counts.csv", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.tag_pair_counts.csv", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.pcr_pair_counts.csv", mode: 'copy'
@@ -292,7 +291,6 @@ process barcode_correct {
   output:
     file "*.fastq.gz" into barcode_fastqs mode flatten
     file "*.stats.json" into barcode_stats_json mode flatten
-    file "*.barcode_counts.csv" into barcode_counts_csv mode flatten
     file "*.index_counts.csv" into index_counts_csv mode flatten
     file "*.tag_pair_counts.csv" into tag_pair_counts_csv mode flatten
     file "*.pcr_pair_counts.csv" into pcr_pair_counts_csv mode flatten
