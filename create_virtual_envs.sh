@@ -35,7 +35,7 @@ echo 'Cleaning cache directories...'
 rm -rf ~/.cache/pip
 
 #
-# Remove existing python virtual environment in the background, if it exists.
+# Remove existing pypy virtual environment in the background, if it exists.
 #
 if [ -d $DIR/src/pypy_env ]; then
         echo 'Removing existing pypy virtualenv...'
