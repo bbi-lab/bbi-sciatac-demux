@@ -75,7 +75,7 @@ def onError = { return( "retry" ) }
 params.help = false
 params.num_well = 384
 params.level = 3
-params.max_cores = 16
+params.max_cores = 6
 params.max_mem_bcl2fastq = 40
 
 /*
@@ -86,16 +86,14 @@ params.max_mem_bcl2fastq = 40
 /*
 ** Define/initialize some internal parameters.
 ** Notes:
-**   o  sample_sheet_phantom is a non-existent file required by bcl2fastq
 */
 def sample_sheet = params.sample_sheet
 def run_dir      = params.run_dir
 def demux_dir    = params.demux_dir
-def num_threads_bcl2fasta_process
+def num_threads_bcl2fasta_process = params.max_cores
 def mem_bcl2fastq = params.max_mem_bcl2fastq
-def num_threads_bcl2fastq_io
+def num_threads_bcl2fastq_io = 6
 def options_barcode_correct = ''
-def sample_sheet_phantom = run_dir + '/Sample_sheet.csv'
 
 /*
 ** Print usage when run with --help parameter.
@@ -191,33 +189,47 @@ if( num_threads_bcl2fasta_process / 2 < 4 ) {
 	num_threads_bcl2fastq_io = 4
 }
 
+
+/*
+** Make a fake sample sheet required by bcl2fastq. The sample sheet has Ns for
+** the sequence in order to force bcl2fastq to make undetermined fastqs.
+*/
+process make_fake_sample_sheet {
+  cache 'lenient'
+  errorStrategy onError
+
+  output:
+  file("SampleSheet.csv") into makeFakeSampleSheetOutChannel
+
+  script:
+  """
+  $script_dir/make_fake_sample_sheet.py --p7_index_length=${illuminaRunInfoMap['p7_index_length']} --p5_index_length=${illuminaRunInfoMap['p5_index_length']}
+  """
+}
+
+
 /*
 ** Run bcl2fastq to make fastq files from Illumina bcl files.
 **
 ** Notes:
 **   o  copy 'Reports' and 'Stats' directories to an accessible directory.
-**   o  bcl2fastq/2.16 appears to be a special version. (bcl2fastq/2.20 does not write the required barcodes to sequence headers)
-**      I understand that the more recent bcl2fastq programs required a sample sheet with Ns as sequences.
 */
-Channel
-    .fromList( [ "${sample_sheet_phantom}" ] )
+makeFakeSampleSheetOutChannel
     .set { bcl2fastqInChannel }
-    
+
 process bcl2fastq {
   cache 'lenient'
   errorStrategy onError
-  penv 'serial'
   cpus num_threads_bcl2fasta_process
   memory "$mem_bcl2fastq GB"    
-  module 'java/latest:modules:modules-init:modules-gs'
-  module 'mpfr/3.1.0:mpc/0.8.2:gmp/5.0.2:gcc/4.9.1:bcl2fastq/2.16'
 //  note: bge: the following publishDir statement is commented out in bbi_dmux. I want it to work for diagnostics during development.
   publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Undetermined_S0_*.fastq.gz", mode: 'copy'
   publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Stats/*", mode: 'copy'
   publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Reports/*", mode: 'copy'
 
   input:
-    val inPhantom from bcl2fastqInChannel
+    file(inFile) from bcl2fastqInChannel
+//    file(inFile) from makeFakeSampleSheetOutChannel
 
   output:
     set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into bcl2fastq_fastqs mode flatten
@@ -244,7 +256,7 @@ process bcl2fastq {
     bcl2fastq --runfolder-dir      ${params.run_dir} \
               --output-dir         . \
               --interop-dir        . \
-              --sample-sheet       ${sample_sheet_phantom} \
+              --sample-sheet       $inFile \
               --loading-threads    ${num_threads_bcl2fastq_io} \
               --processing-threads ${num_threads_bcl2fasta_process}  \
               --writing-threads    ${num_threads_bcl2fastq_io} \
@@ -276,8 +288,6 @@ process bcl2fastq {
 process barcode_correct {
   cache 'lenient'
   errorStrategy onError
-  memory "16 GB"
-  module 'java/latest:modules:modules-init:modules-gs:zlib/1.2.6:pigz/latest'
   publishDir    path: "${params.demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*.fastq.gz", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.stats.json", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.index_counts.csv", mode: 'copy'
@@ -329,17 +339,11 @@ barcode_fastqs
 /*
 ** Run adapter trimming script.
 */
-def num_threads_trimmomatic = 4
-def mem_trimmomatic = 4.0 / num_threads_trimmomatic
 def trimmomatic_exe="${script_dir}/Trimmomatic-0.36/trimmomatic-0.36.jar"
 def adapters_path="${script_dir}/Trimmomatic-0.36/adapters/NexteraPE-PE.fa:2:30:10:1:true"
 process adapter_trimming {
   cache 'lenient'
   errorStrategy onError
-  penv 'serial'
-  cpus num_threads_trimmomatic
-  memory "${mem_trimmomatic} GB"
-  module 'java/8u25:modules:modules-init:modules-gs'
   publishDir path: "$params.demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
   
   input:
@@ -353,7 +357,7 @@ process adapter_trimming {
   mkdir -p fastqs_trim
   java -Xmx1G -jar $trimmomatic_exe \
        PE \
-       -threads $num_threads_trimmomatic \
+       -threads $task.cpus \
        $read_pair \
        ${prefix}_R1.trimmed.fastq.gz \
        ${prefix}_R1.trimmed_unpaired.fastq.gz \
@@ -544,10 +548,19 @@ def writeArgsJson( params, timeNow ) {
     ** Add sample sheet information.
     */
     def genomeInfo = [:]
+    def samples = []
     def fhSampleSheet = new File( params.sample_sheet )
     def jsonSlurper = new JsonSlurper()
-    samples = jsonSlurper.parse( fhSampleSheet )
+    def sampleData = jsonSlurper.parse( fhSampleSheet )
+
+    sampleData['sample_indices_list'].each { aSample ->
+        samples.add( aSample['sample_id'] )
+        genomeInfo.put( aSample['sample_id'], aSample['genome'] )
+
+    }
+
     mapRunInfo['DEMUX'] = demuxDict
+    mapRunInfo['sampledata'] = sampleData
     mapRunInfo['samples'] = samples
     mapRunInfo['genomes'] = genomeInfo
 
