@@ -56,12 +56,7 @@ pip install -r $DIR/pypy_requirements.txt
 #
 # Clone the two repositories once only.
 #
-git clone https://github.com/andrewhill157/easygrid.git
 git clone https://github.com/andrewhill157/barcodeutils.git
-
-pushd easygrid
-pypy setup.py install
-popd
 
 pushd barcodeutils
 pypy setup.py install
