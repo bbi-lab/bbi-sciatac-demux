@@ -12,9 +12,9 @@ NEXTFLOW="/xxx/bin/nextflow"
 NF_DEMUX="/xxx/bbi-sciatac-demux/main.nf"
 
 #
-# Get the path to the analyze output directory from
+# Get the path to the demux output directory from
 # the configuration file and set the Nextflow work
-# directory to be in the analyze output directory.
+# directory to be in the demux output directory.
 #
 DEMUX_DIR=`cat $CONFIG_FILE | sed 's/[ ]*//g' | awk 'BEGIN{FS="="}{if($1=="params.demux_dir"){print$2}}' | sed 's/"//g'`
 WORK_DIR="$DEMUX_DIR/work"
@@ -22,7 +22,7 @@ WORK_DIR="$DEMUX_DIR/work"
 #
 # Use REPORT_FIL, TRACE_FIL, and TIMELINE_FIL so that
 # Nextflow writes some informative processing information
-# in the analyze output directory.
+# in the demux output directory.
 #
 REPORT_FIL=$DEMUX_DIR/demux.report.html
 TRACE_FIL=$DEMUX_DIR/demux.trace.tsv

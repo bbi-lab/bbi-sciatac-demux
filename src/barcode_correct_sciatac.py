@@ -154,27 +154,25 @@ def get_barcode_seqs(r1_name, nextseq, two_level_indexed_tn5):
     return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
 
 def indexsplitter(indexrange):
-	if len(indexrange) < 3:
-		indexout = [int(indexrange)-1]
-	elif "-" in indexrange or ',' in indexrange:
-		range_list = [x for x in indexrange.split(",")]
-		indexout = []
-		for myrange in range_list:
-			index_range = myrange.split('-')
-			
-			if len(index_range) == 1:
-				start = int(index_range[0]) - 1
-				end = start + 1
-			elif len(index_range) == 2:
-				start = int(index_range[0]) - 1
-				end = int(index_range[1])
-			else:
-				raise ValueError('Invalid index range %s' % myrange)
-
-			indexout.extend(range(start, end))
-	else:
-		raise ValueError('Invalid format for index range: %s' % indexrange)
-	return indexout
+    if len(indexrange) < 3:
+        indexout = [int(indexrange)-1]
+    elif "-" in indexrange or ',' in indexrange:
+        range_list = [x for x in indexrange.split(",")]
+        indexout = []
+        for myrange in range_list:
+            index_range = myrange.split('-')
+            if len(index_range) == 1:
+                start = int(index_range[0]) - 1
+                end = start + 1
+            elif len(index_range) == 2:
+                start = int(index_range[0]) - 1
+                end = int(index_range[1])
+            else:
+                raise ValueError('Invalid index range %s' % myrange)
+            indexout.extend(range(start, end))
+    else:
+        raise ValueError('Invalid format for index range: %s' % indexrange)
+    return indexout
 
 
 
@@ -189,29 +187,38 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     Takes a samplesheet file handle and returns a list of True/False indicating whether index was used in lookup and a lookup of tuples of index combinations to sample names.
 
     Args:
-        samplesheet (file handle): opened file handle to samplesheet
+        samplesheet (file handle): opened file handle to samplesheet data file (JSON format)
         tagi5 (list): list of tag/lig i5 indices
         pcri5 (list): list of pcr i5 indices
         pcri7 (list): list of pcr i7 indices
         tagi7 (list): list of tag/lig i7 indices
 
     Returns:
-        (list of bool, dict of tuple to sample name): [use_pcri7, use_tagi7, use_tagi5, use_pcri5] where each entry indicates usage of that barcode in indexing and lookup of (tagi7,tagi5), for example.
+        (list of bool, dict of tuple to sample name, dict of valid tagmentation index pair tuples, dict of valid PCR index pair tuples): [use_pcri7, use_tagi7, use_tagi5, use_pcri5] where each entry indicates usage of that barcode in indexing and lookup of (tagi7,tagi5), for example.
 
     """
+    sample_data = json.load(samplesheet)
+    sample_indices_list = sample_data['sample_indices_list']
+
     pcri7_indices = []
     tagi7_indices = []
     tagi5_indices = []
     pcri5_indices = []
     samples = []
-    for line in samplesheet:
-        if line.startswith('sample_id\tranges'):
-            continue
-
-        entries = line.strip().split()
-        sample, indices, genome = entries
+# the commented out lines below are for the CSV samplesheet, which is replaced by the JSON samplesheet file.
+#    for line in samplesheet:
+#        if line.startswith('sample_id\tranges'):
+#            continue
+#
+#        entries = line.strip().split()
+#        sample, indices, genome = entries
+    for sample_indices in sample_indices_list:
+        sample  = sample_indices['sample_id']
+        indices = sample_indices['ranges']
+        
         indexsplit = indices.split(':')
 
+        # Note: indexsplitter takes 1-based indexes and returns 0-based indexes
         samples.append(sample)
         pcri7_indices.append(indexsplitter(indexsplit[1]))
         tagi7_indices.append(indexsplitter(indexsplit[0]))
@@ -226,6 +233,10 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     index_mask = [use_pcri7, use_tagi7, use_tagi5, use_pcri5]
     index_whitelists = [pcri7, tagi7, tagi5, pcri5]
     index_lists = [pcri7_indices, tagi7_indices, tagi5_indices, pcri5_indices]
+    index_flags = [barcode_to_well.index_lists_to_flags(pcri7_indices, 384),
+                   barcode_to_well.index_lists_to_flags(tagi7_indices, 384), 
+                   barcode_to_well.index_lists_to_flags(tagi5_indices, 384), 
+                   barcode_to_well.index_lists_to_flags(pcri5_indices, 384)]
     
     sample_lookup_table = {}
     for sample_index,sample in enumerate(samples):
@@ -236,8 +247,23 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
 
         for combination in list(itertools.product(*indices_to_use)):
             sample_lookup_table[combination] = sample
-        
-    return index_mask, sample_lookup_table
+
+    tagi5_sample_list = ['None'] * 384
+    for sample_i, tagi5_list in enumerate(tagi5_indices):
+        for tagi5_i in tagi5_list:
+            tagi5_sample_list[tagi5_i] = samples[sample_i]
+    
+    tag_pairs_counts = {}
+    for (tagi7_list, tagi5_list) in zip( tagi7_indices, tagi5_indices):
+        for combination in itertools.product(tagi7_list, tagi5_list):
+            tag_pairs_counts.setdefault( (combination[0], combination[1]), 0 )
+
+    pcr_pairs_counts = {}
+    for (pcri7_list, pcri5_list) in zip( pcri7_indices, pcri5_indices):
+        for combination in itertools.product(pcri7_list, pcri5_list):
+            pcr_pairs_counts.setdefault( (combination[0], combination[1]), 0 )
+
+    return index_mask, sample_lookup_table, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags
 
 
 if __name__ == '__main__':
@@ -250,20 +276,21 @@ if __name__ == '__main__':
     parser.add_argument('--out_dir', required=True, help='Output directory.')
     parser.add_argument('--stats_out', required=True, help='write JSON file with output stats about processed reads and correction rates (0=no;1=yes.')
     parser.add_argument('--two_level_indexed_tn5', action='store_true', help='Flag to run assuming that the library is a two-level indexed-TN5 sample.')
-    parser.add_argument('--wells_384', action='store_true', help='Flag to run assuming That the known barcode set is the 384 well set.')
+    parser.add_argument('--wells_384', action='store_true', help='Flag to run assuming that the known barcode set is the 384 well set.')
     parser.add_argument('--well_ids', action='store_true', help='Flag to output cell IDs that are composed of well IDs rather than the actual sequences.')
     parser.add_argument('-X', '--nextseq', help='NextSeq run indicator', dest='nextseq', action="store_true")
     args = parser.parse_args()
 
     # Note: args.filename may include (leading) directory information.
-    lane_num = args.filename
-    lane_num = re.sub('.*Undetermined_S0_L','L',lane_num)
-    lane_num = lane_num.replace('_R1_001.fastq.gz', '')
+    lane_str = args.filename
+    lane_str = re.sub('.*Undetermined_S0_L','L',lane_str)
+    lane_str = lane_str.replace('_R1_001.fastq.gz', '')
+    lane_num = int(re.sub('L', '', lane_str))
 
     if args.two_level_indexed_tn5 and args.wells_384:
         raise ValueError('There is no 384 well barcode set for indexed Tn5, may not specify both --two_level_indexed_tn5 and --wells_384.')
 
-	# Set up the right index set depending on the indices
+    # Set up the right index set depending on the indices
     if args.two_level_indexed_tn5:
         tagi7 = bc.nex_i7_two_level_indexed_tn5_list
         pcri7 = bc.pcr_i7_two_level_indexed_tn5_list
@@ -288,8 +315,22 @@ if __name__ == '__main__':
             pcr_to_well = bc.pcr_to_well
 
     # Build up sample mapping from indices to samples
-    index_mask, sample_lookup = get_sample_lookup(open(args.samplesheet), pcri7, tagi7, tagi5, pcri5)
+    index_mask, sample_lookup, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags = get_sample_lookup(open(args.samplesheet), pcri7, tagi7, tagi5, pcri5)
 
+    if args.two_level_indexed_tn5:
+        for i in range( 12, 384 ):
+            index_flags[1][i] = -1
+            index_flags[2][i] = -1
+    else:
+        if not args.wells_384:
+            for i in range( 96, 384 ):
+                index_flags[1][i] = -1
+                index_flags[2][i] = -1
+
+    for i in range( 96, 384 ):
+        index_flags[0][i] = -1
+        index_flags[3][i] = -1
+    
     tagmentation_i7_whitelist = tagi7
     pcr_i7_whitelist = pcri7
 
@@ -319,6 +360,11 @@ if __name__ == '__main__':
             pcr_i5_whitelist = bc.pcr_i5_two_level_indexed_tn5
             tagmentation_i5_whitelist = bc.nex_i5_two_level_indexed_tn5
 
+    tagi7_to_index = barcode_to_well.barcode_index_dict( tagmentation_i7_whitelist )
+    pcri7_to_index = barcode_to_well.barcode_index_dict( pcr_i7_whitelist )
+    pcri5_to_index = barcode_to_well.barcode_index_dict( pcr_i5_whitelist )
+    tagi5_to_index = barcode_to_well.barcode_index_dict( tagmentation_i5_whitelist )
+
     tagmentation_i7_correction_map = construct_mismatch_to_whitelist_map(tagmentation_i7_whitelist, 2)
     pcr_i7_correction_map = construct_mismatch_to_whitelist_map(pcr_i7_whitelist, 2)
     pcr_i5_correction_map = construct_mismatch_to_whitelist_map(pcr_i5_whitelist, 2)
@@ -330,8 +376,8 @@ if __name__ == '__main__':
     
     output_files = {}
     for sample in list(set(sample_lookup.values())):
-        output_file_1 = os.path.join(args.out_dir, '%s-RUN001_%s_R1.fastq' % (sample, lane_num))
-        output_file_2 = os.path.join(args.out_dir, '%s-RUN001_%s_R2.fastq' % (sample, lane_num))
+        output_file_1 = os.path.join(args.out_dir, '%s-RUN001_%s_R1.fastq' % (sample, lane_str))
+        output_file_2 = os.path.join(args.out_dir, '%s-RUN001_%s_R2.fastq' % (sample, lane_str))
         output_files[sample] = {}
         output_files[sample]['r1'] = open(output_file_1, 'w')
         output_files[sample]['r1_name'] = output_file_1
@@ -339,8 +385,10 @@ if __name__ == '__main__':
         output_files[sample]['r2_name'] = output_file_2
 
     
-    output_file_stats_json = os.path.join(args.out_dir, 'RUN001_%s.stats.json' % (lane_num))
-    output_file_counts_csv = os.path.join(args.out_dir, 'RUN001_%s.barcode_counts.csv' % (lane_num))
+    output_file_stats_json = os.path.join(args.out_dir, 'RUN001_%s.stats.json' % (lane_str))
+    output_file_counts_indexes_csv = os.path.join(args.out_dir, 'RUN001_%s.index_counts.csv' % (lane_str))
+    output_file_counts_tag_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.tag_pair_counts.csv' % (lane_str))
+    output_file_counts_pcr_pair_csv = os.path.join(args.out_dir, 'RUN001_%s.pcr_pair_counts.csv' % (lane_str))
 
     if1 = FastqGeneralIterator(args.input1)
     if2 = FastqGeneralIterator(args.input2)
@@ -348,17 +396,23 @@ if __name__ == '__main__':
     totreads = 0
     total_not_specified_in_samplesheet = 0
     validreads = {}
+    validreads['Lane'] = 'Lane %d' % (lane_num)
     validreads['pcr_i5'] = 0
     validreads['pcr_i7'] = 0
     validreads['pcr'] = 0
+    validreads['pcr_match'] = 0
     validreads['tagmentation_i5'] = 0
     validreads['tagmentation_i7'] = 0
     validreads['tagmentation'] = 0
+    validreads['tagmentation_match'] = 0
     validreads['all_barcodes'] = 0
 
     start = time.time()
 
-    barcodes_string_count = {} 
+    tagmentation_i7_count = [0] * 384
+    pcr_i7_count = [0] * 384
+    pcr_i5_count = [0] * 384
+    tagmentation_i5_count = [0] * 384
  
     for (r1_name, r1_seq, r1_qual),(r2_name, r2_seq, r2_qual) in zip(if1, if2):
 
@@ -370,16 +424,36 @@ if __name__ == '__main__':
         pcr_i7_seq = correct_barcode(pcr_i7_seq, pcr_i7_correction_map)
         pcr_i5_seq = correct_barcode(pcr_i5_seq, pcr_i5_correction_map)
         tagmentation_i5_seq = correct_barcode(tagmentation_i5_seq, tagmentation_i5_correction_map)
-
+      
         # Skip invalid reads and track valid read count for error checking
         if tagmentation_i7_seq is not None:
             validreads['tagmentation_i7'] += 1
+            tagmentation_i7_index = tagi7_to_index.get(tagmentation_i7_seq)
+            tagmentation_i7_count[tagmentation_i7_index] += 1
         if tagmentation_i5_seq is not None:
             validreads['tagmentation_i5'] += 1
+            tagmentation_i5_index = tagi5_to_index.get(tagmentation_i5_seq)
+            tagmentation_i5_count[tagmentation_i5_index] += 1
+        if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
+            validreads['tagmentation'] += 1
+            if tag_pairs_counts.get((tagmentation_i7_index, tagmentation_i5_index)) is not None:
+                validreads['tagmentation_match'] += 1
+                tag_pairs_counts[(tagmentation_i7_index, tagmentation_i5_index)] += 1
+
         if pcr_i7_seq is not None:
             validreads['pcr_i7'] += 1
+            pcr_i7_index = pcri7_to_index.get(pcr_i7_seq)
+            pcr_i7_count[pcr_i7_index] += 1
         if pcr_i5_seq is not None:
             validreads['pcr_i5'] += 1
+            pcr_i5_index = pcri5_to_index.get(pcr_i5_seq)
+            pcr_i5_count[pcr_i5_index] += 1
+
+        if pcr_i7_seq is not None and pcr_i5_seq is not None:
+            validreads['pcr'] += 1
+            if pcr_pairs_counts.get((pcr_i7_index, pcr_i5_index)) is not None:
+                validreads['pcr_match'] += 1
+                pcr_pairs_counts[(pcr_i7_index, pcr_i5_index)] += 1
         
         if tagmentation_i7_seq is None or pcr_i7_seq is None or pcr_i5_seq is None or tagmentation_i5_seq is None:
             continue
@@ -408,26 +482,63 @@ if __name__ == '__main__':
             output_files[sample]['r1'].write(''.join(['@', barcodes_string, ':', str(totreads), '\n', r1_seq, '\n+\n', r1_qual, '\n']))
             output_files[sample]['r2'].write(''.join(['@', barcodes_string, ':', str(totreads), '\n', r2_seq, '\n+\n', r2_qual, '\n']))
 
-        barcodes_string_count[barcodes_string] = barcodes_string_count.setdefault(barcodes_string, 0) + 1
-
     if totreads == 0:
         raise ValueError('No reads found in fastq input.')
 
     # Output basic stats
-    for stat in validreads:
-        validreads[stat] = validreads[stat] / float(totreads)
-        
     validreads['total_input_reads'] = totreads
     validreads['total_not_specified_in_samplesheet'] = total_not_specified_in_samplesheet
-    validreads['fraction_not_specified_in_samplesheet'] = total_not_specified_in_samplesheet / totreads
 
     with open(output_file_stats_json, 'wt') as f:
         f.write(json.dumps(validreads, indent=4))
+            
+    # write tag and pcr counts by tag/pcr well
+    zero_pad_col = True
+    id_length = 2
+    with open(output_file_counts_indexes_csv,'wt') as f:
+        f.write('well_index,i7_well,tagi7_count,tagi7_flag,pcri7_count,pcri7_flag,i5_well,pcri5_count,pcri5_flag,tagi5_count,tagi5_flag,sample_name_tagi5\n')
+        for i, counts in enumerate(zip(tagmentation_i7_count, pcr_i7_count, pcr_i5_count, tagmentation_i5_count), start = 0):
+            f.write(''.join([str(i),',', \
+                             str(i+1),',', \
+                             barcode_to_well.get_well_id_384_to_96(i, True, zero_pad_col, id_length),',', \
+                             str(counts[0]),',', \
+                             str(index_flags[1][i]),',', \
+                             str(counts[1]),',', \
+                             str(index_flags[0][i]),',', \
+                             barcode_to_well.get_well_id_384_to_96(i, False, zero_pad_col, id_length),',', \
+                             str(counts[2]),',', \
+                             str(index_flags[3][i]),',', \
+                             str(counts[3]),',', \
+                             str(index_flags[2][i]),',', \
+                             tagi5_sample_list[i], \
+                             '\n']))
 
-    with open(output_file_counts_csv,'wt') as f:
-        for barcodes_string in barcodes_string_count.keys():
-            btmp = barcodes_string if (type( barcodes_string ) == str) else 'None'
-            f.write(''.join([lane_num, ',', btmp, ',', str(barcodes_string_count[barcodes_string]),'\n']))
+    # write tag pair counts by tag well
+    zero_pad_col = True
+    id_length = 2
+    with open(output_file_counts_tag_pair_csv,'wt') as f:
+        f.write('tagi7_index,tagi7_well,tagi5_index,tagi5_well,tag_pair_count,sample_name_tagi5\n')
+        for i, pair_tuple in enumerate(tag_pairs_counts.keys()):
+            f.write(''.join([str(i),',',
+                             str(pair_tuple[0]+1),',',
+                             barcode_to_well.get_well_id_384_to_96(pair_tuple[0], True, zero_pad_col, id_length),',',
+                             str(pair_tuple[1]+1),',',
+                             barcode_to_well.get_well_id_384_to_96(pair_tuple[1], False, zero_pad_col, id_length),',',
+                             str(tag_pairs_counts[pair_tuple]),',',
+                             tagi5_sample_list[pair_tuple[1]],'\n']))
+
+    # write pcr pair counts by pcr well
+    zero_pad_col = True
+    id_length = 2
+    with open(output_file_counts_pcr_pair_csv,'wt') as f: 
+        f.write('pcri7_index,pcri7_well,pcri5_index,pcri5_well,pcr_pair_count\n')
+        for i, pair_tuple in enumerate(pcr_pairs_counts.keys()):
+            f.write(''.join([str(i),',',
+                             str(pair_tuple[0]+1),',',
+                             barcode_to_well.get_well_id_384_to_96(pair_tuple[0], True, zero_pad_col, id_length),',',
+                             str(pair_tuple[1]+1),',',
+                             barcode_to_well.get_well_id_384_to_96(pair_tuple[1], False, zero_pad_col, id_length),',',
+                             str(pcr_pairs_counts[pair_tuple]),'\n']))
             
     # Error checking and compress output
     if validreads['all_barcodes'] < 0.05:

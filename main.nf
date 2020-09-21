@@ -18,12 +18,20 @@
 **      
 ** Suggested command line parameters to use when running this script
 **   nextflow run main.nf -w <work_dirname> -with-report <report_filename> -with-trace <trace_filename> -with-timeline <timeline_filename>
+**
+** Notes:
+**   o  see bbi-sciatac-analyze/main.nf header comments for notes
+**      aspects of Groovy and Nextflow. For example, variable
+**      scope in Groovy.
 */
 
-import groovy.json.JsonOutput
+
 import java.nio.file.Files
 import java.nio.file.Path 
 import java.nio.file.Paths
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 
 /*
 ** Run date/time.
@@ -32,9 +40,11 @@ def timeNow = new Date()
 
 /*
 ** Where to find scripts.
+** Note: script_dir needs to be visible within Groovy functions
+**       so there is no 'def', which makes it global.
 */
-def pipeline_path="/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux"
-def script_dir="${pipeline_path}/src"
+pipeline_path="$workflow.projectDir"
+script_dir="${pipeline_path}/src"
 
 
 /*
@@ -64,7 +74,7 @@ def onError = { return( "retry" ) }
 params.help = false
 params.num_well = 384
 params.level = 3
-params.max_cores = 16
+params.max_cores = 6
 params.max_mem_bcl2fastq = 40
 
 /*
@@ -75,16 +85,14 @@ params.max_mem_bcl2fastq = 40
 /*
 ** Define/initialize some internal parameters.
 ** Notes:
-**   o  sample_sheet_phantom is a non-existent file required by bcl2fastq
 */
 def sample_sheet = params.sample_sheet
 def run_dir      = params.run_dir
 def demux_dir    = params.demux_dir
-def num_threads_bcl2fasta_process
+def num_threads_bcl2fasta_process = params.max_cores
 def mem_bcl2fastq = params.max_mem_bcl2fastq
-def num_threads_bcl2fastq_io
+def num_threads_bcl2fastq_io = 6
 def options_barcode_correct = ''
-def sample_sheet_phantom = run_dir + '/Sample_sheet.csv'
 
 /*
 ** Print usage when run with --help parameter.
@@ -128,6 +136,14 @@ checkSamplesheet( params )
 illuminaRunInfoMap = readIlluminaRunInfo( params )
 
 /*
+** Check that these are paired-end reads.
+*/
+if( illuminaRunInfoMap['paired_end'] == false )
+{
+  throw new Exception('Single-end reads detected: paired-end reads required')
+}
+
+/*
 ** Write run information to args.json file.
 */
 writeArgsJson( params, timeNow )
@@ -136,7 +152,7 @@ writeArgsJson( params, timeNow )
 ** Does the i5 sequence require reverse complementing?
 ** If yes, set sequence_flag.
 */
-def sequencer_flag = ( illuminaRunInfoMap['reverse_complement_i5'].toInteger() ) ? '-X' : ''
+def sequencer_flag = ( illuminaRunInfoMap['reverse_complement_i5'] ) ? '-X' : ''
 
 /*
 ** Add optional barcode correction parameters.
@@ -172,33 +188,47 @@ if( num_threads_bcl2fasta_process / 2 < 4 ) {
 	num_threads_bcl2fastq_io = 4
 }
 
+
+/*
+** Make a fake sample sheet required by bcl2fastq. The sample sheet has Ns for
+** the sequence in order to force bcl2fastq to make undetermined fastqs.
+*/
+process make_fake_sample_sheet {
+  cache 'lenient'
+  errorStrategy onError
+
+  output:
+  file("SampleSheet.csv") into makeFakeSampleSheetOutChannel
+
+  script:
+  """
+  $script_dir/make_fake_sample_sheet.py --p7_index_length=${illuminaRunInfoMap['p7_index_length']} --p5_index_length=${illuminaRunInfoMap['p5_index_length']}
+  """
+}
+
+
 /*
 ** Run bcl2fastq to make fastq files from Illumina bcl files.
 **
 ** Notes:
 **   o  copy 'Reports' and 'Stats' directories to an accessible directory.
-**   o  bcl2fastq/2.16 appears to be a special version. (bcl2fastq/2.20 does not write the required barcodes to sequence headers)
-**      I understand that the more recent bcl2fastq programs required a sample sheet with Ns as sequences.
 */
-Channel
-    .fromList( [ "${sample_sheet_phantom}" ] )
+makeFakeSampleSheetOutChannel
     .set { bcl2fastqInChannel }
-    
+
 process bcl2fastq {
   cache 'lenient'
   errorStrategy onError
-  penv 'serial'
   cpus num_threads_bcl2fasta_process
   memory "$mem_bcl2fastq GB"    
-  module 'java/latest:modules:modules-init:modules-gs'
-  module 'mpfr/3.1.0:mpc/0.8.2:gmp/5.0.2:gcc/4.9.1:bcl2fastq/2.16'
 //  note: bge: the following publishDir statement is commented out in bbi_dmux. I want it to work for diagnostics during development.
   publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Undetermined_S0_*.fastq.gz", mode: 'copy'
   publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Stats/*", mode: 'copy'
   publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Reports/*", mode: 'copy'
 
   input:
-    val inPhantom from bcl2fastqInChannel
+    file(inFile) from bcl2fastqInChannel
+//    file(inFile) from makeFakeSampleSheetOutChannel
 
   output:
     set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into bcl2fastq_fastqs mode flatten
@@ -225,7 +255,7 @@ process bcl2fastq {
     bcl2fastq --runfolder-dir      ${params.run_dir} \
               --output-dir         . \
               --interop-dir        . \
-              --sample-sheet       ${sample_sheet_phantom} \
+              --sample-sheet       $inFile \
               --loading-threads    ${num_threads_bcl2fastq_io} \
               --processing-threads ${num_threads_bcl2fasta_process}  \
               --writing-threads    ${num_threads_bcl2fastq_io} \
@@ -250,18 +280,18 @@ process bcl2fastq {
 **      two scale similarly with file size.
 **   o  barcode_correct_sciatac.py uses pigz to compress fastq files. pigz is
 **      supposed to use all available processors to compress files.
-**   o  the barcode_stats_json and barcode_counts_csv output channels are dummy
-**      channels. It appears that the files do not get copied by the publishDir
+**   o  the barcode_stats_json output channel is a dummy channel. It appears
+**      that the files do not get copied by the publishDir
 **      directive if these files are not in a channel.
 */
 process barcode_correct {
   cache 'lenient'
   errorStrategy onError
-  memory "16 GB"
-  module 'java/latest:modules:modules-init:modules-gs:zlib/1.2.6:pigz/latest'
   publishDir    path: "${params.demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*.fastq.gz", mode: 'copy'
   publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.stats.json", mode: 'copy'
-  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.barcode_counts.csv", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.index_counts.csv", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.tag_pair_counts.csv", mode: 'copy'
+  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.pcr_pair_counts.csv", mode: 'copy'
   
   input:
     // set file(R1), file(R2) from bcl2fastq_fastqs.splitFastq(by: params.fastq_chunk_size, file: true, pe: true)
@@ -269,8 +299,10 @@ process barcode_correct {
     
   output:
     file "*.fastq.gz" into barcode_fastqs mode flatten
-    file "*.barcode_counts.csv" into barcode_counts_csv mode flatten
     file "*.stats.json" into barcode_stats_json mode flatten
+    file "*.index_counts.csv" into index_counts_csv mode flatten
+    file "*.tag_pair_counts.csv" into tag_pair_counts_csv mode flatten
+    file "*.pcr_pair_counts.csv" into pcr_pair_counts_csv mode flatten
 
   script:
   """
@@ -306,17 +338,11 @@ barcode_fastqs
 /*
 ** Run adapter trimming script.
 */
-def num_threads_trimmomatic = 4
-def mem_trimmomatic = 4.0 / num_threads_trimmomatic
 def trimmomatic_exe="${script_dir}/Trimmomatic-0.36/trimmomatic-0.36.jar"
 def adapters_path="${script_dir}/Trimmomatic-0.36/adapters/NexteraPE-PE.fa:2:30:10:1:true"
 process adapter_trimming {
   cache 'lenient'
   errorStrategy onError
-  penv 'serial'
-  cpus num_threads_trimmomatic
-  memory "${mem_trimmomatic} GB"
-  module 'java/8u25:modules:modules-init:modules-gs'
   publishDir path: "$params.demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
   
   input:
@@ -330,7 +356,7 @@ process adapter_trimming {
   mkdir -p fastqs_trim
   java -Xmx1G -jar $trimmomatic_exe \
        PE \
-       -threads $num_threads_trimmomatic \
+       -threads $task.cpus \
        $read_pair \
        ${prefix}_R1.trimmed.fastq.gz \
        ${prefix}_R1.trimmed_unpaired.fastq.gz \
@@ -475,22 +501,19 @@ def archiveRunFiles( params, timeNow )
 
 
 def readIlluminaRunInfo( params ) {
-    def command = "/net/gs/vol1/home/bge/eclipse-workspace/bbi-sciatac-demux/src/run_info_read.py ${params.run_dir}"
+    def command = "${script_dir}/read_run_info.py ${params.run_dir}"
     def strOut = new StringBuffer()
     def strErr = new StringBuffer()
     def proc = command.execute()
+    def jsonSlurper = new JsonSlurper()
+
     proc.consumeProcessOutput(strOut, strErr)
     proc.waitForProcessOutput()
     if( proc.exitValue() != 0 ) {
         System.err << strErr.toString()
         System.exit( -1 )
     }
-
-    def illuminaRunInfoMap = [:]
-    def tokens = strOut.tokenize()
-    for( i = 0; i < tokens.size; i += 2 ) {
-        illuminaRunInfoMap.put( tokens[i], tokens[i+1] )
-    }
+    illuminaRunInfoMap = jsonSlurper.parseText(strOut.toString())
     return( illuminaRunInfoMap )
 }
 
@@ -526,16 +549,19 @@ def writeArgsJson( params, timeNow ) {
     def genomeInfo = [:]
     def samples = []
     def fhSampleSheet = new File( params.sample_sheet )
-    fhSampleSheet.eachLine { line ->
-        def (sample, wells, genome) = line.split(/[ \t]+/)
-        if( sample != "sample_id" ) {
-            samples.add( sample )
-            genomeInfo.put( sample, genome )
-        }
-     }
-     mapRunInfo['DEMUX'] = demuxDict
-     mapRunInfo['samples'] = samples
-     mapRunInfo['genomes'] = genomeInfo
+    def jsonSlurper = new JsonSlurper()
+    def sampleData = jsonSlurper.parse( fhSampleSheet )
+
+    sampleData['sample_indices_list'].each { aSample ->
+        samples.add( aSample['sample_id'] )
+        genomeInfo.put( aSample['sample_id'], aSample['genome'] )
+
+    }
+
+    mapRunInfo['DEMUX'] = demuxDict
+    mapRunInfo['sampledata'] = sampleData
+    mapRunInfo['samples'] = samples
+    mapRunInfo['genomes'] = genomeInfo
 
     /*
     ** Add Illumina sequencing run parameters.
