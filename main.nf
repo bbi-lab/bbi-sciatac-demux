@@ -42,9 +42,8 @@ def timeNow = new Date()
 ** Where to find scripts.
 ** Note: script_dir needs to be visible within Groovy functions
 **       so there is no 'def', which makes it global.
-**
 */
-def pipeline_path="/net/gs/vol1/home/bge/git/bbi-sciatac-demux"
+pipeline_path="$workflow.projectDir"
 script_dir="${pipeline_path}/src"
 
 

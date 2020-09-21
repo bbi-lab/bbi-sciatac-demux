@@ -420,10 +420,6 @@ if __name__ == '__main__':
 
         # Get barcodes and correct
         tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq = get_barcode_seqs(r1_name, args.nextseq, args.two_level_indexed_tn5)
-        tagi7_in = tagmentation_i7_seq
-        pcri7_in = pcr_i7_seq
-        pcri5_in = pcr_i5_seq
-        tagi5_in = tagmentation_i5_seq
         tagmentation_i7_seq = correct_barcode(tagmentation_i7_seq, tagmentation_i7_correction_map)
         pcr_i7_seq = correct_barcode(pcr_i7_seq, pcr_i7_correction_map)
         pcr_i5_seq = correct_barcode(pcr_i5_seq, pcr_i5_correction_map)
@@ -438,7 +434,6 @@ if __name__ == '__main__':
             validreads['tagmentation_i5'] += 1
             tagmentation_i5_index = tagi5_to_index.get(tagmentation_i5_seq)
             tagmentation_i5_count[tagmentation_i5_index] += 1
-
         if tagmentation_i7_seq is not None and tagmentation_i5_seq is not None:
             validreads['tagmentation'] += 1
             if tag_pairs_counts.get((tagmentation_i7_index, tagmentation_i5_index)) is not None:
