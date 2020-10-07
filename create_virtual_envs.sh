@@ -54,7 +54,7 @@ pypy3 -m ensurepip
 pip install -r $DIR/pypy_requirements.txt
 
 #
-# Clone the two repositories once only.
+# Clone the repository.
 #
 git clone https://github.com/andrewhill157/barcodeutils.git
 

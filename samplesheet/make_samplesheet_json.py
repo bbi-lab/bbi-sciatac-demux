@@ -23,7 +23,12 @@ import argparse
 genomes_map = {
  'Human': 'human',
  'Mouse': 'mouse',
- 'Barnyard': 'barnyard'
+ 'Macaque': 'macaque',
+ 'Barnyard': 'barnyard',
+ 'human': 'human',
+ 'mouse': 'mouse',
+ 'macaque': 'macaque',
+ 'barnyard': 'barnyard'
 }
 
 
@@ -444,6 +449,7 @@ if __name__ == '__main__':
   parser.add_argument('-l', '--level', type=str, default=None, required=True, help='Experiment level. Either 2 or 3.')
   parser.add_argument('-r', '--p7_rows', type=str, default=0, required=False, help='PCR plate p7 rows used for indexing entered as a single string')
   parser.add_argument('-c', '--p5_cols', type=str, default=0, required=False, help='PCR plate p5 columns used for indexing entered as a single string.')
+  parser.add_argument('-w', '--well_range', type=str, default=None, required=False, help='3-level n7 well range.')
   parser.add_argument('-7', '--p7_wells', type=str, default=0, required=False, help='PCR plate p7 wells used for indexing entered as a single string.')
   parser.add_argument('-5', '--p5_wells', type=str, default=0, required=False, help='PCR plate p5 wells used for indexing entered as a single string.')
   parser.add_argument('-s', '--samplesheet', type=str, default=None, required=True, help='Sample sheet file name (CSV file).')
@@ -453,7 +459,12 @@ if __name__ == '__main__':
   level = args.level
   samplesheet_file = args.samplesheet
   (samples, genomes_dict, well_samples, well_genomes, well_n7_indices, well_n5_indices, row_list) = read_samplesheet(samplesheet_file)
-  
+ 
+  if( int( level ) == 3 ):
+    if( args.well_range is None ):
+      raise RuntimeError( 'missing N7 ligation range for 3 level samplesheet' )
+    n7_ranges_str = args.well_range
+ 
   (n7_masks, n5_masks) = make_tag_masks(samples, well_samples, well_n7_indices, well_n5_indices)
  
   (well_wise, error_flag) = check_pcr_parameters(args)
@@ -462,32 +473,7 @@ if __name__ == '__main__':
 
   ( pcr_well_wise, pcr_p7_list, pcr_p5_list, pcr_ranges_str ) = make_pcr_ranges( args )
   
-  # print( 'N7' )
-  # for sample in samples:
-  #   print( 'sample: %s' % ( sample ) )
-  #   iwell = 0
-  #   for i in range( 16 ):
-  #     for j in range( 24 ):
-  #       print( ' %d' % ( n7_masks[sample][iwell] ), end='' )
-  #       iwell += 1
-  #     print()
-  #   print()
-  
-  
-  # print( 'N5' )
-  # for sample in samples:
-  #   print( 'sample: %s' % ( sample ) )
-  #   iwell = 0
-  #   for i in range( 16 ):
-  #     for j in range( 24 ):
-  #       print( ' %d' % ( n5_masks[sample][iwell] ), end='' )
-  #       iwell += 1
-  #     print()
-  #   print()
-  
- 
   sample_indices_list = [] 
-#  print( 'sample_id\tranges\tgenome' )
   for sample in samples:
     n7_beg = 0
     n7_end = 0
@@ -531,28 +517,20 @@ if __name__ == '__main__':
         n5_ranges.append('%d-%d' % (n5_beg, 384))
       else:
         n5_ranges.append('%d' % (384))
-  
-  #  print('sample: %s  n7 ranges:' % (sample))
-  #  for arange in n7_ranges:
-  #    print( '  %s' % ( arange ) )
-  #  print( 'sample: %s  n5 ranges:' % ( sample ) )
-  #  for arange in n5_ranges:
-  #    print( '  %s' % ( arange ) )
-    n7_ranges_str = ''
-    for i in range(len( n7_ranges)):
-      if(i > 0):
-        n7_ranges_str += ','
-      n7_ranges_str += n7_ranges[i]
-  #  print( 'n7 ranges: %s' % ( n7_ranges_str ) )
+ 
+    if( level == 2 ): 
+      n7_ranges_str = ''
+      for i in range(len( n7_ranges)):
+        if(i > 0):
+          n7_ranges_str += ','
+        n7_ranges_str += n7_ranges[i]
   
     n5_ranges_str = ''
     for i in range(len(n5_ranges)):
       if(i > 0):
         n5_ranges_str += ','
       n5_ranges_str += n5_ranges[i]
-  #  print( 'n5 ranges: %s' % ( n5_ranges_str ) )
   
-#    print( '%s\t%s:%s:%s\t%s' % ( sample, n7_ranges_str, pcr_ranges_str, n5_ranges_str, genomes_map[genomes_dict[sample]] ) ) 
     sample_indices_list.append( {'sample_id' : sample,
                                'ranges' : ':'.join([n7_ranges_str, pcr_ranges_str, n5_ranges_str]),
                                'genome' : genomes_map[genomes_dict[sample]] })
