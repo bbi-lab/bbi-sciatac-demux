@@ -552,14 +552,14 @@ def writeArgsJson( params, timeNow ) {
     def jsonSlurper = new JsonSlurper()
     def sampleData = jsonSlurper.parse( fhSampleSheet )
 
-    sampleData['sample_indices_list'].each { aSample ->
+    sampleData['sample_index_list'].each { aSample ->
         samples.add( aSample['sample_id'] )
         genomeInfo.put( aSample['sample_id'], aSample['genome'] )
 
     }
 
     mapRunInfo['DEMUX'] = demuxDict
-    mapRunInfo['sampledata'] = sampleData
+    mapRunInfo['sample_data'] = sampleData
     mapRunInfo['samples'] = samples
     mapRunInfo['genomes'] = genomeInfo
 
