@@ -927,9 +927,9 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
     samplesheet.append( ','.join( '"{0}"'.format( e ) for e in samplesheet_row ) )
 
   # Store sample information for processing pipeline.
-  sample_indexes_list = []
+  sample_index_list = []
   for row_out in row_out_list:
-    sample_indexes_list.append( { 'sample_id' : row_out['sample_name'],
+    sample_index_list.append( { 'sample_id' : row_out['sample_name'],
                                   'ranges' : ':'.join( [ make_index_string( row_out['n7_index_list'] ),
                                                          make_index_string( row_out['p5_index_list'] ),
                                                          make_index_string( row_out['p7_index_list'] ),
@@ -972,7 +972,7 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
                   'p7_row_list' : p7_row_list,
                   'p5_well_list' : p5_well_list,
                   'p7_well_list' : p7_well_list,
-                  'sample_indexes_list' : sample_indexes_list
+                  'sample_index_list' : sample_index_list
                 }
   file.write(json.dumps(sample_data, indent=4))
 
