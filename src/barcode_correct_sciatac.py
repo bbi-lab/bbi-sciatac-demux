@@ -225,10 +225,31 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
         tagi5_indices.append(indexsplitter(indexsplit[3]))
         pcri5_indices.append(indexsplitter(indexsplit[2]))
 
-    use_pcri7 = required_index(pcri7_indices)
-    use_tagi7 = required_index(tagi7_indices)
-    use_tagi5 = required_index(tagi5_indices)
-    use_pcri5 = required_index(pcri5_indices)
+    #
+    # Note:
+    #   o  required_index() determines if a set of indexes for a barcode is the same for
+    #      all samples. If so, required_index returns False and the indexes for that
+    #      barcode are not used. For example, if the same P7 PCR barcodes are used for
+    #      all samples, this program ignores the P7 barcodes in the read (when
+    #      required_index() is used); that is, there is no P7 correction of the
+    #      read P7 barcode and no test for whether the read P7 indexes are in the
+    #      samplesheet.
+    #   o  this saves some testing when a barcode is uninformative
+    #   o  there may be cases where this behavior is wrong; for example, in some runs
+    #      the user's sequencing library may be mixed with another user's library but
+    #      user 1 does not know user 2's barcodes and so omits them from the samplesheet.
+    #      In this case, this pipeline masks out the PCR barcodes (and perhaps a ligation
+    #      barcode?) erroreously, if user 1 used the same PCR indexes for all samples.
+    #   o  so force use of all four barcodes
+#    use_pcri7 = required_index(pcri7_indices)
+#    use_tagi7 = required_index(tagi7_indices)
+#    use_tagi5 = required_index(tagi5_indices)
+#    use_pcri5 = required_index(pcri5_indices)
+
+    use_pcri7 = True
+    use_tagi7 = True
+    use_tagi5 = True
+    use_pcri5 = True
 
     index_mask = [use_pcri7, use_tagi7, use_tagi5, use_pcri5]
     index_whitelists = [pcri7, tagi7, tagi5, pcri5]
