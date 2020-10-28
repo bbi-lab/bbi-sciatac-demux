@@ -1,0 +1,1120 @@
+#!/usr/bin/env python3
+
+"""
+Program: sciatac_samplesheet.py
+Summary:
+  This program reads a (front-end) CSV spreadsheet file, performs a variety of
+  checks, 'fixes' sample names, and writes a 'back-end' samplesheet file for
+  use with the processing pipeline. There are two back-end samplesheet formats:
+  Andrew's sci-ATAC pipeline samplesheet format and a JSON format file for the
+  BBI sci-ATAC pipeline.
+
+Input (front-end) samplesheet format:
+  o  the input samplesheet file is a CSV format spreadsheet file (use a
+     spreadsheet program to create the CSV file)
+  o  checks rows
+       o  checks the first six cells in each row and trims off additional cells
+       o  ignores rows with all empty cells
+       o  reports an error if there are both empty and non-empty cells amongst
+          the first six
+  o  the first row is a header with the following required columns
+       o  sample name identifier with value: 'sample_name'
+       o  genome label identifier value: 'genome'
+       o  n5 barcode identifier with possible values: 'n5_wells' or 'n5_indexes'
+       o  n7 barcode identifier with possible values: 'n7_wells' or 'n7_indexes'
+       o  p5 barcode identifier with possible values: 'p5_wells' or 'p5_indexes'
+          or 'p5_columns'
+       o  p7 barcode identifier with possible values: 'p7_wells' or 'p7_indexes'
+          or 'p7_rows'
+  o  the header values do not depend on case
+  o  the column order is arbitrary (but must be consistent within the file)
+  o  ranges: index, well, column, and row range values are separated by either
+     '-' or ':', your choice (mixes are allowed)
+     examples:
+       o  3-5
+       o  3:5
+       o  3-5,7:12
+  o  multiple barcode values: multiple indexes, wells, columns, and rows (and
+     ranges) are separated by ','
+     examples:
+       o  indexes: 1-5,7,89-96
+       o  wells:   P1-A10,P1-A11
+       o  rows:    E,F,G
+       o  columns: 3,7,12
+  o  sample names:
+       o  begin with an alphabetic character: a-z and A-Z
+       o  allowed characters are alphabetic (a-z and A-Z), numeric (0-9), and
+          period '.'
+       o  this program silently converts other characters in the sample name
+          to '.', and then checks for sample name degeneracy. If there is, the
+          program exits immediately.
+  o  genomes:
+       o  recognized genome names are listed in the variable 'genome_name_list'
+          in this program's code. If a samplesheet genome name is not in the
+          list, sciatac_samplesheet.py gives a warning in case the name is
+          mis-spelled.
+       o  genome is the name of the organism that was sequenced. This
+          identifies the files required to analyze the reads. The genome string
+          is passed to the processing pipeline, and the pipeline uses it to
+          find required files.
+  o  wells:
+       o  samplesheet wells are converted to indexes where indexes refer to
+          physical wells, which are in the order used in Andrew's pipeline;
+          that is, N7 and P7 indexes increase by column number along each row
+          and N5 and P5 indexes increase by row letter down each column
+       o  wells that include a plate identifier can have either '-' or ':'
+          separating the plate and well, your choice (mixes within a range are
+          allowed)
+          examples:
+            o  P1-A10
+            o  P1:A10
+       o  wells are given as single or ranges of wells separated by commas.
+          examples:
+            o  A01-A12,B01:B12
+            o  P1:A01-P1:A12,P2-A01:P2-A12
+       o  when the same set of wells is used from all four plates for a sample,
+          use 'P*' for the plate number
+          example:
+            o  P*:A01-P*:A04 is the same as P1:A01-P1:A04,P2:A01-P2:A04,P3:A01-P3:A04,P4:A01-P4:A04
+       o  wells names do not depend on case
+          examples:
+            o  P1-A10
+            o  p1-a10
+  o  indexes:
+       o  indexes are given as single or ranges of integer well indexes
+          separated by commas.
+          example:
+            o  3,5-8,89:96
+       o  indexes refer to physical wells in the order used in Andrew's pipeline
+  o  p7 rows:
+       o  u-titer plate rows used for PCR reactions
+       o  rows are given as single or ranges of rows separated by commas
+          examples:
+            o  E,F,G
+            o  D-F,H
+  o  p5 columns:
+       o  u-titer plate columns used for PCR reactions
+       o  columns are given as single or ranges of rows separated by commas
+          examples:
+            o  3,4,5
+            o  3-5,10-12
+
+Example samplesheet file:
+
+N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome
+1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse
+1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human
+1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse
+1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human
+1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human
+1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse
+1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse
+1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse
+1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse
+1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human
+1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human
+1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard
+
+Notes:
+  o  the p7_row and p5_column value sets are enclosed in quotes
+     because the sets have commas.  Do not use quotes in the
+     spreadsheet program cells; the spreadsheet program adds
+     them when it writes the CSV file.
+
+
+For help with command line parameters, run
+
+sciatac_samplesheet.py -h
+
+which gives
+
+usage: sciatac_samplesheet.py [-h] [-i INPUT] [-o OUTPUT] [-f {json,index}]
+                              [-r RUN_DIR] [-l {2,3}] [-t] [-s {n5,n7}] [-e]
+                              [-d] [-v]
+
+A program to convert sci-ATAC CSV samplesheet to pipeline samplesheet.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        Input CSV samplesheet filename (string).
+  -o OUTPUT, --output OUTPUT
+                        Output samplesheet filename (string).
+  -f {json,index}, --format {json,index}
+                        Output file format (default: 'json') (string).
+  -r RUN_DIR, --run_dir RUN_DIR
+                        Illumina run directory path (string).
+  -l {2,3}, --level {2,3}
+                        Two or three level sci-ATAC-seq experiment (default:
+                        '3') (integer).
+  -t, --tn5_barcodes    Tn5 has barcodes (flag: no value).
+  -s {n5,n7}, --sample_identifier {n5,n7}
+                        Ligation barcode that identifies the sample (default:
+                        'n5') used to check for duplicates (string).
+  -e, --template        Write template samplesheet file
+                        ('samplesheet.template.csv') with standard column
+                        formats and exit (flag: no value).
+  -d, --documentation   Display documentation and exit (flag: no value).
+  -v, --version         Give program and JSON output file versions and exit
+                        (flag: no value).
+"""
+
+
+import sys
+import re
+import csv
+import json
+import argparse
+
+#
+# Samplesheet JSON file version.
+#
+program_version = '1.0.0'
+json_file_version = '1.0.0'
+
+#
+# List of recognizable genome names.
+# This program issues a warning if a samplesheet genome is
+# not in this list.
+#
+genome_name_list = [
+  'arabidopsis',
+  'barnyard',
+  'bat',
+  'cat',
+  'chicken',
+  'corn',
+  'cow',
+  'cynomolgus',
+  'dog',
+  'drosophila',
+  'duck',
+  'elephant',
+  'horse',
+  'human',
+  'macaque',
+  'mouse',
+  'opossum',
+  'pig',
+  'rabbit',
+  'rat',
+  'snake',
+  'worm',
+  'zebrafish',
+  'hg19',
+  'mm19',
+  'hg19_mm9'
+]
+
+
+#
+# List of recognizable CSV column header names.
+# These are used to check labels in the file.
+#
+n5_column_values = 'n5_wells n5_indexes'
+n7_column_values = 'n7_wells n7_indexes'
+p5_column_values = 'p5_wells p5_indexes p5_columns'
+p7_column_values = 'p7_wells p7_indexes p7_rows'
+
+column_header_value_list = [ 'sample_name', 'genome' ]
+column_header_value_list.extend( n5_column_values.split() )
+column_header_value_list.extend( n7_column_values.split() )
+column_header_value_list.extend( p5_column_values.split() )
+column_header_value_list.extend( p7_column_values.split() )
+
+
+def display_documentation():
+  print( __doc__ )
+  return( 0 )
+
+def parse_header_column_name( string_in, column_name_list, error_string ):
+  """
+  Split column header name into a 'type' and a 'format' and store as dictionary in column_name_list.
+  """
+  if( not string_in.lower() in column_header_value_list ):
+    error_string += '  %s' % ( string_in )
+    return( column_name_list, error_string )
+  string_in = string_in.lower()
+  if( string_in == 'sample_name' ):
+    column_name_dict = { 'type': 'sample_name', 'format': None }
+  elif( string_in == 'genome' ):
+    column_name_dict = { 'type': 'genome', 'format': None }
+  else:
+    mobj = re.match( r'([np][57])_(wells|indexes|rows|columns)', string_in )
+    column_name_dict = { 'type': mobj.group( 1 ), 'format': mobj.group( 2 ) }
+  column_name_list.append( column_name_dict )
+  return( column_name_list, error_string )
+
+
+def check_header_column_names( column_name_list ):
+  """
+  Check column header names.
+  Notes:
+    o  check that each required column type occurs once
+    o  check that if either p5 or p7 are specified by columns and rows, then both are.
+  """
+  columns_required = { 'n5': 0, 'n7': 0, 'p5': 0, 'p7': 0, 'sample_name': 0, 'genome': 0 }
+  for column_name_dict in column_name_list:
+    columns_required[column_name_dict['type']] += 1
+  error_flag = 0
+  for column_name in columns_required:
+    if( columns_required[column_name] == 0 ):
+      print( 'Error: column for \'%s\' missing.' % ( column_name ), file=sys.stderr )
+      if( column_name == 'n5' ):
+        print( '  acceptable n5 header values: %s' % ( n5_column_values ), file=sys.stderr )
+      elif( column_name == 'n7' ):
+        print( '  acceptable n7 header values: %s' % ( n7_column_values ), file=sys.stderr )
+      elif( column_name == 'p5' ):
+        print( '  acceptable p5 header values: %s' % ( p5_column_values ), file=sys.stderr )
+      elif( column_name == 'p7' ):
+        print( '  acceptable p7 header values: %s' % ( p7_column_values ), file=sys.stderr )
+      error_flag = 1
+    elif( columns_required[column_name] > 1 ):
+      print( 'Error: column for \'%s\' occurs %d times.' % ( column_name, columns_required[column_name] ), file=sys.stderr )
+      error_flag = 1
+  if( error_flag ):
+    sys.exit( -1 )
+  p5_col = False
+  p7_row = False
+  for column_name_dict in column_name_list:
+    if( column_name_dict['type'] == 'p5' and column_name_dict['format'] == 'columns' ):
+      p5_col = True
+    if( column_name_dict['type'] == 'p7' and column_name_dict['format'] == 'rows' ):
+      p7_row = True
+  if( p5_col != p7_row ):
+    print( 'Error: p5 is %sin \'columns\' format but p7 is %sin \'rows\' format' % ( '' if p5_col else 'not ', '' if p7_row else 'not ' ), file=sys.stderr )
+    sys.exit( -1 )
+  return( 0 )
+
+
+def parse_header( row_header ):
+  """
+  Convert column header (row) into a list of column name dictionaries.
+  The dictionary has the elements
+    key     value description
+    type    entry type name: n5, n7, p5, p7, sample_name, genome
+    format  barcode format values: wells, indexes, rows, columns, None (see column_header_value_list for allowed combinations of type and format)
+  """
+  column_name_list = []
+  error_string = ''
+  for str in row_header:
+    parse_header_column_name( str, column_name_list, error_string )
+  check_header_column_names( column_name_list )
+  return( column_name_list )
+
+
+def well_to_index( plate, row, column, across_row_first=True, element_coordinates=[None,None] ):
+  """
+  Convert a well specification to a plate index in the range P1:A01=1 to P4:H12=384.
+
+  Args:
+    plate              integer plate number between 1 and 4
+    row                character row (A-H)
+    column             integer column number (1-12)
+    across_row_first   bool index increases by one as a row is traversed; that is,
+                       moving from column to column along row
+  Returns:
+    index: an integer well index (1-384)
+
+  """
+  row = row.lower()
+  if( plate < 1 or plate > 4  or
+      not row in [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' ] or
+      column < 1 or column > 12 ):
+    print( 'Error: spreadsheet cell: %s %s:  bad well values: plate: %d  row: %s  col: %d' % ( element_coordinates[0], element_coordinates[1], plate, row, column ), file=sys.stderr )
+    sys.exit( -1 )
+  irow = ord( row ) - ord( 'a' )
+  icol = column - 1
+  if( across_row_first ):
+    well_index = irow * 12 + icol + 1
+  else:
+    well_index = icol * 8 + irow + 1
+  return( well_index + ( plate - 1 ) * 96 )
+
+
+def pad_well_col(well_col, zero_pad, id_length):
+  if zero_pad:
+      template = '%%0%sd' % id_length
+  else:
+      template = '%s'
+  col_id = template % (well_col)
+  return col_id
+
+
+def index_to_well( well_index, across_row_first ):
+  nrow = 8
+  ncol = 12
+  ipl = int( well_index / 96 )
+  i96 = well_index - ipl * 96
+  if across_row_first:
+      well_row = chr(65 + int(i96 / ncol))
+      well_col = (i96 % ncol) + 1
+  else:
+      well_row = chr(65 + (i96 % nrow))
+      well_col = int(i96 / nrow) + 1
+
+#    well_id = 'P%d-%s%s' % (ipl + 1, well_row, pad_well_col(well_col, zero_pad_col, id_length))
+  well_id = '%s%s' % ( well_row, pad_well_col( well_col, True, 2 ) )
+
+  return( well_id )
+
+
+def check_index_list( index_list, element_coordinates = [ None, None ] ):
+  """
+  Check and clean index list
+    o  check for duplicate indexes
+    o  remove duplicate indexes
+  """
+  index_dict = {}
+  for i in index_list:
+    index_dict.setdefault( i, 0 )
+    index_dict[i] += 1
+  duplicate_list = []
+  for i in index_dict.keys():
+    if( index_dict[i] > 1 ):
+      duplicate_list.append( str( i ) )
+  if( len( duplicate_list ) > 0 ):
+    print( 'Warning: spreadsheet cell: %s %s: duplicate index(es): %s' % ( element_coordinates[0], element_coordinates[1], ' '.join( duplicate_list ) ), file=sys.stderr )
+  return( list( set( index_list ) ) )
+
+
+def make_index_string( index_list ):
+  """
+  Convert a list of (integer) barcode well indexes to an index string where
+    o  repeated indexes are dropped; that is, keep only distinct indexes
+    o  sequences of counting numbers are expressed as ranges, for example, 5 6 7 8 9 => 5-9
+    o  indexes and index ranges are separated by commas
+  """
+  index_string = ''
+  index_list.sort()
+  index_prev = None
+  index1 = None
+  for i in index_list:
+    if( index_prev ):
+      if( i == index_prev ):
+        continue
+      elif( i > index_prev + 1 ):
+        if( len( index_string ) > 0 ):
+          index_string += ','
+        if( index_prev > index1 ):
+          index_string += '%d-%d' % ( index1, index_prev )
+        else:
+          index_string += '%d' % ( index_prev )
+        index1 = i
+    else:
+      index1 = i
+    index_prev = i
+  # last index in list
+  if( len( index_string ) > 0 ):
+    index_string += ','
+  if( index_prev > index1 ):
+    index_string += '%d-%d' % ( index1, index_prev )
+  else:
+    index_string += '%d' % ( index_prev )
+  return( index_string )
+
+
+def parse_indexes( string_in, max_index = 96, element_coordinates = [ None, None ] ):
+  """
+  Convert an index specification to an index string.
+  Acceptable index specifications include
+    o  single integer index
+         o  76
+    o  range of integer indexes, example
+         o  5-9
+    o  single and/or ranges of indexes separated by commas, examples
+         o  3,6
+         o  3,5-9
+         o  2-4,9-18
+         o  2:4,9:18
+  """
+  index_list = []
+  string_in = re.sub( r'\s', '', string_in )
+  for index_range in string_in.split( ',' ):
+    mobj = re.match( r'([0-9]+)([-:]([0-9]+))?$', index_range )
+    if( not mobj ):
+      print( 'Error: spreadsheet cell: %s %s: bad index range \'%s\'' % ( element_coordinates[0], element_coordinates[1], index_range ), file=sys.stderr )
+      sys.exit( -1 )
+    index1 = int( mobj.group( 1 ) )
+    if( index1 < 1 or index1 > max_index ):
+      print( 'Error: spreadsheet cell: %s %s: bad index range \'%s\'' % ( element_coordinates[0], element_coordinates[1], index_range ), file=sys.stderr )
+      sys.exit( -1 )
+    index2 = int( mobj.group( 3 ) ) if mobj.group( 2 ) else index1
+    if( index2 < 1 or index2 > max_index ):
+      print( 'Error: spreadsheet cell: %s %s: bad index range \'%s\'' % ( element_coordinates[0], element_coordinates[1], index_range ), file=sys.stderr )
+      sys.exit( -1 )
+    if( index2 < index2 ):
+      print( 'Error: spreadsheet cell: %s %s: bad index range \'%s\'' % ( element_coordinates[0], element_coordinates[1], index_range ), file=sys.stderr )
+      sys.exit( -1 )
+    for i in range( index1, index2 + 1 ):
+      index_list.append( i )
+  return( check_index_list( index_list, element_coordinates ) )
+
+
+def parse_wells( string_in, across_row_first=True, max_index = 96, element_coordinates = [ None, None ] ):
+  """
+  Convert a well specification to an index string.
+  Acceptable well specifications include
+    o  a single well without a plate specified (implicit plate=1), examples
+         o  A5
+         o  A05
+    o  a single well with a plate specified
+         o  P1-A5
+         o  P1:A5
+    o  the same well from all four plates
+         o  P*-A5
+         o  P*:A5
+    o  range of wells without plates specified,
+       Note: the range of indices depends on whether the reaction type is n5/p5 or n7/p7.
+         o  A9-B9
+         o  A9:B9
+    o  range of wells with plates specified,
+         o  P1-A5:P1-A12
+         o  P1:A5-P1:A12
+         o  P1:A5:P1:A12
+         o  P1-A5-P1-A12
+    o  the same range of wells from all four plates
+         o  P*-A5:P*-A10
+    o  single and/or ranges of wells separated by commas
+         o  A10,P1-B5:P1-B10,C7
+  """
+  index_list = []
+  string_in = re.sub( r'\s', '', string_in )
+  for well_range in string_in.split( ',' ):
+    expand_plate_flag = False
+#    mobj = re.match( r'(P([1-4])-)?([A-H])([01]?[0-9])([-:](P([1-4])-)?([A-H])([01]?[0-9]))?$', well_range )
+    mobj = re.match( r'([pP][0]?([1-4*])[-:])?([a-hA-H])([0]?[1-9][0-2]?)([-:]([pP][0]?([1-4*])[-:])?([a-hA-H])([0]?[1-9][0-2]?))?$', well_range )
+    if( not mobj ):
+      print( 'Error: spreadsheet cell: %s %s: bad well or well range \'%s\'' % ( element_coordinates[0], element_coordinates[1], well_range ), file=sys.stderr )
+      sys.exit( -1 )
+    #
+    # first well
+    row1 = mobj.group( 3 )
+    col1 = int( mobj.group( 4 ) )
+    if( col1 < 1 or col1 > 12 ):
+      print( 'Error: spreadsheet cell: %s %s: bad well: \'%s\'' % ( element_coordinates[0], element_coordinates[1], string_in ), file=sys.stderr )
+      sys.exit( -1 )
+    # is plate specified?
+    if( mobj.group( 1 ) ):
+      if( mobj.group( 2 ) == '*' ):
+        plate1_list = [ 1, 2, 3, 4 ]
+      else:
+        plate1_list = [ int( mobj.group( 2 ) ) ]
+    else:
+      plate1_list = [ 1 ]
+    #
+    if( mobj.group( 5 ) ):
+      if( ( mobj.group( 2 ) == None ) != ( mobj.group( 7 ) == None ) ):
+        print( 'Error: spreadsheet cell: %s %s: either both or neither well in a range must have plates specified: \'%s\'' % ( element_coordinates[0], element_coordinates[1], string_in ), file=sys.stderr )
+        sys.exit( -1 )
+      if( ( mobj.group( 2 ) == '*' ) != ( mobj.group( 7 ) == '*' ) ):
+        print( 'Error: spreadsheet cell: %s %s: either both or neither well in a range must have plates specified as \'*\': \'%s\'' % ( element_coordinates[0], element_coordinates[1], string_in ), file=sys.stderr )
+        sys.exit( -1 )
+
+      # second well, if this is a range
+      row2 = mobj.group( 8 )
+      col2 = int( mobj.group( 9 ) )
+      if( col2 < 1 or col2 > 12 ):
+        print( 'Error: spreadsheet cell: %s %s: bad well: \'%s\'' % ( element_coordinates[0], element_coordinates[1], string_in ), file=sys.stderr )
+        sys.exit( -1 )
+      # is plate specified?
+      if( mobj.group( 6 ) ):
+        if( mobj.group( 7 ) == '*' ):
+          plate2_list = [ 1, 2, 3, 4 ]
+        else:
+          plate2_list = [ int( mobj.group( 7 ) ) ]
+      else:
+        plate2_list = [ 1 ]
+      #
+    else:
+      plate2_list = plate1_list
+      row2 = row1
+      col2 = col1
+    #
+    for plate1, plate2 in zip( plate1_list, plate2_list ):
+      index1 = well_to_index( plate1, row1, col1, across_row_first, element_coordinates )
+      index2 = well_to_index( plate2, row2, col2, across_row_first, element_coordinates )
+      if( index2 < index1 ):
+        print( 'Error: spreadsheet cell: %s %s: bad well range: \'%s\'' % ( element_coordinates[0], element_coordinates[1], string_in ), file=sys.stderr )
+        sys.exit( -1 )
+      for i in range( index1, index2 + 1 ):
+        index_list.append( i )
+  return( check_index_list( index_list, element_coordinates ) )
+
+
+def parse_rows( string_in, element_coordinates = [ None, None ] ):
+  """
+  Convert a row specification to an index string.
+  Acceptable row specifications include
+    o  single row
+         o  B
+    o  row range
+         o  E-G
+    o  single and/or ranges of rows separated by commas
+         o  E-F,H
+  """
+  index_list = []
+  string_in = re.sub( r'\s', '', string_in )
+  for row_range in string_in.split( ',' ):
+    mobj = re.match( r'([a-hA-H])([-:]([a-hA-H]))?$', row_range )
+    if( not mobj ):
+      print( 'Error: spreadsheet cell: %s %s: bad row or row range \'%s\'' % ( element_coordinates[0], element_coordinates[1], row_range ), file=sys.stderr )
+      sys.exit( -1 )
+    row1 = mobj.group( 1 )
+    row1_index = well_to_index( 1, row1, 1, True, element_coordinates )
+    row2_index = row1_index
+    if( mobj.group( 2 ) ):
+      row2 = mobj.group( 3 )
+      row2_index = well_to_index( 1, row2, 1, True, element_coordinates )
+      if( row2_index < row1_index ):
+        print( 'Error: spreadsheet cell: %s %s: bad row range: \'%\'' % ( element_coordinates[0], element_coordinates[1], string_in ), file=sys.stderr )
+        sys.exit( -1 )
+    index1 = row1_index
+    index2 = row2_index + 11
+    for i in range( index1, index2 + 1 ):
+      index_list.append( i )
+  return( check_index_list( index_list, element_coordinates ) )
+
+
+def parse_columns( string_in, element_coordinates = [ None, None ] ):
+  """
+  Convert a column specification to an index string.
+  Acceptable column specifications include
+    o  single column
+         o  5
+    o  column range
+         o  6-8
+    o  single and/or ranges of column separated by commas
+         o  9-11,3
+  """
+  index_list = []
+  string_in = re.sub( r'\s', '', string_in )
+  for col_range in string_in.split( ',' ):
+    mobj = re.match( r'([1-9][0-2]?)([-:]([1-9][0-2]?))?$', col_range )
+    if( not mobj ):
+      print( 'Error: spreadsheet cell: %s %s: bad column or column range \'%s\'' % ( element_coordinates[0], element_coordinates[1], col_range ), file=sys.stderr )
+      sys.exit( -1 )
+
+    col1 = int( mobj.group( 1 ) )
+    col1_index = well_to_index( 1, 'A', col1, False, element_coordinates )
+    col2_index = col1_index
+    if( col1 < 1 or col1 > 12 ):
+      print( 'Error: spreadsheet cell: %s %s: bad column value: \'%d\'' % ( element_coordinates[0], element_coordinates[1], col1 ), file=sys.stderr )
+      sys.exit( -1 )
+    if( mobj.group( 2 ) ):
+      col2 = int( mobj.group( 3 ) )
+      if( col2 < 1 or col2 > 12 ):
+        print( 'Error: spreadsheet cell: %s %s: bad column value: \'%d\'' % ( element_coordinates[0], element_coordinates[1], col1 ), file=sys.stderr )
+        sys.exit( -1 )
+      if( col2 < col1 ):
+        print( 'Error: spreadsheet cell: %s %s: bad column range: \'%s\'' % ( element_coordinates[0], element_coordinates[1], string_in ), file=sys.stderr )
+        sys.exit( -1 )
+      col2_index = well_to_index( 1, 'A', col2, False, element_coordinates )
+    index1 = col1_index
+    index2 = col2_index + 7
+    for i in range( index1, index2 + 1 ):
+      index_list.append( i )
+  return( check_index_list( index_list, element_coordinates ) )
+
+
+def check_rows( csv_rows ):
+  """
+  Trim off empty cells at end of rows and columns
+  and check for internal empty cells. Allow empty
+  internal row.
+  Notes:
+    o  we expect
+         o  6 columns
+         o  nrows 
+  """
+  # check for internal empty row
+  csv_rows_out = []
+  for irow, row_elements in enumerate( csv_rows ):
+    num_empty = 0
+    row_elements_out = []
+    for icol, cell in enumerate( row_elements ):
+      if( icol == 6 ):
+        break
+      if( len( cell ) > 0 ):
+        row_elements_out.append( cell )
+      else:
+        num_empty += 1
+    if( num_empty == 0 ):
+      csv_rows_out.append( row_elements_out )
+    elif( num_empty > 0 and num_empty < 6 ):
+      print( 'Error: row %d has empty cells' % ( irow + 1 ) )
+      sys.exit( -1 )
+  return( csv_rows_out )
+
+
+def read_samplesheet( file ):
+  """
+  Read CSV samplesheet input file.
+  Notes:
+    o  the first row in the file must have column header names.
+    o  the column header names must be in the list 'column_header_value_list'.
+    o  the column order is arbitrary.
+  """
+  samplesheet_row_list = []
+  csv_rows = csv.reader( file, delimiter=',', quotechar='"')
+  csv_rows = check_rows( csv_rows )
+  row_header = csv_rows[0]
+  column_name_list = parse_header( row_header )
+  for row_elements in csv_rows[1:]:
+    samplesheet_row_list.append( row_elements )
+  return( column_name_list, samplesheet_row_list )
+
+
+def check_sample_names( column_name_list, samplesheet_row_list ):
+  """
+  Check sample names and convert unacceptable characters to '.'.
+  Sample names must begin with [a-zA-Z].
+  Unacceptable characters are characters that are not a-z, A-Z, 0-9, and '.'
+  Check for name degeneracy after substitutions.
+  """
+  sample_name_in_dict = {}
+  sample_name_out_dict = {}
+  num_sample_name = 0
+  for row_elements in samplesheet_row_list:
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'sample_name' ):
+        continue
+      sample_name_in_dict.setdefault( element_string, True )
+      num_sample_name += 1
+      mobj = re.match( r'[a-zA-Z]', element_string )
+      if( not mobj ):
+        print( 'Error: sample names must begin with an alphabetic character', file=sys.stderr )
+        sys.exit( -1 )
+      row_elements[i] = re.sub( r'[^a-zA-Z0-9.]', '.', element_string )
+      sample_name_out_dict.setdefault( element_string, True )
+  if( len( sample_name_out_dict ) != len( sample_name_in_dict ) ):
+    print( 'Error: unacceptable names are not distinct after editing', file=sys.stderr )
+    sys.exit( -1 )
+  return( samplesheet_row_list )
+
+
+def check_genome_names( column_name_list, samplesheet_row_list ):
+  """
+  Check genome names and warn if not in our list.
+  """
+  missing_genome_names_dict = {}
+  for row_elements in samplesheet_row_list:
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'genome' ):
+        continue
+      if( not row_elements[i] in genome_name_list ):
+        missing_genome_names_dict.setdefault( row_elements[i], True )
+  if( len( missing_genome_names_dict.keys() ) > 0 ):
+    print( 'The following genomes are not in my list of known genomes (they may be mis-spelled or not in my list).', file=sys.stderr )
+    for missing_genome_name in missing_genome_names_dict.keys():
+      print( '  \'%s\'' % ( missing_genome_name ), file=sys.stderr )
+  return( 0 )
+
+
+def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
+  """
+  Make well index lists for N5, N7, P5, P7 barcode wells from the input samplesheet information.
+  """
+  row_out_list = []
+  for irow, row_elements in enumerate( samplesheet_row_list ):
+    if( len( row_elements ) < 6 ):
+      print( 'Error: missing cells in row %d: %s' % ( irow + 1, ', '.join('"{0}"'.format(e) for e in row_elements ) ), file=sys.stderr )
+      sys.exit( -1 )
+    icol = 0
+    for element_string, column_name_dict in zip( row_elements, column_name_list ):
+      icol += 1
+      element_coordinates = [ str( irow + 2 ), chr( icol + ord( 'A' ) - 1 ) ]
+      if( column_name_dict['type'] == 'n7' ):
+        max_index = 384
+        if( column_name_dict['format'] == 'indexes' ):
+          n7_index_list = parse_indexes( element_string, max_index, element_coordinates )
+        elif( column_name_dict['format'] == 'wells' ):
+          n7_index_list = parse_wells( element_string, True, max_index, element_coordinates )
+        else:
+          print( 'Error: unexpected N7 format', file=sys.stderr )
+          sys.exit( -1 )
+      elif( column_name_dict['type'] == 'n5' ):
+        max_index = 384
+        if( column_name_dict['format'] == 'indexes' ):
+          n5_index_list = parse_indexes( element_string, max_index, element_coordinates )
+        elif( column_name_dict['format'] == 'wells' ):
+          n5_index_list = parse_wells( element_string, False, max_index, element_coordinates )
+        else:
+          print( 'Error: unexpected N5 format', file=sys.stderr )
+          sys.exit( -1 )
+      elif( column_name_dict['type'] == 'p7' ):
+        max_index = 96
+        if( column_name_dict['format'] == 'indexes' ):
+          p7_index_list = parse_indexes( element_string, max_index, element_coordinates )
+        elif( column_name_dict['format'] == 'wells' ):
+          p7_index_list = parse_wells( element_string, True, max_index, element_coordinates )
+        elif( column_name_dict['format'] == 'rows' ):
+          p7_index_list = parse_rows( element_string, element_coordinates )
+        else:
+          print( 'Error: unexpected P7 format', file=sys.stderr )
+          sys.exit( -1 )
+      elif( column_name_dict['type'] == 'p5' ):
+        max_index = 96
+        if( column_name_dict['format'] == 'indexes' ):
+          p5_index_list = parse_indexes( element_string, max_index, element_coordinates )
+        elif( column_name_dict['format'] == 'wells' ):
+          p5_index_list = parse_wells( element_string, False, max_index, element_coordinates )
+        elif( column_name_dict['format'] == 'columns' ):
+          p5_index_list = parse_columns( element_string, element_coordinates )
+        else:
+          print( 'Error: unexpected P5 format', file=sys.stderr )
+          sys.exit( -1 )
+      elif( column_name_dict['type'] == 'sample_name' ):
+          sample_name = element_string
+      elif( column_name_dict['type'] == 'genome' ):
+          genome = element_string
+    #
+    row_out_list.append( { 'sample_name': sample_name,
+                           'n7_index_list': n7_index_list,
+                           'p7_index_list': p7_index_list,
+                           'n5_index_list': n5_index_list,
+                           'p5_index_list': p5_index_list,
+                           'genome': genome } )
+  return(  row_out_list )
+
+
+def check_sample_identifier( row_out_list, sample_identifier ):
+  """
+  Check for samples that have in common sample identifier well indexes.
+  Typically, sci-ATAC experiments use the N5 barcode to identify samples. Check whether
+  these sample identifier barcodes occur in more than one sample.
+  Notes:
+    o  some experiments use a combination of ligation and PCR barcodes to
+       identify samples, and the same ligation barcodes can be assigned
+       intentionally to more than one sample 
+  """
+  key = '%s_index_list' % ( sample_identifier )
+  index_dict = {}
+  for row_out in row_out_list:
+    for i in row_out[key]:
+      index_dict.setdefault( i, 0 )
+      index_dict[i] += 1
+  duplicate_list = []
+  for i in index_dict.keys():
+    if( index_dict[i] > 1 ):
+      duplicate_list.append( i )
+
+  if( len( duplicate_list ) > 0 ):
+    print( 'Warning: the following samples have %s wells in common' % ( sample_identifier ), file=sys.stderr )
+    for row_out in row_out_list:
+      if( set( duplicate_list ).intersection( set( row_out[key] ) ) ):
+        print( '  %s' % ( row_out['sample_name'] ), file=sys.stderr )
+  return( 0 )
+
+
+def dump_row_out_list( row_out_list ):
+  """
+  Diagnostic function to dump (barcode) well index lists.
+  """
+  for row_out in row_out_list:
+    print( 'sample_name: %s' % ( row_out['sample_name'] ) )
+    print( '  n7_index_list: %s' % ( make_index_string( row_out['n7_index_list'] ) ) )
+    print( '  p7_index_list: %s' % ( make_index_string( row_out['p7_index_list'] ) ) )
+    print( '  p5_index_list: %s' % ( make_index_string( row_out['p5_index_list'] ) ) )
+    print( '  n5_index_list: %s' % ( make_index_string( row_out['n5_index_list'] ) ) )
+    print( '  genome: %s' % ( row_out['genome'] ) )
+  return( 0 )
+
+
+def write_samplesheet_index_format( file, row_out_list ):
+  """
+  Write a well index samplesheet file in Andrew's format.
+  """
+  print( 'sample_id\tranges\tgenome', file=file )
+  for row_out in row_out_list:
+    print( '%s\t%s:%s:%s:%s\t%s' % ( row_out['sample_name'],
+                                     make_index_string( row_out['n7_index_list'] ),
+                                     make_index_string( row_out['p7_index_list'] ),
+                                     make_index_string( row_out['p5_index_list'] ),
+                                     make_index_string( row_out['n5_index_list'] ),
+                                     row_out['genome'] ), file=file )
+
+  return( 0 )
+
+
+def get_pcr_row_col( column_name_list, samplesheet_row_list ):
+  p5_re_pattern = r'([1-9][0-2]?)([-:]([1-9][0-2]?))?$'
+  p7_re_pattern = r'([a-hA-H])([-:]([a-hA-H]))?$'
+
+  # find required samplesheet column
+  p5_samplesheet_col = None
+  p7_samplesheet_col = None
+  for icol, column_name_dict in enumerate( column_name_list ):
+    if( column_name_dict['type'] == 'p5' ):
+      p5_samplesheet_col = icol
+    if( column_name_dict['type'] == 'p7' ):
+      p7_samplesheet_col = icol
+
+  # gather plate values
+  pair_samplesheet_row_list = []
+  for samplesheet_row in samplesheet_row_list:
+    p5_samplesheet_row_list = []
+    for value_range in samplesheet_row[p5_samplesheet_col].split( ',' ):
+      value_range = re.sub( r'\s', '', value_range )
+      mobj = re.match( p5_re_pattern, value_range )
+      if( not mobj ):
+        print( 'Error: bad value or value range \'%s\'' % ( value_range ), file=sys.stderr )
+        sys.exit( -1 )
+      col1 = int( mobj.group( 1 ) )
+      col2 = col1
+      if( mobj.group( 2 ) ):
+        col2 = int( mobj.group( 3 ) )
+      for col in range( col1, col2 + 1 ):
+        p5_samplesheet_row_list.append( str( col ) )
+
+    p7_samplesheet_row_list = []
+    for value_range in samplesheet_row[p7_samplesheet_col].split( ',' ):
+      value_range = re.sub( r'\s', '', value_range )
+      mobj = re.match( p7_re_pattern, value_range )
+      if( not mobj ):
+        print( 'Error: bad value or value range \'%s\'' % ( value_range ), file=sys.stderr )
+        sys.exit( -1 )
+      row1 = mobj.group( 1 )
+      row2 = row1
+      if( mobj.group( 2 ) ):
+        row2 = mobj.group( 3 )
+      for orow in range( ord( row1 ), ord( row2 ) + 1 ):
+        p7_samplesheet_row_list.append( chr( orow ) )
+
+    pair_samplesheet_row_list.append( [ p5_samplesheet_row_list, p7_samplesheet_row_list ] )
+
+  pair_list_dict = {}
+  for pair_samplesheet_row in pair_samplesheet_row_list:
+    key = '_'.join( pair_samplesheet_row[0] ) + '_' + '_'.join( pair_samplesheet_row[1] )
+    pair_list_dict.setdefault( key, pair_samplesheet_row )
+
+  p5_col_list = []
+  p7_row_list = []
+  for key in pair_list_dict.keys():
+    p5_col_list.extend( pair_list_dict[key][0] )
+    p7_row_list.extend( pair_list_dict[key][1] )
+
+  return( p5_col_list, p7_row_list )
+
+
+def get_pcr_wells( column_name_list, samplesheet_row_list ):
+  # find required samplesheet column
+  p5_samplesheet_col = None
+  p7_samplesheet_col = None
+  for icol, column_name_dict in enumerate( column_name_list ):
+    if( column_name_dict['type'] == 'p5' ):
+      p5_samplesheet_col = icol
+    if( column_name_dict['type'] == 'p7' ):
+      p7_samplesheet_col = icol
+
+  pair_samplesheet_row_list = []
+  for samplesheet_row in samplesheet_row_list:
+    p5_samplesheet_row_list = []
+    for value_range in samplesheet_row[p5_samplesheet_col].split( ',' ):
+      value_range = re.sub( r'\s', '', value_range )
+      mobj = re.match( r'([pP][0]?([1-4*])[-:])?([a-hA-H])([0]?[1-9][0-2]?)([-:]([pP][0]?([1-4*])[-:])?([a-hA-H])([0]?[1-9][0-2]?))?$', value_range )
+      if( not mobj ):
+        print( 'Error: bad well or well range \'%s\'' % ( value_range ), file=sys.stderr )
+        sys.exit( -1 )
+
+      # Assume that the well-range strings were checked earlier in parse_wells() call so
+      # those tests are omitted here. Also, this is PCR for which there is a single plate=1.
+      # first well
+      row1 = mobj.group( 3 )
+      col1 = int( mobj.group( 4 ) )
+      row2 = row1
+      col2 = col1
+      if( col1 < 1 or col1 > 12 ):
+        print( 'Error: bad well: \'%s\'' % ( value_range ), file=sys.stderr )
+        sys.exit( -1 )
+      if( mobj.group( 5 ) ):
+        # second well, if this is a range
+        row2 = mobj.group( 8 )
+        col2 = int( mobj.group( 9 ) )
+      across_row_first = False # p5
+      index1 = well_to_index( 1, row1, col1, across_row_first, [ None, None ] )
+      index2 = well_to_index( 1, row2, col2, across_row_first, [ None, None ] )
+
+      for well_index in range( index1, index2 + 1 ):
+        well = index_to_well( well_index - 1, across_row_first )
+        p5_samplesheet_row_list.append( well )
+
+    p7_samplesheet_row_list = []
+    for value_range in samplesheet_row[p7_samplesheet_col].split( ',' ):
+      value_range = re.sub( r'\s', '', value_range )
+      mobj = re.match( r'([pP][0]?([1-4*])[-:])?([a-hA-H])([0]?[1-9][0-2]?)([-:]([pP][0]?([1-4*])[-:])?([a-hA-H])([0]?[1-9][0-2]?))?$', value_range )
+      if( not mobj ):
+        print( 'Error: bad well or well range \'%s\'' % ( value_range ), file=sys.stderr )
+        sys.exit( -1 )
+
+      # Assume that the well-range strings were checked earlier in parse_wells() call so
+      # those tests are omitted here. Also, this is PCR for which there is a single plate=1.
+      # first well
+      row1 = mobj.group( 3 )
+      col1 = int( mobj.group( 4 ) )
+      row2 = row1
+      col2 = col1
+      if( col1 < 1 or col1 > 12 ):
+        print( 'Error: bad well: \'%s\'' % ( value_range ), file=sys.stderr )
+        sys.exit( -1 )
+      if( mobj.group( 5 ) ):
+        # second well, if this is a range
+        row2 = mobj.group( 8 )
+        col2 = int( mobj.group( 9 ) )
+      across_row_first = True # p7
+      index1 = well_to_index( 1, row1, col1, across_row_first, [ None, None ] )
+      index2 = well_to_index( 1, row2, col2, across_row_first, [ None, None ] )
+
+      for well_index in range( index1, index2 + 1 ):
+        well = index_to_well( well_index - 1, across_row_first )
+        p7_samplesheet_row_list.append( well )
+
+    pair_samplesheet_row_list.append( [ p5_samplesheet_row_list, p7_samplesheet_row_list ] )
+
+  pair_list_dict = {}
+  for pair_samplesheet_row in pair_samplesheet_row_list:
+    key = '_'.join( pair_samplesheet_row[0] ) + '_' + '_'.join( pair_samplesheet_row[1] )
+    pair_list_dict.setdefault( key, pair_samplesheet_row )
+
+  p5_well_list = []
+  p7_well_list = []
+  for key in pair_list_dict.keys():
+    p5_well_list.extend( pair_list_dict[key][0] )
+    p7_well_list.extend( pair_list_dict[key][1] )
+
+  return( p5_well_list, p7_well_list )
+
+
+def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list, row_out_list, level = 3, tn5_barcodes = False, illumina_run_directory = 'NA' ):
+  """
+  Write an output samplesheet file in JSON format.
+  """
+  # Store input samplesheet for for reference if questions arise.
+  input_samplesheet_rows = []
+  for samplesheet_row in samplesheet_row_list:
+    input_samplesheet_rows.append( ','.join( '"{0}"'.format( e ) for e in samplesheet_row ) )
+
+  # Store sample information for processing pipeline.
+  sample_index_list = []
+  for row_out in row_out_list:
+    sample_index_list.append( { 'sample_id' : row_out['sample_name'],
+                                  'ranges' : ':'.join( [ make_index_string( row_out['n7_index_list'] ),
+                                                         make_index_string( row_out['p7_index_list'] ),
+                                                         make_index_string( row_out['p5_index_list'] ),
+                                                         make_index_string( row_out['n5_index_list'] ) ] ),
+                                  'genome' : row_out['genome'] })
+
+  # Store information for dashboard(s).
+
+  # Note: assume that the header was checked for consistent
+  #       p5 => columns and p7 => rows
+  pcr_format = None
+  for icol, column_name_dict in enumerate( column_name_list ):
+    if( column_name_dict['type'] == 'p5' ):
+      if( column_name_dict['format'] == 'columns' ):
+        pcr_format = 'row_col'
+      elif( column_name_dict['format'] == 'indexes' ):
+        pcr_format = 'indexes'
+      elif( column_name_dict['format'] == 'wells' ):
+        pcr_format = 'wells'
+
+  # PCR rows and columns specified?
+  p5_col_list = None
+  p7_row_list = None
+  if( pcr_format == 'row_col' ):
+    p5_col_list, p7_row_list = get_pcr_row_col( column_name_list, samplesheet_row_list )
+
+  # PCR wells specified?
+  p5_well_list = None
+  p7_well_list = None
+  if( pcr_format == 'wells' ):
+    p5_well_list, p7_well_list = get_pcr_wells( column_name_list, samplesheet_row_list ) 
+
+  # JSON structure.
+  sample_data = { 'json_file_version' : json_file_version,
+                  'illumina_run_directory' : illumina_run_directory,
+                  'level' : level,
+                  'tn5_barcodes' : tn5_barcodes,
+                  'input_samplesheet_rows' : input_samplesheet_rows,
+                  'pcr_format': pcr_format,
+                  'p5_col_list' : p5_col_list,
+                  'p7_row_list' : p7_row_list,
+                  'p5_well_list' : p5_well_list,
+                  'p7_well_list' : p7_well_list,
+                  'sample_index_list' : sample_index_list
+                }
+  file.write(json.dumps(sample_data, indent=4))
+
+  return( 0 )
+
+
+def write_samplesheet_template():
+  filename = 'samplesheet.template.csv'
+  with open( filename, 'wt' ) as fp:
+    print( 'n7_wells,p7_rows,p5_columns,n5_wells,sample_name,genome', file=fp )
+    print( 'p1:A01-p1:H12,a-d,5-8,p1:a01-p1:h01,sample1,barnyard', file=fp )
+  return( 0 )
+
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description='A program to convert sci-ATAC CSV samplesheet to pipeline samplesheet.')
+  parser.add_argument('-i', '--input', required=False, default=None, help='Input CSV samplesheet filename (string).')
+  parser.add_argument('-o', '--output', required=False, default=None, help='Output samplesheet filename (string).')
+  parser.add_argument('-f', '--format', required=False, choices=[ 'json', 'index'], default='json', help='Output file format (default: \'%(default)s\') (string).')
+  parser.add_argument('-r', '--run_dir', required=False, default=None, help='Illumina run directory path (string).')
+  parser.add_argument('-l', '--level', required=False, choices=[ 2, 3 ], default=3, help='Two or three level sci-ATAC-seq experiment (default: \'%(default)s\') (integer).')
+  parser.add_argument('-t', '--tn5_barcodes', required=False, action='store_true', help='Tn5 has barcodes (flag: no value).')
+  parser.add_argument('-s', '--sample_identifier', required=False, choices=[ 'n5', 'n7' ], default='n5', help='Ligation barcode that identifies the sample (default: \'%(default)s\') used to check for duplicates (string).')
+  parser.add_argument('-e', '--template', required=False, action='store_true', help='Write template samplesheet file (\'samplesheet.template.csv\') with standard column formats and exit (flag: no value).')
+  parser.add_argument('-d', '--documentation', required=False, action='store_true', help='Display documentation and exit (flag: no value).')
+  parser.add_argument('-v', '--version', required=False, action='store_true', help='Give program and JSON output file versions and exit (flag: no value).')
+  args = parser.parse_args()
+
+  # Write documentation.
+  if( args.documentation ):
+    display_documentation()
+    sys.exit( 0 )
+
+  # Write versions.
+  if( args.version ):
+    print( 'Program version: %s' % ( program_version ) )
+    print( 'JSON output file  version: %s' % ( json_file_version ) )
+    sys.exit( 0 )
+
+  # Write samplesheet template file.
+  if( args.template ):
+    write_samplesheet_template()
+    sys.exit( 0 )
+
+  # Check for required command line parameters.
+  error_string = ''
+  if( args.input == None ):
+    error_string += '  input filename parameter: -i <input filename> or --input <input filename>\n'
+  if( args.output == None ):
+    error_string += '  output filename parameter: -o <output filename> or --output <output filename>\n'
+  if( len( error_string ) > 0 ):
+    print( 'Error: missing command line parameters\n%s' % ( error_string ) )
+    print( 'For help run \'sciatac_samplesheet.py -h\' or \'sciatac_samplesheet.py -d\'' )
+    sys.exit( -1 )
+
+  # Go to work.
+  filename_in = args.input
+  filename_out = args.output
+
+  column_name_list, samplesheet_row_list = read_samplesheet( open( filename_in, newline='' ) )
+  samplesheet_row_list = check_sample_names( column_name_list, samplesheet_row_list )
+  check_genome_names( column_name_list, samplesheet_row_list )
+  row_out_list = make_samplesheet_indexes( column_name_list, samplesheet_row_list )
+  check_sample_identifier( row_out_list, args.sample_identifier )
+  if( args.format == 'json' ):
+    write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, level = args.level, tn5_barcodes = args.tn5_barcodes, illumina_run_directory=args.run_dir )
+  else:
+    write_samplesheet_index_format( open( filename_out, 'w' ), row_out_list )
+
+  # diagnostic dump
+  # dump_row_out_list( row_out_list )
+

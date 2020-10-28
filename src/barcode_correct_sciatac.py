@@ -198,7 +198,7 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
 
     """
     sample_data = json.load(samplesheet)
-    sample_indices_list = sample_data['sample_indices_list']
+    sample_index_list = sample_data['sample_index_list']
 
     pcri7_indices = []
     tagi7_indices = []
@@ -212,7 +212,7 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
 #
 #        entries = line.strip().split()
 #        sample, indices, genome = entries
-    for sample_indices in sample_indices_list:
+    for sample_indices in sample_index_list:
         sample  = sample_indices['sample_id']
         indices = sample_indices['ranges']
         
