@@ -240,16 +240,12 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     #      user 1 does not know user 2's barcodes and so omits them from the samplesheet.
     #      In this case, this pipeline masks out the PCR barcodes (and perhaps a ligation
     #      barcode?) erroreously, if user 1 used the same PCR indexes for all samples.
-    #   o  so force use of all four barcodes
-#    use_pcri7 = required_index(pcri7_indices)
-#    use_tagi7 = required_index(tagi7_indices)
-#    use_tagi5 = required_index(tagi5_indices)
-#    use_pcri5 = required_index(pcri5_indices)
+    #   o  use the --no_mask command line argument to over-ride this mask
 
-    use_pcri7 = True
-    use_tagi7 = True
-    use_tagi5 = True
-    use_pcri5 = True
+    use_pcri7 = required_index(pcri7_indices)
+    use_tagi7 = required_index(tagi7_indices)
+    use_tagi5 = required_index(tagi5_indices)
+    use_pcri5 = required_index(pcri5_indices)
 
     index_mask = [use_pcri7, use_tagi7, use_tagi5, use_pcri5]
     index_whitelists = [pcri7, tagi7, tagi5, pcri5]
@@ -300,6 +296,8 @@ if __name__ == '__main__':
     parser.add_argument('--wells_384', action='store_true', help='Flag to run assuming that the known barcode set is the 384 well set.')
     parser.add_argument('--well_ids', action='store_true', help='Flag to output cell IDs that are composed of well IDs rather than the actual sequences.')
     parser.add_argument('-X', '--nextseq', help='NextSeq run indicator', dest='nextseq', action="store_true")
+    parser.add_argument('--no_mask', action='store_true', help='Use all four barcodes. By default, do not use (mask out) a barcode(s) when all samples have the same index set (flag).')
+
     args = parser.parse_args()
 
     # Note: args.filename may include (leading) directory information.
@@ -337,6 +335,9 @@ if __name__ == '__main__':
 
     # Build up sample mapping from indices to samples
     index_mask, sample_lookup, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags = get_sample_lookup(open(args.samplesheet), pcri7, tagi7, tagi5, pcri5)
+
+    if( args.no_mask ):
+      index_mask = [ True, True, True, True ]
 
     if args.two_level_indexed_tn5:
         for i in range( 12, 384 ):

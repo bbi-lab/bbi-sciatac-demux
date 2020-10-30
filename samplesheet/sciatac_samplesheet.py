@@ -6,8 +6,8 @@ Summary:
   This program reads a (front-end) CSV spreadsheet file, performs a variety of
   checks, 'fixes' sample names, and writes a 'back-end' samplesheet file for
   use with the processing pipeline. There are two back-end samplesheet formats:
-  Andrew's sci-ATAC pipeline samplesheet format and a JSON format file for the
-  BBI sci-ATAC pipeline.
+  Andrew Hill's sci-ATAC pipeline samplesheet format and a JSON format file for
+  the BBI sci-ATAC pipeline.
 
 Input (front-end) samplesheet format:
   o  the input samplesheet file is a CSV format spreadsheet file (use a
@@ -45,9 +45,9 @@ Input (front-end) samplesheet format:
        o  begin with an alphabetic character: a-z and A-Z
        o  allowed characters are alphabetic (a-z and A-Z), numeric (0-9), and
           period '.'
-       o  this program silently converts other characters in the sample name
-          to '.', and then checks for sample name degeneracy. If there is, the
-          program exits immediately.
+       o  this program converts other characters in the sample name to '.',
+          and then checks for sample name degeneracy. If there is, the program
+          exits immediately.
   o  genomes:
        o  recognized genome names are listed in the variable 'genome_name_list'
           in this program's code. If a samplesheet genome name is not in the
@@ -1052,6 +1052,18 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
   return( 0 )
 
 
+def samplesheet_report( samplesheet_row_list, row_out_list, args ):
+  print( 'Tn5 barcodes: %r' % ( args.tn5_barcodes ) )
+  print( 'Level: %s' % ( args.level ) )
+  print( 'Sample identifier: %s' % ( args.sample_identifier ) )
+  print( 'Sample names after converting unacceptable characters to \'.\'.' )
+  for row_out in row_out_list:
+    print( '  %s' % ( row_out['sample_name'] ) )
+  print( 'Illumina run directory: %s' % ( args.run_dir ) )
+  print( 'Run sciatac_samplesheet.py -d for more information.' )
+  return( 0 )
+
+
 def write_samplesheet_template():
   filename = 'samplesheet.template.csv'
   with open( filename, 'wt' ) as fp:
@@ -1114,7 +1126,7 @@ if __name__ == '__main__':
     write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, level = args.level, tn5_barcodes = args.tn5_barcodes, illumina_run_directory=args.run_dir )
   else:
     write_samplesheet_index_format( open( filename_out, 'w' ), row_out_list )
-
+  samplesheet_report( samplesheet_row_list, row_out_list, args )
   # diagnostic dump
   # dump_row_out_list( row_out_list )
 
