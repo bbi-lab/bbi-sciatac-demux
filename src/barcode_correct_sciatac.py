@@ -182,7 +182,7 @@ def required_index(a):
     """
     return len(set(tuple(a_i) for a_i in a)) != 1
     
-def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
+def get_sample_lookup(samplesheet, no_mask, pcri7, tagi7, tagi5, pcri5):
     """
     Takes a samplesheet file handle and returns a list of True/False indicating whether index was used in lookup and a lookup of tuples of index combinations to sample names.
 
@@ -241,11 +241,38 @@ def get_sample_lookup(samplesheet, pcri7, tagi7, tagi5, pcri5):
     #      In this case, this pipeline masks out the PCR barcodes (and perhaps a ligation
     #      barcode?) erroreously, if user 1 used the same PCR indexes for all samples.
     #   o  use the --no_mask command line argument to over-ride this mask
+    #   o  effect of --no_mask=False vs --no_mask=True
+    #        Data set    Lane    no_mask    total input reads    total not specified in samplesheet
+    #        1           1       False      113584723            185945
+    #        1           2       False      112078744            186457
+    #        1           3       False      110634663            186854
+    #        1           4       False      111439288            183947
+    #
+    #        1           1       True       113584723            389702
+    #        1           2       True       112078744            393607
+    #        1           3       True       110634663            393869
+    #        1           4       True       111439288            388235
+    #
+    #        2           1       False      120785620              9272
+    #        2           1       False      117058811              8236
+    #        2           1       False      119080958             10186
+    #        2           1       False      117381130             8928
+    #
+    #        2           1       True       120785620            491738
+    #        2           1       True       117058811            571587
+    #        2           1       True       119080958            549204
+    #        2           1       True       117381130            441952
 
     use_pcri7 = required_index(pcri7_indices)
     use_tagi7 = required_index(tagi7_indices)
     use_tagi5 = required_index(tagi5_indices)
     use_pcri5 = required_index(pcri5_indices)
+
+    if( no_mask ):
+      use_pcri7 = True
+      use_tagi7 = True
+      use_tagi5 = True
+      use_pcri5 = True
 
     index_mask = [use_pcri7, use_tagi7, use_tagi5, use_pcri5]
     index_whitelists = [pcri7, tagi7, tagi5, pcri5]
@@ -334,10 +361,7 @@ if __name__ == '__main__':
             pcr_to_well = bc.pcr_to_well
 
     # Build up sample mapping from indices to samples
-    index_mask, sample_lookup, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags = get_sample_lookup(open(args.samplesheet), pcri7, tagi7, tagi5, pcri5)
-
-    if( args.no_mask ):
-      index_mask = [ True, True, True, True ]
+    index_mask, sample_lookup, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags = get_sample_lookup(open(args.samplesheet), args.no_mask, pcri7, tagi7, tagi5, pcri5)
 
     if args.two_level_indexed_tn5:
         for i in range( 12, 384 ):

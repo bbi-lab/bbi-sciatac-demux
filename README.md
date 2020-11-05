@@ -1,6 +1,6 @@
 # bbi-sciatac-demux and bbi-sciatac-analyze
 
-*bbi-sciatac-demux* implements Andrew Hill's sci-ATAC-seq demultiplexing processing pipeline in the NextFlow domain-specific language and *bbi-sciatac-analyze* implements Andrew Hill's sci-ATAC-seq analysis processing pipeline.
+*bbi-sciatac-demux* implements Andrew Hill's sci-ATAC-seq demultiplexing processing pipeline and *bbi-sciatac-analyze* implements his sci-ATAC-seq analysis pipeline in the Nextflow domain-specific language.
 
 ## Requirements
 
@@ -23,7 +23,7 @@ bash create_virtual_envs.sh
 cd ..
 ```
 
-The above is a one-time installation setup, or may be required if you need to update the pipeline.
+The above is a one-time installation setup, or may be required if you need to update the environment.
 
 ## Overview
 
@@ -42,54 +42,15 @@ The Nextflow pipeline components required for the bbi-sciatac pipeline consist o
 
 #### bbi-sciatac pipeline
 
-The bbi-sciatac pipeline consists of a pair of Nextflow scripts. The first converts an Illumina bcl file to fastq files, corrects barcode errors, partitions reads into fastq files by sample, and trims off adapter sequence from the reads. The second script continues processing with read alignments through to making count matrices.
-
-Note: I no longer support the *setup_sciatac.py* script. Instead, consider using the scripts *bbi-sciatac-demux/run.sciatac-demux.sh* and *bbi-sciatac-analyze/run.sciatac-analyze.sh* I leave *setup_sciatac.py* here because it may have some value as a guide for setting up scripts.
-
-The bbi-sciatac-demux repository includes a script called *setup_sciatac.py*, which sets up the required directories and files for the pipeline runs. The script prompts for required values and allows editing of values. The editable values consist of
-
-* Processing (parent) directory
-* Illumina run directory
-* Samplesheet file
-* Levels
-* Number of wells
-* Demux script name
-* Demux output directory
-* Analyze script name
-* Analyze output directory
-* Nextflow parameters filename (for example, params.config)
-* Maximum number of CPUs
-* Maximum memory for bcl2fastq
-* Grid engine queue name (optional)
-* Grid engine cluster options (optional)
-* Genomes JSON file
-
-Additionally, you will need to set the following values in the script
-
-* nextflowExe, the path to the Nextflow executable,
-* demuxNextflowScript, the path to the demux Nextflow script, which is called main.nf,
-* analyzeNextflowScript, the path to the analyze Nextflow script, which is called main.nf.
+The bbi-sciatac pipelines consist of a pair of Nextflow scripts. The first script (bbi-sciatac-demux/main.nf) converts an Illumina bcl file to fastq files, corrects barcode errors, partitions reads into fastq files by sample, and trims off adapter sequence from the reads. The second script (bbi-sciatac-analyze/main.nf) continues processing with read alignments through to making count matrices.
 
 #### Samplesheet file
 
-The samplesheet is a tab-delimited file with the format:
+The user-generated samplesheet file (front-end samplesheet) is in CSV format. The program *bbi-sciatac-demux/samplesheet/sciatac_samplesheet.py* converts this file to a JSON file (back-end samplesheet), which is required by the pipeline. In addition, the user sets various processing parameters as *sciatac_samplesheet.py* command line arguments. For additional information about *sciatac_samplesheet.py*, including a detailed description of the front-end samplesheet format, run
 
 ```
-sample_id   ranges  genome
-sample_1    1-96:25-48:65-80:1-20   hg19
-sample_2    1-96:25-48:65-80:21-40  hg19
-sample_3    1-96:25-48:65-80:41-60  mm9
-sample_4    1-96:25-48:65-80:61-80  hg19_mm9
-sample_5    1-96:25-48:65-80:80-96  mm9
+sciatac_samplesheet -d
 ```
-
-The `sample_id` column can have whatever you want as an ID for each sample in the run.
-
-The `ranges` column specifies the range of `<N7 ligation indices>:<N7 PCR indices>:<N5 PCR indices>:<N5 ligation indices>` used for this run. Note that the N7/P7 indices are numbered by column and the N5/N7 indices are numbered by row. Multiple ranges for a barcode are separated by commas.
-
-There is a rudimentary script for converting a BBI CSV samplesheet to the required format in the *bbi-sciatac-demux/samplesheet* directory.
-
-Warning: sample names cannot have dashes in them, or any special character that does not appear typically in a Unix file name so such characters are converted to dots (any character other than 'a-z', 'A-Z', '0-9', '_',  and '.'). This is because the script adds the sample name to the main file name, separated by a dash, so that it can identify the sample based the filename. For example, the file 'sample1-RUN001_L001_R1.fastq.gz' is from a sample called 'sample1'.
 
 #### Genome files
 
@@ -103,11 +64,18 @@ The *bbi-sciatac-analyze* repository has some scripts for assisting with buildin
 
 #### nextflow.config file
 
+The *nextflow.config* file defines processing values such as the required modules, memory, and number of CPUs for each processing stage, which do not change typically from run-to-run. The file can be left in the bbi-sciatac-\* installation directory where Nextflow searches for it automatically when the pipeline starts up. The supplied *nextflow.config* file has two profiles: the default profile, called *standard*, defines modules used by the pipeline on CentOS 7 systems in the UW Genome Sciences cluster, and the *centos_6* profile, which defines modules used by the pipeline on CentOS 6 systems in the UW Genome Sciences cluster. In order to run the pipelines with the *centos_6* profile, add the command line parameter `-profile centos_6` to the nextflow run command, for example
+
+
+```
+nextflow run bbi-dmux -profile centos_6 -c experiment.config
+```
+
+This *nextflow.config* file has comments that give additional information.
+
 #### Parameters configuration file
 
-#### Demultiplexing parameters
-
-#### Analyze parameters
+The lines in the *experiment.config* file define parameters required by the processing pipeline, such as the Illumina run directory and the processing pipeline output directory. There is additional information in the example *experiment.config* files in the pipeline repositories.
 
 #### Running the pipeline scripts.
 
@@ -117,17 +85,15 @@ Run the pipeline scripts in a cluster node with significant a significant memory
 qlogin -l mfree=16G
 ```
 
-Run the bash script *run.demux.sh* first. After that finishes, run *run.analyze.sh*.
+Copy the *experiment.config* file and bash scripts *bbi-sciatac-demux/scripts/run.sciatac-demux.sh* and *bbi-sciatac-analyze/scripts/run.sciatac-analyze.sh* to the directory where want the pipeline output files. Edit *experiment.config* as required then run *run.sciatac-demux.sh* followed by *run.sciatac-analyze.sh*.
 
 ```
-bash run.demux.sh
+bash run.sciatac-demux.sh
 .
 .
 .
-bash run.analyze.sh
+bash run.sciatac-analyze.sh
 ```
-
-The *bbi-sciatac-demux* pipeline creates the file *args.json* in the demux output directory. The *bbi-sciatac-analyze* pipeline script looks for *args.json* in the demux output directory, and uses it to read the trimmed fastq files from the *<sample_name>/fastqs_trim* sub-directory in the demux output directory, and continues the analysis starting with read alignments.
 
 #### Additional information
 

@@ -6,8 +6,8 @@ Summary:
   This program reads a (front-end) CSV spreadsheet file, performs a variety of
   checks, 'fixes' sample names, and writes a 'back-end' samplesheet file for
   use with the processing pipeline. There are two back-end samplesheet formats:
-  Andrew Hill's sci-ATAC pipeline samplesheet format and a JSON format file for
-  the BBI sci-ATAC pipeline.
+  Andrew Hill's sci-ATAC pipeline samplesheet format and a JSON format file
+  required by the BBI sci-ATAC pipeline.
 
 Input (front-end) samplesheet format:
   o  the input samplesheet file is a CSV format spreadsheet file (use a
@@ -18,16 +18,16 @@ Input (front-end) samplesheet format:
        o  reports an error if there are both empty and non-empty cells amongst
           the first six
   o  the first row is a header with the following required columns
-       o  sample name identifier with value: 'sample_name'
-       o  genome label identifier value: 'genome'
        o  n5 barcode identifier with possible values: 'n5_wells' or 'n5_indexes'
        o  n7 barcode identifier with possible values: 'n7_wells' or 'n7_indexes'
        o  p5 barcode identifier with possible values: 'p5_wells' or 'p5_indexes'
           or 'p5_columns'
        o  p7 barcode identifier with possible values: 'p7_wells' or 'p7_indexes'
           or 'p7_rows'
-  o  the header values do not depend on case
+       o  sample name identifier with value: 'sample_name'
+       o  genome label identifier value: 'genome'
   o  the column order is arbitrary (but must be consistent within the file)
+  o  the header values do not depend on case
   o  ranges: index, well, column, and row range values are separated by either
      '-' or ':', your choice (mixes are allowed)
      examples:
@@ -56,7 +56,8 @@ Input (front-end) samplesheet format:
        o  genome is the name of the organism that was sequenced. This
           identifies the files required to analyze the reads. The genome string
           is passed to the processing pipeline, and the pipeline uses it to
-          find required files.
+          find required files. Available genomes are defined by the 'name'
+           field in the bbi-sciatac-analyze/genomes.json file.
   o  wells:
        o  samplesheet wells are converted to indexes where indexes refer to
           physical wells, which are in the order used in Andrew's pipeline;
@@ -85,7 +86,10 @@ Input (front-end) samplesheet format:
           separated by commas.
           example:
             o  3,5-8,89:96
-       o  indexes refer to physical wells in the order used in Andrew's pipeline
+       o  indexes refer to physical wells in the order used in Andrew's
+          pipeline and range from 1 to 384. Indexes 1 to 96 refer to
+          plate 1, 97 to 192 to plate 2, and so on, for P5, P7, N5, and
+          N7.
   o  p7 rows:
        o  u-titer plate rows used for PCR reactions
        o  rows are given as single or ranges of rows separated by commas
@@ -94,32 +98,58 @@ Input (front-end) samplesheet format:
             o  D-F,H
   o  p5 columns:
        o  u-titer plate columns used for PCR reactions
-       o  columns are given as single or ranges of rows separated by commas
+       o  columns are given as single or ranges of columns separated
+          by commas
           examples:
             o  3,4,5
             o  3-5,10-12
 
-Example samplesheet file:
+  Example samplesheet file:
 
-N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome
-1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse
-1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human
-1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse
-1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human
-1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human
-1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse
-1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse
-1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse
-1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse
-1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human
-1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human
-1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard
+  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome
+  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse
+  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human
+  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse
+  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human
+  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human
+  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse
+  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse
+  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse
+  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse
+  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human
+  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human
+  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard
+  
+  Notes:
+    o  the p7_row and p5_column value sets are enclosed in quotes
+       in this example because the sets have commas.  Do not use
+       quotes in the spreadsheet program cells; the spreadsheet
+       program adds them when it writes the CSV file.
+
+Command line options:
+
+  Option                   Description
+  ------                   -----------
+  --use_all_barcodes       By default, the BBI sci-ATAC processing pipeline uses only
+                           informative barcodes to assign reads to samples. In this
+                           description, a barcode is one of the four sequences N5, N7,
+                           P5, P7 (for ligation and PCR reactions). These four
+                           barcodes identify the read. If a barcode uses the same
+                           index set for all samples, it is considered to be
+                           uninformative for the purpose of identifying the sample,
+                           so it is not used to identify the sample. In the example
+                           samplesheet above, the N7, P5, and P7 index sets are the
+                           same for all samples so only the N5 indexes are used to
+                           identify samples. This is safe unless the sequencing run
+                           includes samples that are not present in the samplesheet
+                           and those additional samples are distinguished by barcode
+                           index sets that appear to be uninformative based on the
+                           samplesheet information. Use this option when there are
+                           such additional samples in the sequencing run.
 
 Notes:
-  o  the p7_row and p5_column value sets are enclosed in quotes
-     because the sets have commas.  Do not use quotes in the
-     spreadsheet program cells; the spreadsheet program adds
-     them when it writes the CSV file.
+  o  the command line arguments -r, -l, -w, -t, -s, and --use_all_barcodes
+     are used only with the JSON samplesheet format.
 
 
 For help with command line parameters, run
@@ -129,34 +159,42 @@ sciatac_samplesheet.py -h
 which gives
 
 usage: sciatac_samplesheet.py [-h] [-i INPUT] [-o OUTPUT] [-f {json,index}]
-                              [-r RUN_DIR] [-l {2,3}] [-t] [-s {n5,n7}] [-e]
-                              [-d] [-v]
+                              [-r RUN_DIR] [-l {2,3}] [-w {96,384}] [-t]
+                              [-s {n5,n7}] [--use_all_barcodes] [-e] [-d] [-v]
 
 A program to convert sci-ATAC CSV samplesheet to pipeline samplesheet.
 
 optional arguments:
   -h, --help            show this help message and exit
   -i INPUT, --input INPUT
-                        Input CSV samplesheet filename (string).
+                        Input CSV samplesheet filename (required string).
   -o OUTPUT, --output OUTPUT
-                        Output samplesheet filename (string).
+                        Output samplesheet filename (required string).
   -f {json,index}, --format {json,index}
-                        Output file format (default: 'json') (string).
+                        Output file format (default: 'json') (optional
+                        string).
   -r RUN_DIR, --run_dir RUN_DIR
-                        Illumina run directory path (string).
+                        Illumina run directory path (optional string).
   -l {2,3}, --level {2,3}
                         Two or three level sci-ATAC-seq experiment (default:
-                        '3') (integer).
-  -t, --tn5_barcodes    Tn5 has barcodes (flag: no value).
+                        3) (optional integer).
+  -w {96,384}, --number_wells {96,384}
+                        Number of barcode set wells (default: 384) (optional
+                        integer).
+  -t, --tn5_barcodes    Tn5 has barcodes (optional flag).
   -s {n5,n7}, --sample_identifier {n5,n7}
                         Ligation barcode that identifies the sample (default:
-                        'n5') used to check for duplicates (string).
+                        'n5') used to check for duplicates (optional string).
+  --use_all_barcodes    Use all barcodes to demultiplex fastq files. By
+                        default, uninformative barcodes are not used to
+                        identify samples when demultiplexing fastq files
+                        (optional flag).
   -e, --template        Write template samplesheet file
                         ('samplesheet.template.csv') with standard column
-                        formats and exit (flag: no value).
-  -d, --documentation   Display documentation and exit (flag: no value).
+                        formats and exit (optional flag).
+  -d, --documentation   Display documentation and exit (optional flag).
   -v, --version         Give program and JSON output file versions and exit
-                        (flag: no value).
+                        (optional flag).
 """
 
 
@@ -226,6 +264,18 @@ column_header_value_list.extend( p7_column_values.split() )
 def display_documentation():
   print( __doc__ )
   return( 0 )
+
+
+def check_args( args ):
+  error_string = ''
+  if( args.tn5_barcodes and ( args.number_wells == 384 or args.level == 3 ) ):
+    error_string += '  tn5_barcodes requires level == 2 and number_wells == 96\n'
+  if( len( error_string ) > 0 ):
+    print( 'Command line argument errors:' )
+    print( error_string, file=sys.stderr )
+    sys.exit( -1 )
+  return( 0 )
+
 
 def parse_header_column_name( string_in, column_name_list, error_string ):
   """
@@ -791,6 +841,7 @@ def check_sample_identifier( row_out_list, sample_identifier ):
     o  some experiments use a combination of ligation and PCR barcodes to
        identify samples, and the same ligation barcodes can be assigned
        intentionally to more than one sample 
+    o  issue warning and continue rather than error and exit
   """
   key = '%s_index_list' % ( sample_identifier )
   index_dict = {}
@@ -842,6 +893,11 @@ def write_samplesheet_index_format( file, row_out_list ):
 
 
 def get_pcr_row_col( column_name_list, samplesheet_row_list ):
+  """
+  Given lists of PCR rows and columns by sample, return lists of
+  distinct PCR rows and columns for JSON output file. This values
+  are used by the demux_dash.
+  """
   p5_re_pattern = r'([1-9][0-2]?)([-:]([1-9][0-2]?))?$'
   p7_re_pattern = r'([a-hA-H])([-:]([a-hA-H]))?$'
 
@@ -902,7 +958,10 @@ def get_pcr_row_col( column_name_list, samplesheet_row_list ):
 
 
 def get_pcr_wells( column_name_list, samplesheet_row_list ):
-  # find required samplesheet column
+  """
+  Given the samplesheet rows, return lists of specified PCR wells,
+  if any.
+  """
   p5_samplesheet_col = None
   p7_samplesheet_col = None
   for icol, column_name_dict in enumerate( column_name_list ):
@@ -989,7 +1048,7 @@ def get_pcr_wells( column_name_list, samplesheet_row_list ):
   return( p5_well_list, p7_well_list )
 
 
-def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list, row_out_list, level = 3, tn5_barcodes = False, illumina_run_directory = 'NA' ):
+def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list, row_out_list, level = 3, number_wells = 384, tn5_barcodes = False, use_all_barcodes = False, illumina_run_directory = 'NA' ):
   """
   Write an output samplesheet file in JSON format.
   """
@@ -1038,7 +1097,9 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
   sample_data = { 'json_file_version' : json_file_version,
                   'illumina_run_directory' : illumina_run_directory,
                   'level' : level,
+                  'number_wells' : number_wells,
                   'tn5_barcodes' : tn5_barcodes,
+                  'use_all_barcodes' : use_all_barcodes,
                   'input_samplesheet_rows' : input_samplesheet_rows,
                   'pcr_format': pcr_format,
                   'p5_col_list' : p5_col_list,
@@ -1053,9 +1114,11 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
 
 
 def samplesheet_report( samplesheet_row_list, row_out_list, args ):
-  print( 'Tn5 barcodes: %r' % ( args.tn5_barcodes ) )
-  print( 'Level: %s' % ( args.level ) )
+  print( 'Tn5 barcodes:      %r' % ( args.tn5_barcodes ) )
+  print( 'Level:             %s' % ( args.level ) )
+  print( 'Number of wells:   %d' % ( args.number_wells ) )
   print( 'Sample identifier: %s' % ( args.sample_identifier ) )
+  print( 'Use all barcodes:  %r' % ( args.use_all_barcodes ) )
   print( 'Sample names after converting unacceptable characters to \'.\'.' )
   for row_out in row_out_list:
     print( '  %s' % ( row_out['sample_name'] ) )
@@ -1074,16 +1137,18 @@ def write_samplesheet_template():
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='A program to convert sci-ATAC CSV samplesheet to pipeline samplesheet.')
-  parser.add_argument('-i', '--input', required=False, default=None, help='Input CSV samplesheet filename (string).')
-  parser.add_argument('-o', '--output', required=False, default=None, help='Output samplesheet filename (string).')
-  parser.add_argument('-f', '--format', required=False, choices=[ 'json', 'index'], default='json', help='Output file format (default: \'%(default)s\') (string).')
-  parser.add_argument('-r', '--run_dir', required=False, default=None, help='Illumina run directory path (string).')
-  parser.add_argument('-l', '--level', required=False, choices=[ 2, 3 ], default=3, help='Two or three level sci-ATAC-seq experiment (default: \'%(default)s\') (integer).')
-  parser.add_argument('-t', '--tn5_barcodes', required=False, action='store_true', help='Tn5 has barcodes (flag: no value).')
-  parser.add_argument('-s', '--sample_identifier', required=False, choices=[ 'n5', 'n7' ], default='n5', help='Ligation barcode that identifies the sample (default: \'%(default)s\') used to check for duplicates (string).')
-  parser.add_argument('-e', '--template', required=False, action='store_true', help='Write template samplesheet file (\'samplesheet.template.csv\') with standard column formats and exit (flag: no value).')
-  parser.add_argument('-d', '--documentation', required=False, action='store_true', help='Display documentation and exit (flag: no value).')
-  parser.add_argument('-v', '--version', required=False, action='store_true', help='Give program and JSON output file versions and exit (flag: no value).')
+  parser.add_argument('-i', '--input', required=False, default=None, help='Input CSV samplesheet filename (required string).')
+  parser.add_argument('-o', '--output', required=False, default=None, help='Output samplesheet filename (required string).')
+  parser.add_argument('-f', '--format', required=False, choices=[ 'json', 'index'], default='json', help='Output file format (default: \'%(default)s\') (optional string).')
+  parser.add_argument('-r', '--run_dir', required=False, default=None, help='Illumina run directory path (optional string).')
+  parser.add_argument('-l', '--level', type=int, required=False, choices=[ 2, 3 ], default=3, help='Two or three level sci-ATAC-seq experiment (default: %(default)s) (optional integer).')
+  parser.add_argument('-w', '--number_wells', type=int, required=False, choices=[ 96, 384 ], default=384, help='Number of barcode set wells (default: %(default)s) (optional integer).')
+  parser.add_argument('-t', '--tn5_barcodes', required=False, action='store_true', help='Tn5 has barcodes (optional flag).')
+  parser.add_argument('-s', '--sample_identifier', required=False, choices=[ 'n5', 'n7' ], default='n5', help='Ligation barcode that identifies the sample (default: \'%(default)s\') used to check for duplicates (optional string).')
+  parser.add_argument('--use_all_barcodes', required=False, action='store_true', help='Use all barcodes to demultiplex fastq files. By default, uninformative barcodes are not used to identify samples when demultiplexing fastq files (optional flag).')
+  parser.add_argument('-e', '--template', required=False, action='store_true', help='Write template samplesheet file (\'samplesheet.template.csv\') with standard column formats and exit (optional flag).')
+  parser.add_argument('-d', '--documentation', required=False, action='store_true', help='Display documentation and exit (optional flag).')
+  parser.add_argument('-v', '--version', required=False, action='store_true', help='Give program and JSON output file versions and exit (optional flag).')
   args = parser.parse_args()
 
   # Write documentation.
@@ -1113,6 +1178,11 @@ if __name__ == '__main__':
     print( 'For help run \'sciatac_samplesheet.py -h\' or \'sciatac_samplesheet.py -d\'' )
     sys.exit( -1 )
 
+  #
+  # Check command line parameter consistency.
+  #
+  check_args( args )
+
   # Go to work.
   filename_in = args.input
   filename_out = args.output
@@ -1123,7 +1193,7 @@ if __name__ == '__main__':
   row_out_list = make_samplesheet_indexes( column_name_list, samplesheet_row_list )
   check_sample_identifier( row_out_list, args.sample_identifier )
   if( args.format == 'json' ):
-    write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, level = args.level, tn5_barcodes = args.tn5_barcodes, illumina_run_directory=args.run_dir )
+    write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, level = args.level, number_wells = args.number_wells, tn5_barcodes = args.tn5_barcodes, use_all_barcodes = args.use_all_barcodes, illumina_run_directory = args.run_dir )
   else:
     write_samplesheet_index_format( open( filename_out, 'w' ), row_out_list )
   samplesheet_report( samplesheet_row_list, row_out_list, args )

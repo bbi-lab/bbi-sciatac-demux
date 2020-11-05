@@ -72,8 +72,6 @@ def onError = { return( "retry" ) }
 ** Initial pre-defined, required parameter values.
 */
 params.help = false
-params.num_well = 384
-params.level = 3
 params.max_cores = 6
 params.max_mem_bcl2fastq = 40
 
@@ -88,11 +86,10 @@ params.max_mem_bcl2fastq = 40
 */
 def sample_sheet = params.sample_sheet
 def run_dir      = params.run_dir
-def demux_dir    = params.demux_dir
-def num_threads_bcl2fasta_process = params.max_cores
-def mem_bcl2fastq = params.max_mem_bcl2fastq
-def num_threads_bcl2fastq_io = 6
 def options_barcode_correct = ''
+
+num_threads_bcl2fasta_process = params.max_cores
+num_threads_bcl2fastq_io = 6
 
 /*
 ** Print usage when run with --help parameter.
@@ -105,15 +102,28 @@ if (params.help) {
 /*
 ** Check for required parameters.
 */
-assert ( params.run_dir && params.demux_dir && params.sample_sheet && params.num_well && params.level ) : "missing config file: use -c CONFIG_FILE.config that includes run_dir, demux_dir, sample_sheet, num_well, and level parameters"
-assert ( params.num_well == 96 || params.num_well == 384 ) : "invalid params.num_well value: must be either 96 or 384"
-assert ( params.level == 2 || params.level == 3 ) : "invalid params.level value: must be either 2 or 3"
-assert ( ( params.level == 2 && params.num_well == 96 ) || ( params.level == 3 && params.num_well == 96 ) || ( params.level == 3 && params.num_well == 384 ) ) : "invalid combination of params.level and params.num_well"
+assert ( params.run_dir && params.output_dir && params.sample_sheet ) : "missing config file: use -c CONFIG_FILE.config that includes run_dir, demux_dir, and sample_sheet parameters"
+
+/*
+** Global variables accessible in process blocks.
+*/
+output_dir = params.output_dir.replaceAll("/\\z", "")
+demux_dir = output_dir + '/demux_out'
+
+/*
+** Check sample sheet file.
+*/
+checkSamplesheet( params )
+
+/*
+** Read sample sheet file.
+*/
+sampleSheetMap = readSampleSheetJson( params )
 
 /*
 ** Report run parameter values.
 */
-reportRunParams( params )
+reportRunParams( params, sampleSheetMap )
 
 /*
 ** Archive configuration and samplesheet files in demux_dir.
@@ -124,11 +134,6 @@ archiveRunFiles( params, timeNow )
 ** Check that required directories exist or can be made.
 */
 checkDirectories( params )
-
-/*
-** Check sample sheet file.
-*/
-checkSamplesheet( params )
 
 /*
 ** Read Illumina run information.
@@ -157,11 +162,17 @@ def sequencer_flag = ( illuminaRunInfoMap['reverse_complement_i5'] ) ? '-X' : ''
 /*
 ** Add optional barcode correction parameters.
 */
-if( params.level == 2 && params.num_well == 96 ) {
+if( sampleSheetMap['tn5_barcodes'] && ( sampleSheetMap['level'] != 2 || sampleSheetMap['number_wells'] != 96 ) ) {
+    throw new Exception('tn5_barcode requires level == 2 and number_wells == 96')
+}
+if( sampleSheetMap['level'] == 2 && sampleSheetMap['number_wells'] == 96 && sampleSheetMap['tn5_barcodes'] ) {
 	options_barcode_correct += ' --two_level_indexed_tn5'
 }
-if( params.num_well == 384 ) {
+if( sampleSheetMap['number_wells'] == 384 ) {
 	options_barcode_correct += ' --wells_384'
+}
+if( sampleSheetMap['use_all_barcodes'] ) {
+  options_barcode_correct += ' --no_mask'
 }
 
 /*
@@ -222,16 +233,16 @@ process bcl2fastq {
   cpus num_threads_bcl2fasta_process
   memory "$mem_bcl2fastq GB"    
 //  note: bge: the following publishDir statement is commented out in bbi_dmux. I want it to work for diagnostics during development.
-  publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Undetermined_S0_*.fastq.gz", mode: 'copy'
-  publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Stats/*", mode: 'copy'
-  publishDir path: "$params.demux_dir/fastqs_bcl2fastq", pattern: "Reports/*", mode: 'copy'
+  publishDir path: "$demux_dir/fastqs_bcl2fastq", pattern: "Undetermined_S0_*.fastq.gz", mode: 'copy'
+  publishDir path: "$demux_dir/fastqs_bcl2fastq", pattern: "Stats/*", mode: 'copy'
+  publishDir path: "$demux_dir/fastqs_bcl2fastq", pattern: "Reports/*", mode: 'copy'
 
   input:
     file(inFile) from bcl2fastqInChannel
 //    file(inFile) from makeFakeSampleSheetOutChannel
 
   output:
-    set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into bcl2fastq_fastqs mode flatten
+    set file("Undetermined_S0_*_R1_001.fastq.gz"), file("Undetermined_S0_*_R2_001.fastq.gz") into bcl2fastq_fastqsOutChannel mode flatten
     file("Stats/*") into  bcl2fastq_stats
     file("Reports/*") into bcl2fastq_reports
 
@@ -267,6 +278,11 @@ process bcl2fastq {
     //               --tiles s_1 \
 }
 
+bcl2fastq_fastqsOutChannel
+   .into { bcl2fastq_fastqsOutChannelCopy01;
+           bcl2fastq_fastqsOutChannelCopy02 }
+
+
 /*
 ** Run bar code correction script (barcode_correct_sciatac.py).
 **
@@ -287,15 +303,15 @@ process bcl2fastq {
 process barcode_correct {
   cache 'lenient'
   errorStrategy onError
-  publishDir    path: "${params.demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*.fastq.gz", mode: 'copy'
-  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.stats.json", mode: 'copy'
-  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.index_counts.csv", mode: 'copy'
-  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.tag_pair_counts.csv", mode: 'copy'
-  publishDir    path: "${params.demux_dir}/fastqs_barcode", pattern: "*.pcr_pair_counts.csv", mode: 'copy'
+  publishDir    path: "${demux_dir}", saveAs: { qualifyFilename( it, "fastqs_barcode" ) }, pattern: "*.fastq.gz", mode: 'copy'
+  publishDir    path: "${demux_dir}/fastqs_barcode", pattern: "*.stats.json", mode: 'copy'
+  publishDir    path: "${demux_dir}/fastqs_barcode", pattern: "*.index_counts.csv", mode: 'copy'
+  publishDir    path: "${demux_dir}/fastqs_barcode", pattern: "*.tag_pair_counts.csv", mode: 'copy'
+  publishDir    path: "${demux_dir}/fastqs_barcode", pattern: "*.pcr_pair_counts.csv", mode: 'copy'
   
   input:
-    // set file(R1), file(R2) from bcl2fastq_fastqs.splitFastq(by: params.fastq_chunk_size, file: true, pe: true)
-    set file(R1), file(R2) from bcl2fastq_fastqs
+    // set file(R1), file(R2) from bcl2fastq_fastqsOutChannelCopy01.splitFastq(by: params.fastq_chunk_size, file: true, pe: true)
+    set file(R1), file(R2) from bcl2fastq_fastqsOutChannelCopy01
     
   output:
     file "*.fastq.gz" into barcode_fastqs mode flatten
@@ -323,6 +339,11 @@ process barcode_correct {
   """
 }
 
+
+barcode_fastqs
+  .into { barcode_fastqsCopy01;
+          barcode_fastqsCopy02 }
+
 /*
 ** Gather R1/R2 pairs of fastq filenames because
 ** Trimmomatic processes read pairs using separate
@@ -330,7 +351,7 @@ process barcode_correct {
 */
 get_prefix_barcode_fastqs = { file -> (file - ~/_R[12]\.fastq\.gz/) }
 
-barcode_fastqs
+barcode_fastqsCopy01
   .map { file -> tuple( get_prefix_barcode_fastqs(file.name), file) }
   .groupTuple()
   .set { barcode_fastqs_paired }
@@ -343,7 +364,7 @@ def adapters_path="${script_dir}/Trimmomatic-0.36/adapters/NexteraPE-PE.fa:2:30:
 process adapter_trimming {
   cache 'lenient'
   errorStrategy onError
-  publishDir path: "$params.demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
+  publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
   
   input:
   set prefix, file(read_pair) from barcode_fastqs_paired
@@ -375,7 +396,116 @@ process adapter_trimming {
 ** However, this script requires still statistics/report generating functions.
 */
 
+/*
+** Run fastqc on bcl2fastq output (lanes) files.
+*/
+process fastqc_lanes {
+  cache 'lenient'
+  errorStrategy onError
+  publishDir path: "$output_dir", pattern: "fastqc_lanes", mode: 'copy'
 
+  input:
+    file fastq from bcl2fastq_fastqsOutChannelCopy02.collect()
+
+  output:
+    file fastqc_lanes into fastqcLanesOutChannel
+
+  script:
+  """
+  mkdir fastqc_lanes
+  fastqc *.fastq.gz -t $task.cpus -o fastqc_lanes
+  """
+}
+
+
+/*
+** Run fastqc on barcode corrected fastq files by sample.
+*/
+process fastqc_samples {
+  cache 'lenient'
+  errorStrategy onError
+  publishDir path: "$output_dir", pattern: "fastqc_sample", mode: 'copy'
+
+  input:
+    file fastq from barcode_fastqsCopy02.collect()
+
+  output:
+    file fastqc_sample into fastqcSampleOutChannel
+
+  script:
+  """
+  mkdir fastqc_sample
+  fastqc *.fastq.gz -t $task.cpus -o fastqc_sample
+  """
+}
+
+
+/*
+** Make demux dash files.
+**   Required input files:
+**     o  args.json file: this is made outside the pipeline, initially
+**     o  files '%s/fastqs_barcode/RUN001_L%03d.stats.json' typically in <run_process_dir>/demux_out/fastqs_barcode directory
+**     o  files '/RUN001_', lane, '.pcr_pair_counts.csv', typically in <run_process_dir>/demux_out/fastqs_barcode directory
+**     o  files '/RUN001_', lane, '.index_counts.csv', typically in <run_process_dir>/demux_out/fastqs_barcode directory
+**     o  process barcode_correct output channels
+**          o  file "*.stats.json" into barcode_stats_json mode flatten
+**          o  file "*.index_counts.csv" into index_counts_csv mode flatten
+**          o  file "*.tag_pair_counts.csv" into tag_pair_counts_csv mode flatten
+**          o  file "*.pcr_pair_counts.csv" into pcr_pair_counts_csv mode flatten
+**   Runs scripts:
+**     o  make_dashboard_data.R (Rscript)
+**     o  make_run_data.py
+**   Requires additional files/directories:
+**     o  demux_dash/js/demux.js and footer.js and style and ...
+**   Writes to
+**     o  demux_dash/js/run_data.js
+**     o  demux_dash/js/recover_summary.js  (eventually)
+**     o  demux_dash/img/*
+**
+**   Input channels:
+**     process: barcode_correct
+**       output:
+**         file "*.stats.json" into barcode_stats_json mode flatten
+**         file "*.index_counts.csv" into index_counts_csv mode flatten
+**         file "*.tag_pair_counts.csv" into tag_pair_counts_csv mode flatten
+**         file "*.pcr_pair_counts.csv" into pcr_pair_counts_csv mode flatten
+**
+**   Output channels:
+**     process demux_dash (!)
+**
+**   Questions:
+**     o  how do I transfer all files in input channel to one process?
+*/
+project_name = output_dir.substring(output_dir.lastIndexOf("/")+1);
+
+process demux_dash {
+  cache 'lenient'
+  errorStrategy onError
+  publishDir path: "$output_dir", pattern: "demux_dash", mode: 'copy'
+
+  input:
+    file stats_json from barcode_stats_json.collect()
+    file index_counts from index_counts_csv.collect()
+    file tag_pair_counts from tag_pair_counts_csv.collect()
+    file pcr_pair_counts from pcr_pair_counts_csv.collect()
+
+  output:
+    file demux_dash into demux_dashOutChannel
+
+  script:
+  """
+  mkdir demux_dash
+  cp -R $script_dir/skeleton_dash/* demux_dash
+
+  $script_dir/make_dashboard_data.R  --input_folder="." \
+                                     --samplesheet=$sample_sheet \
+                                     --project_name=$project_name \
+                                     --image_output_folder="demux_dash/img"
+
+  $script_dir/make_run_data.py --input_file="$demux_dir/args.json" \
+                               --output_file="demux_dash/js/run_data.js"
+  """
+}
 
 /*
 ** ================================================================================
@@ -404,20 +534,14 @@ def writeHelp() {
     log.info ''
     log.info 'Required parameters (specify in your config file):'
     log.info '    params.run_dir = RUN_DIRECTORY             Path to the sequencer run directory.'
-    log.info '    params.demux_dir = OUTPUT DIRECTORY        Processing output directory.'
+    log.info '    params.output_dir = OUTPUT DIRECTORY       Processing output directory.'
     log.info '    params.sample_sheet = SAMPLE_SHEET_PATH    Sample sheet of the format described in the README.'
-    log.info '    params.num_well = 384                      Number of u-titer plate wells.'
-    log.info '    params.level = 3                           Level of run (2 or 3).'
     log.info ''
-    log.info 'Optional parameters (specify in your config file):'
+    log.info 'Optional parameters (specify in your experiment.config file):'
     log.info '    params.max_cores = 16                      The maximum number of cores to use - fewer will be used if appropriate.'
     log.info '    process.maxForks = 20                      The maximum number of processes to run at the same time on the cluster.'
     log.info '    process.queue = "trapnell-short.q"         The queue on the cluster where the jobs should be submitted. '
     log.info '    params.max_mem_bcl2fastq = 40              The maximum number of GB of RAM to allocate for bcl2fastq run'
-    log.info ''
-    log.info 'Notes:'
-    log.info '  o  valid combinations of (params.level, params.num_well) are (3, 384), (3, 96), and'
-    log.info '     (2, 96). The last combination is for the original barcoded Tn5-based assay.'
     log.info ''
     log.info 'Issues? Contact bge@uw.edu'
 }
@@ -426,17 +550,21 @@ def writeHelp() {
 /*
 ** Report run parameters
 */
-def reportRunParams( params ) {
+def reportRunParams( params, sampleSheetMap ) {
 
     String s = ""
     s += String.format( "Run parameters\n" )
     s += String.format( "--------------\n" )
     s += String.format( "Sequencing data directory:     %s\n", params.run_dir )
-    s += String.format( "Processing output directory:   %s\n", params.demux_dir )
+    s += String.format( "Processing output directory:   %s\n", params.output_dir )
+    s += String.format( "Processing demux directory:    %s\n", demux_dir )
     s += String.format( "Launch directory:              %s\n", workflow.launchDir )
     s += String.format( "Work directory:                %s\n", workflow.workDir )
-    s += String.format( "Combinatorial levels:          %d\n", params.level )
     s += String.format( "Sample sheet file:             %s\n", params.sample_sheet )
+    s += String.format( "Level:                         %d\n", sampleSheetMap['level'] )
+    s += String.format( "Number of wells:               %d\n", sampleSheetMap['number_wells'] )
+    s += String.format( "TN5 barcodes:                  %b\n", sampleSheetMap['tn5_barcodes'] )
+    s += String.format( "Use all barcodes               %b\n", sampleSheetMap['use_all_barcodes'] )
     s += String.format( "Maximum cores:                 %d\n", params.max_cores )
     s += String.format( "Maximum memory for bcl2fastq:  %d\n", params.max_mem_bcl2fastq )
     s += String.format( "\n" )
@@ -464,7 +592,7 @@ def checkDirectories( params ) {
     /*
     ** Check that either the demux_dir exists or we can create it.
     */
-    def dhOutDir = new File( params.demux_dir )
+    def dhOutDir = new File( demux_dir )
     if( !dhOutDir.exists() ) {
        assert dhOutDir.mkdirs() : "unable to create output directory $demux_dir"
     }
@@ -488,7 +616,7 @@ def archiveRunFiles( params, timeNow )
   file_suffix = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
   Path src = Paths.get( params.sample_sheet )
   def ftmp = new File( params.sample_sheet )
-  Path dst =  Paths.get( "${params.demux_dir}/${ftmp.getName()}.${file_suffix}" )
+  Path dst =  Paths.get( "${demux_dir}/${ftmp.getName()}.${file_suffix}" )
   Files.copy( src, dst )
   def i = 1
   workflow.configFiles.each { aFile ->
@@ -497,6 +625,13 @@ def archiveRunFiles( params, timeNow )
     Files.copy( src, dst )
     i += 1
   }
+}
+
+
+def readSampleSheetJson( params ) {
+    def jsonSlurper = new JsonSlurper()
+    sampleSheetMap = jsonSlurper.parse(new File(params.sample_sheet))
+    return( sampleSheetMap )
 }
 
 
@@ -536,10 +671,11 @@ def writeArgsJson( params, timeNow ) {
     demuxDict = [:]
     demuxDict['run_date'] = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
     demuxDict['run_dir'] = params.run_dir
-    demuxDict['demux_dir'] = params.demux_dir
+    demuxDict['output_dir'] = output_dir
+    demuxDict['demux_dir'] = demux_dir
     demuxDict['sample_sheet'] = params.sample_sheet
-    demuxDict['num_well'] = params.num_well
-    demuxDict['level'] = params.level
+    demuxDict['num_well'] = sampleSheetMap['number_wells']
+    demuxDict['level'] = sampleSheetMap['level']
     demuxDict['params.max_cores'] = params.max_cores
     demuxDict['max_mem_bcl2fastq'] = params.max_mem_bcl2fastq
 
@@ -579,7 +715,7 @@ def writeArgsJson( params, timeNow ) {
     /*
     ** Write mapRunInfo to args.json file.
     */
-    def args_json = params.demux_dir + "/args.json"
+    def args_json = demux_dir + "/args.json"
     File file_json = new File( args_json )
     file_json.write( JsonOutput.prettyPrint( JsonOutput.toJson( mapRun001 ) ) )
 }
