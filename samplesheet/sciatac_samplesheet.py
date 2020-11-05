@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+#
+# Notes:
+#   o  the master file is bbi-sciatac-demux/samplesheet/sciatac_samplesheet.py
+#
+
 """
 Program: sciatac_samplesheet.py
 Summary:
