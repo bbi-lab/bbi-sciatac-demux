@@ -30,7 +30,7 @@ Input (front-end) samplesheet format:
        o  p7 barcode identifier with possible values: 'p7_wells' or 'p7_indexes'
           or 'p7_rows'
        o  sample name identifier with value: 'sample_name'
-       o  genome label identifier value: 'genome'
+       o  genome label identifier with value: 'genome'
   o  the column order is arbitrary (but must be consistent within the file)
   o  the header values do not depend on case
   o  ranges: index, well, column, and row range values are separated by either
