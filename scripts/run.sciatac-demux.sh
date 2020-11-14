@@ -1,6 +1,11 @@
 #!/bin/bash
 
 #
+# Current date and time.
+#
+NOW=`date '+%Y%m%d.%H%M%S'`
+
+#
 # Path to the Nextflow processing run configuration file.
 #
 PWD=`pwd`
@@ -42,13 +47,13 @@ PARS="-c $CONFIG_FILE -w $WORK_DIR -with-report $REPORT_FIL -with-trace $TRACE_F
 mkdir -p $DEMUX_DIR
 pushd $DEMUX_DIR
 
-date > ./run_start.txt
+date > ./run_start.${NOW}.txt
 
 #
 # Run Nextflow sci-ATAC demux pipeline.
 #
 $NEXTFLOW run $NF_DEMUX $PARS
 
-date > run_finish.txt
+date > run_finish.${NOW}.txt
 
 popd

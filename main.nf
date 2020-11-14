@@ -102,7 +102,18 @@ if (params.help) {
 /*
 ** Check for required parameters.
 */
-assert ( params.run_dir && params.output_dir && params.sample_sheet ) : "missing config file: use -c CONFIG_FILE.config that includes run_dir, demux_dir, and sample_sheet parameters"
+if( !params.run_dir ) {
+	printErr( "Error: missing params.run_dir in parameters file" )
+	System.exit( -1 )
+}
+if( !params.output_dir ) {
+	printErr( "Error: missing params.output_dir in parameters file" )
+	System.exit( -1 )
+}if( !params.sample_sheet ) {
+	printErr( "Error: missing params.sample_sheet in parameters file" )
+	System.exit( -1 )
+}
+
 
 /*
 ** Global variables accessible in process blocks.
@@ -514,6 +525,9 @@ process demux_dash {
 */
 
 
+def printErr = System.err.&println
+
+
 /*
 ** Write help information.
 */
@@ -586,15 +600,24 @@ def checkDirectories( params ) {
     ** Check for existence of run_dir.
     */
     def dhRunDir = new File( params.run_dir )
-    assert dhRunDir.exists() : "unable to find Illumina run directory $run_dir"
-    assert dhRunDir.canRead() : "unable to read Illumina run directory $run_dir"
+    if( !dhRunDir.exists() ) {
+    	printErr( "Error: unable to find Illumina run directory $run_dir" )
+    	System.exit( -1 )
+    }
+    if( !dhRunDir.canRead() ) {
+    	printErr( "Error: unable to read Illumina run directory $run_dir" )
+    	System.exit( -1 )
+    }
 
     /*
     ** Check that either the demux_dir exists or we can create it.
     */
     def dhOutDir = new File( demux_dir )
     if( !dhOutDir.exists() ) {
-       assert dhOutDir.mkdirs() : "unable to create output directory $demux_dir"
+    	if( !dhOutDir.mkdirs() ) {
+    		printErr( "Error: unable to create demux output directory $demux_dir" )
+    		System.exit( -1 )
+    	}
     }
 }
 
@@ -606,8 +629,14 @@ def checkSamplesheet( params ) {
     **   o  check sample sheet file content
     */
     def fhSampleSheet = new File( params.sample_sheet )
-    assert fhSampleSheet.exists() : "unable to find sample sheet file ${params.sample_sheet}"
-    assert fhSampleSheet.canRead() : "unable to read file sample sheet ${params.sample_sheet}"
+    if( !fhSampleSheet.exists() ) {
+    	printErr( "Error: unable to find samplesheet file ${params.sample_sheet}" )
+    	System.exit( -1 )
+    }
+	if( !fhSampleSheet.canRead() ) {
+    	printErr( "Error: unable to read file sample sheet ${params.sample_sheet}" )
+    	System.exit( -1 )
+    }    
 }
 
 
