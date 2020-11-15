@@ -1,0 +1,16 @@
+2020-11-09 12:02:45	-	hungry_lamarck	-	4a3952cc8cf20f14486ce72a1b021cd2	be50f529-92fa-47ac-bbbc-0869fedf6d74	nextflow run channel_01.nf
+2020-11-09 12:06:08	57.7s	backstabbing_stallman	OK	3ad89ee6e9da8f67fcdf141092d90241	029d1bfd-cd3d-4d76-a4a9-c9102714cf50	nextflow run channel_01.nf
+2020-11-09 12:20:09	56.8s	spontaneous_stallman	OK	6c0fdc24db3dd4fa2581fbf967cfbf09	90566968-fc4c-433f-9aa9-d6cc86030481	nextflow run channel_01.nf
+2020-11-09 12:22:28	56.7s	small_euler	OK	0fe219a9e5d8a856c5be0b512c5b15ce	a95b8a77-b69a-4700-9ab1-d42c59a734c4	nextflow run channel_01.nf
+2020-11-09 12:25:54	41.8s	determined_spence	ERR	4f60ca1689c0c3a765966a86b2b37eb6	437ff4b2-cfcd-46f6-bfcb-338bf26c9035	nextflow run channel_01.nf
+2020-11-09 12:59:46	-	fabulous_crick	-	655b1a62a4acbc187cc381ebe7f48a49	a933ae89-8b85-4d15-8b12-70d4f193daa9	nextflow run channel_01.nf
+2020-11-09 13:00:31	-	cheeky_shockley	-	7d5ba6d2cf086041356e484663907914	925becad-90de-40ca-b2ba-d23da128c23f	nextflow run channel_01.nf
+2020-11-09 13:01:02	16.9s	prickly_gutenberg	ERR	eb5a488d68028056e096a9eb44cfb405	d550a3e6-3e76-4534-a926-870597329e64	nextflow run channel_01.nf
+2020-11-09 13:01:58	42.8s	irreverent_woese	ERR	9d4247c65e3b85089a32cea3ba2e0809	c343f8d7-f206-49cd-87c3-bf5630bc9bd5	nextflow run channel_01.nf
+2020-11-09 13:04:01	42.2s	dreamy_mcnulty	ERR	b76e5d0424cf9271f763a6aa7223b6ac	891dd988-5b11-4066-9b55-cb48c07fc6f0	nextflow run channel_01.nf
+2020-11-09 13:08:17	-	deadly_pare	-	431676a1135e2a2c761c50931a489688	e90fa851-890e-4e6e-aa4f-b412ee214448	nextflow run channel_01.nf
+2020-11-09 13:08:31	42.2s	lonely_joliot	ERR	039f01946695b09c154ffecc0086ef36	78f82c39-4172-4f12-94fc-a7dea6e2571b	nextflow run channel_01.nf
+2020-11-09 13:09:38	26.9s	prickly_darwin	OK	deac13c67850e782359e26de1afa0be3	4e0d1afa-e464-48bf-860e-adc99b15d9b7	nextflow run channel_01.nf
+2020-11-09 13:12:54	-	lonely_lumiere	-	fb8188d9777ff27cace0a514b5407565	4d444878-55b2-45ce-b74b-ab51fbf080ff	nextflow run channel_01.nf
+2020-11-09 13:13:30	26.9s	sharp_sinoussi	OK	844ba9a2301ea04b2cd615f5ac8fdfe3	5ffbeddc-71ab-4f0b-9bd8-0afbb3a9165e	nextflow run channel_01.nf
+2020-11-09 13:14:38	27.7s	evil_majorana	OK	629b173510eab94d6216ea91106fb62a	d12e48d8-4c0c-40ed-849b-a32f6383f541	nextflow run channel_01.nf

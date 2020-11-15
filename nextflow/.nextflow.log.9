@@ -1,0 +1,39 @@
+Nov-09 13:00:29.984 [main] DEBUG nextflow.cli.Launcher - $> nextflow run channel_01.nf
+Nov-09 13:00:30.288 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 20.07.1
+Nov-09 13:00:30.313 [main] INFO  nextflow.cli.CmdRun - Launching `channel_01.nf` [cheeky_shockley] - revision: 7d5ba6d2cf
+Nov-09 13:00:30.369 [main] DEBUG nextflow.config.ConfigBuilder - Found config home: /net/gs/vol1/home/bge/.nextflow/config
+Nov-09 13:00:30.374 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /net/gs/vol1/home/bge/.nextflow/config
+Nov-09 13:00:30.455 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-09 13:00:31.503 [main] DEBUG nextflow.Session - Session uuid: 925becad-90de-40ca-b2ba-d23da128c23f
+Nov-09 13:00:31.504 [main] DEBUG nextflow.Session - Run name: cheeky_shockley
+Nov-09 13:00:31.505 [main] DEBUG nextflow.Session - Executor pool size: 2
+Nov-09 13:00:31.567 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 20.07.1 build 5412
+  Created: 24-07-2020 15:18 UTC (08:18 PDT)
+  System: Linux 3.10.0-1062.18.1.el7.x86_64
+  Runtime: Groovy 2.5.11 on OpenJDK 64-Bit Server VM 1.8.0_272-b10
+  Encoding: UTF-8 (UTF-8)
+  Process: 30793@s007.grid.gs.washington.edu [10.210.0.1]
+  CPUs: 2 - Mem: 94.2 GB (84.6 GB) - Swap: 8 GB (8 GB)
+Nov-09 13:00:31.647 [main] DEBUG nextflow.Session - Work-dir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work [nfs]
+Nov-09 13:00:31.648 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/bin
+Nov-09 13:00:31.729 [main] DEBUG nextflow.Session - Observer factory: TowerFactory
+Nov-09 13:00:31.732 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Nov-09 13:00:32.157 [main] DEBUG nextflow.Session - Session start invoked
+Nov-09 13:00:32.772 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Nov-09 13:00:32.786 [main] DEBUG nextflow.Session - Workflow process names [dsl1]: finit, doit
+Nov-09 13:00:32.792 [main] DEBUG nextflow.Session - Session aborted -- Cause: No such property: sample for class: Script_e2a1df3c
+Nov-09 13:00:32.807 [main] ERROR nextflow.cli.Launcher - @unknown
+groovy.lang.MissingPropertyException: No such property: sample for class: Script_e2a1df3c
+	at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.unwrap(ScriptBytecodeAdapter.java:65)
+	at org.codehaus.groovy.runtime.callsite.PogoGetPropertySite.getProperty(PogoGetPropertySite.java:51)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callGroovyObjectGetProperty(AbstractCallSite.java:309)
+	at Script_e2a1df3c.runScript(Script_e2a1df3c:51)
+	at nextflow.script.BaseScript.runDsl1(BaseScript.groovy:164)
+	at nextflow.script.BaseScript.run(BaseScript.groovy:200)
+	at nextflow.script.ScriptParser.runScript(ScriptParser.groovy:219)
+	at nextflow.script.ScriptRunner.run(ScriptRunner.groovy:219)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:127)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:274)
+	at nextflow.cli.Launcher.run(Launcher.groovy:466)
+	at nextflow.cli.Launcher.main(Launcher.groovy:648)

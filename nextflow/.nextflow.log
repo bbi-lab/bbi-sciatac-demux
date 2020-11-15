@@ -1,0 +1,57 @@
+Nov-09 13:14:37.035 [main] DEBUG nextflow.cli.Launcher - $> nextflow run channel_01.nf
+Nov-09 13:14:37.388 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 20.07.1
+Nov-09 13:14:37.413 [main] INFO  nextflow.cli.CmdRun - Launching `channel_01.nf` [evil_majorana] - revision: 629b173510
+Nov-09 13:14:37.469 [main] DEBUG nextflow.config.ConfigBuilder - Found config home: /net/gs/vol1/home/bge/.nextflow/config
+Nov-09 13:14:37.474 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /net/gs/vol1/home/bge/.nextflow/config
+Nov-09 13:14:37.556 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-09 13:14:38.672 [main] DEBUG nextflow.Session - Session uuid: d12e48d8-4c0c-40ed-849b-a32f6383f541
+Nov-09 13:14:38.673 [main] DEBUG nextflow.Session - Run name: evil_majorana
+Nov-09 13:14:38.675 [main] DEBUG nextflow.Session - Executor pool size: 2
+Nov-09 13:14:38.751 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 20.07.1 build 5412
+  Created: 24-07-2020 15:18 UTC (08:18 PDT)
+  System: Linux 3.10.0-1062.18.1.el7.x86_64
+  Runtime: Groovy 2.5.11 on OpenJDK 64-Bit Server VM 1.8.0_272-b10
+  Encoding: UTF-8 (UTF-8)
+  Process: 2843@s007.grid.gs.washington.edu [10.210.0.1]
+  CPUs: 2 - Mem: 94.2 GB (84.6 GB) - Swap: 8 GB (8 GB)
+Nov-09 13:14:38.806 [main] DEBUG nextflow.Session - Work-dir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work [nfs]
+Nov-09 13:14:38.807 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/bin
+Nov-09 13:14:38.886 [main] DEBUG nextflow.Session - Observer factory: TowerFactory
+Nov-09 13:14:38.889 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Nov-09 13:14:39.468 [main] DEBUG nextflow.Session - Session start invoked
+Nov-09 13:14:40.129 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Nov-09 13:14:40.154 [main] DEBUG nextflow.Session - Workflow process names [dsl1]: finit, doit
+Nov-09 13:14:40.516 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: sge
+Nov-09 13:14:40.516 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'sge'
+Nov-09 13:14:40.532 [main] DEBUG nextflow.executor.Executor - [warm up] executor > sge
+Nov-09 13:14:40.551 [main] DEBUG n.processor.TaskPollingMonitor - Creating task monitor for executor 'sge' > capacity: 100; pollInterval: 5s; dumpInterval: 5m 
+Nov-09 13:14:40.558 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Nov-09 13:14:40.835 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: sge
+Nov-09 13:14:40.835 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'sge'
+Nov-09 13:14:40.897 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Nov-09 13:14:40.897 [main] DEBUG nextflow.Session - Session await
+Nov-09 13:14:44.223 [Task submitter] DEBUG nextflow.executor.GridTaskHandler - [SGE] submitted process doit (1) > jobId: 233998235; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/2c/aec8945526aa2fa2175f41342b8f6b
+Nov-09 13:14:44.234 [Task submitter] INFO  nextflow.Session - [2c/aec894] Submitted process > doit (1)
+Nov-09 13:14:47.353 [Task submitter] DEBUG nextflow.executor.GridTaskHandler - [SGE] submitted process doit (2) > jobId: 233998237; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/25/e96bfb2cad5396982469325b69672c
+Nov-09 13:14:47.355 [Task submitter] INFO  nextflow.Session - [25/e96bfb] Submitted process > doit (2)
+Nov-09 13:14:50.506 [Task submitter] DEBUG nextflow.executor.GridTaskHandler - [SGE] submitted process doit (3) > jobId: 233998238; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/84/24672537d82aabe42308a0ff819554
+Nov-09 13:14:50.506 [Task submitter] INFO  nextflow.Session - [84/246725] Submitted process > doit (3)
+Nov-09 13:14:50.566 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[jobId: 233998235; id: 1; name: doit (1); status: COMPLETED; exit: 0; error: -; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/2c/aec8945526aa2fa2175f41342b8f6b started: 1604956485570; exited: 2020-11-09T21:14:45.600908Z; ]
+Nov-09 13:14:50.665 [Task monitor] DEBUG n.util.BlockingThreadExecutorFactory - Thread pool name=FileTransfer; maxThreads=6; maxQueueSize=18; keepAlive=1m
+Nov-09 13:14:50.688 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[jobId: 233998237; id: 2; name: doit (2); status: COMPLETED; exit: 0; error: -; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/25/e96bfb2cad5396982469325b69672c started: 1604956490683; exited: 2020-11-09T21:14:48.604708Z; ]
+Nov-09 13:14:53.669 [Task submitter] DEBUG nextflow.executor.GridTaskHandler - [SGE] submitted process doit (4) > jobId: 233998239; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/cd/70972ad9fcb1ce2e597c9abd046e12
+Nov-09 13:14:53.670 [Task submitter] INFO  nextflow.Session - [cd/70972a] Submitted process > doit (4)
+Nov-09 13:14:55.568 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[jobId: 233998238; id: 3; name: doit (3); status: COMPLETED; exit: 0; error: -; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/84/24672537d82aabe42308a0ff819554 started: 1604956495564; exited: 2020-11-09T21:14:51.739892Z; ]
+Nov-09 13:14:55.589 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[jobId: 233998239; id: 4; name: doit (4); status: COMPLETED; exit: 0; error: -; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/cd/70972ad9fcb1ce2e597c9abd046e12 started: 1604956495577; exited: 2020-11-09T21:14:54.900873Z; ]
+Nov-09 13:14:58.827 [Task submitter] DEBUG nextflow.executor.GridTaskHandler - [SGE] submitted process finit (1) > jobId: 233998240; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/ae/bf7cf62a2a23723f20f30f0eccb8ec
+Nov-09 13:14:58.829 [Task submitter] INFO  nextflow.Session - [ae/bf7cf6] Submitted process > finit (1)
+Nov-09 13:15:00.568 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[jobId: 233998240; id: 5; name: finit (1); status: COMPLETED; exit: 0; error: -; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/ae/bf7cf62a2a23723f20f30f0eccb8ec started: 1604956500564; exited: 2020-11-09T21:15:00.058694Z; ]
+Nov-09 13:15:01.944 [Task submitter] DEBUG nextflow.executor.GridTaskHandler - [SGE] submitted process finit (2) > jobId: 233998241; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/09/a7edc6ac443492b6499e9ddacbae03
+Nov-09 13:15:01.945 [Task submitter] INFO  nextflow.Session - [09/a7edc6] Submitted process > finit (2)
+Nov-09 13:15:05.567 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[jobId: 233998241; id: 6; name: finit (2); status: COMPLETED; exit: 0; error: -; workDir: /net/gs/vol1/home/bge/git/bbi-sciatac-demux/nextflow/work/09/a7edc6ac443492b6499e9ddacbae03 started: 1604956505563; exited: 2020-11-09T21:15:03.175355Z; ]
+Nov-09 13:15:05.572 [main] DEBUG nextflow.Session - Session await > all process finished
+Nov-09 13:15:05.574 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Nov-09 13:15:05.592 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=6; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=5s; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=1; peakMemory=0; ]
+Nov-09 13:15:05.651 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Nov-09 13:15:05.693 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
