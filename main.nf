@@ -109,7 +109,8 @@ if( !params.run_dir ) {
 if( !params.output_dir ) {
 	printErr( "Error: missing params.output_dir in parameters file" )
 	System.exit( -1 )
-}if( !params.sample_sheet ) {
+}
+if( !params.sample_sheet ) {
 	printErr( "Error: missing params.sample_sheet in parameters file" )
 	System.exit( -1 )
 }
