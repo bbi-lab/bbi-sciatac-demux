@@ -128,6 +128,11 @@ demux_dir = output_dir + '/demux_out'
 checkSamplesheet( params )
 
 /*
+** Check that required directories exist or can be made.
+*/
+checkDirectories( params )
+
+/*
 ** Read sample sheet file.
 */
 sampleSheetMap = readSampleSheetJson( params )
@@ -141,11 +146,6 @@ reportRunParams( params, sampleSheetMap )
 ** Archive configuration and samplesheet files in demux_dir.
 */
 archiveRunFiles( params, timeNow )
-
-/*
-** Check that required directories exist or can be made.
-*/
-checkDirectories( params )
 
 /*
 ** Read Illumina run information.
@@ -596,6 +596,20 @@ def reportRunParams( params, sampleSheetMap ) {
 }
 
 
+/*
+** Make directory, if it does not exist.
+*/
+def makeDirectory( directoryName ) {
+	dirHandle = new File( directoryName )
+	if( !dirHandle.exists() ) {
+		if( !dirHandle.mkdirs() ) {
+			printErr( "Error: unable to create directory $directoryName" )
+			System.exit( -1 )
+		}
+	}
+}
+
+
 def checkDirectories( params ) {
     /*
     ** Check for existence of run_dir.
@@ -613,13 +627,7 @@ def checkDirectories( params ) {
     /*
     ** Check that either the demux_dir exists or we can create it.
     */
-    def dhOutDir = new File( demux_dir )
-    if( !dhOutDir.exists() ) {
-    	if( !dhOutDir.mkdirs() ) {
-    		printErr( "Error: unable to create demux output directory $demux_dir" )
-    		System.exit( -1 )
-    	}
-    }
+    makeDirectory( demux_dir )
 }
 
 
@@ -643,18 +651,19 @@ def checkSamplesheet( params ) {
 
 def archiveRunFiles( params, timeNow )
 {
-  file_suffix = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
-  Path src = Paths.get( params.sample_sheet )
-  def ftmp = new File( params.sample_sheet )
-  Path dst =  Paths.get( "${demux_dir}/${ftmp.getName()}.${file_suffix}" )
-  Files.copy( src, dst )
-  def i = 1
-  workflow.configFiles.each { aFile ->
-    src = aFile
-    dst = Paths.get( "${aFile.getName()}.${file_suffix}.${i}" )
-    Files.copy( src, dst )
-    i += 1
-  }
+	makeDirectory( "${demux_dir}/reports" )
+	file_suffix = timeNow.format( 'yyyy-MM-dd_HH-mm-ss' )
+	Path src = Paths.get( params.sample_sheet )
+	def ftmp = new File( params.sample_sheet )
+	Path dst =  Paths.get( "${demux_dir}/reports/${ftmp.getName()}.${file_suffix}" )
+	Files.copy( src, dst )
+	def i = 1
+	workflow.configFiles.each { aFile ->
+		src = aFile
+		dst = Paths.get( "${demux_dir}/reports/${aFile.getName()}.${file_suffix}.${i}" )
+		Files.copy( src, dst )
+		i += 1
+	}
 }
 
 
