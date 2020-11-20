@@ -6,6 +6,25 @@
 **   o  .flatMap
 **   o  .combine
 ** and others.
+**
+** Note:
+**   o  there is an 'each' input channel thingy, which is likely
+**      to accomplish the same function as the .combine() operator
+**      below. Test it in order to check whether it works as
+**      advertised. See
+**
+**      https://www.nextflow.io/docs/latest/faq.html  How do I iterate over a process n times?
+**      process bootstrapReplicateTrees {
+**        publishDir "$results_path/$datasetID/bootstrapsReplicateTrees"
+**
+**        input:
+**        each x from 1..bootstrapReplicates
+**        set val(datasetID), file(ClustalwPhylips)
+**
+**        output:
+**        file "bootstrapTree_${x}.nwk" into bootstrapReplicateTrees
+**
+**        script:
 */
 
 /*
@@ -190,8 +209,8 @@ def combineit( inPaths, samples ) {
 
 
 /*
-** Combine combine file items with the same sample name
-** into single entries.
+** Combine file items with the same sample name into
+** single entries.
 ** This is an alternative to the finitInChannel01 above.
 */
 finitInChannel01_2

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+#
+# Write run_data.js file for sci-ATAC demux dashboard.
+#
 
 import sys
 import argparse

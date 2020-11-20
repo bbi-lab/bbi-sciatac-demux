@@ -108,6 +108,8 @@ Input (front-end) samplesheet format:
           examples:
             o  3,4,5
             o  3-5,10-12
+  o  name the barnyard sample 'Barnyard' for compatibility with the
+     experiment dashboard
 
   Example samplesheet file:
 
@@ -726,6 +728,7 @@ def check_sample_names( column_name_list, samplesheet_row_list ):
   Sample names must begin with [a-zA-Z].
   Unacceptable characters are characters that are not a-z, A-Z, 0-9, and '.'
   Check for name degeneracy after substitutions.
+  Check that the barnyard sample is labeled 'Barnyard'.
   """
   sample_name_in_dict = {}
   sample_name_out_dict = {}
@@ -747,6 +750,21 @@ def check_sample_names( column_name_list, samplesheet_row_list ):
   if( len( sample_name_out_dict ) != len( sample_name_in_dict ) ):
     print( 'Error: unacceptable names are not distinct after editing', file=sys.stderr )
     sys.exit( -1 )
+  # Check barnyard sample name.
+  for row_elements in samplesheet_row_list:
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'sample_name' ):
+        continue
+      mobj = re.search( r'barnyard', element_string.lower() )
+      if( mobj and element_string != 'Barnyard' ):
+        print( '**' )
+        print( '** Warning: barnyard sample name (%s) not \'Barnyard\'.' % ( element_string ), file=sys.stderr )
+        print( '**          Consider re-naming it for compatibility with the' )
+        print( '**          experiment dashboard.' )
+        print( '**' )
+      break
   return( samplesheet_row_list )
 
 
@@ -1119,16 +1137,18 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
 
 
 def samplesheet_report( samplesheet_row_list, row_out_list, args ):
-  print( 'Tn5 barcodes:      %r' % ( args.tn5_barcodes ) )
-  print( 'Level:             %s' % ( args.level ) )
-  print( 'Number of wells:   %d' % ( args.number_wells ) )
-  print( 'Sample identifier: %s' % ( args.sample_identifier ) )
-  print( 'Use all barcodes:  %r' % ( args.use_all_barcodes ) )
-  print( 'Sample names after converting unacceptable characters to \'.\'.' )
+  print()
+  print( 'Samplesheet information' )
+  print( '  Tn5 barcodes:      %r' % ( args.tn5_barcodes ) )
+  print( '  Level:             %s' % ( args.level ) )
+  print( '  Number of wells:   %d' % ( args.number_wells ) )
+  print( '  Sample identifier: %s' % ( args.sample_identifier ) )
+  print( '  Use all barcodes:  %r' % ( args.use_all_barcodes ) )
+  print( '  Sample names after converting unacceptable characters to \'.\'.' )
   for row_out in row_out_list:
-    print( '  %s' % ( row_out['sample_name'] ) )
-  print( 'Illumina run directory: %s' % ( args.run_dir ) )
-  print( 'Run sciatac_samplesheet.py -d for more information.' )
+    print( '    %s' % ( row_out['sample_name'] ) )
+  print( '  Illumina run directory: %s' % ( args.run_dir ) )
+  print( '  Run sciatac_samplesheet.py -d for more information.' )
   return( 0 )
 
 
