@@ -724,7 +724,8 @@ def read_samplesheet( file ):
 
 def check_sample_names( column_name_list, samplesheet_row_list ):
   """
-  Check sample names and convert unacceptable characters to '.'.
+  Check for name degeneracy.
+  Check sample names for unacceptable characters and, if present, convert them to '.'.
   Sample names must begin with [a-zA-Z].
   Unacceptable characters are characters that are not a-z, A-Z, 0-9, and '.'
   Check for name degeneracy after substitutions.
@@ -739,7 +740,8 @@ def check_sample_names( column_name_list, samplesheet_row_list ):
       element_string = row_elements[i]
       if( column_name_dict['type'] != 'sample_name' ):
         continue
-      sample_name_in_dict.setdefault( element_string, True )
+      sample_name_in_dict.setdefault( element_string, 0 )
+      sample_name_in_dict[element_string] += 1
       num_sample_name += 1
       mobj = re.match( r'[a-zA-Z]', element_string )
       if( not mobj ):
@@ -747,24 +749,31 @@ def check_sample_names( column_name_list, samplesheet_row_list ):
         sys.exit( -1 )
       row_elements[i] = re.sub( r'[^a-zA-Z0-9.]', '.', element_string )
       sample_name_out_dict.setdefault( element_string, True )
+  errorFlag = False
+  for sample_name in sample_name_in_dict.keys():
+    if( sample_name_in_dict[sample_name] > 1 ):
+      print( 'Error: sample name \'%s\' not unique. It is used %d times.' % ( sample_name, sample_name_in_dict[sample_name] ), file=sys.stderr )
+      errorFlag = True
   if( len( sample_name_out_dict ) != len( sample_name_in_dict ) ):
     print( 'Error: unacceptable names are not distinct after editing', file=sys.stderr )
+    errorFlag = True
+  if( errorFlag ):
     sys.exit( -1 )
-  # Check barnyard sample name.
-  for row_elements in samplesheet_row_list:
-    for i in range( len( row_elements ) ):
-      column_name_dict = column_name_list[i]
-      element_string = row_elements[i]
-      if( column_name_dict['type'] != 'sample_name' ):
-        continue
-      mobj = re.search( r'barnyard', element_string.lower() )
-      if( mobj and element_string != 'Barnyard' ):
-        print( '**' )
-        print( '** Warning: barnyard sample name (%s) not \'Barnyard\'.' % ( element_string ), file=sys.stderr )
-        print( '**          Consider re-naming it for compatibility with the' )
-        print( '**          experiment dashboard.' )
-        print( '**' )
-      break
+  # Check barnyard sample name. (This is unnecessary, I believe.)
+#   for row_elements in samplesheet_row_list:
+#     for i in range( len( row_elements ) ):
+#       column_name_dict = column_name_list[i]
+#       element_string = row_elements[i]
+#       if( column_name_dict['type'] != 'sample_name' ):
+#         continue
+#       mobj = re.search( r'barn', element_string.lower() )
+#       if( mobj and element_string != 'Barnyard' ):
+#         print( '**' )
+#         print( '** Warning: barnyard sample name (%s) not \'Barnyard\'.' % ( element_string ), file=sys.stderr )
+#         print( '**          Consider re-naming it to \'Barnyard\' for compatibility' )
+#         print( '**          with the experiment dashboard.' )
+#         print( '**' )
+#       break
   return( samplesheet_row_list )
 
 
