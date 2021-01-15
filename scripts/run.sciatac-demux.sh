@@ -35,25 +35,25 @@ WORK_DIR="$DEMUX_DIR/work"
 # Nextflow writes some informative processing information
 # in the analyze output directory.
 #
-REPORT_FIL=$DEMUX_DIR/reports/demux.report.html
-TRACE_FIL=$DEMUX_DIR/reports/demux.trace.tsv
-TIMELINE_FIL=$DEMUX_DIR/reports/demux.timeline.html
+REPORT_FIL=$DEMUX_DIR/run_reports/demux.report.html
+TRACE_FIL=$DEMUX_DIR/run_reports/demux.trace.tsv
+TIMELINE_FIL=$DEMUX_DIR/run_reports/demux.timeline.html
 
 #
 # Nextflow run parameters.
 #
 PARS="-c $CONFIG_FILE -w $WORK_DIR -with-report $REPORT_FIL -with-trace $TRACE_FIL -with-timeline $TIMELINE_FIL -resume"
 
-mkdir -p $DEMUX_DIR/reports
+mkdir -p $DEMUX_DIR/run_reports
 pushd $DEMUX_DIR
 
-date > reports/run_start.${NOW}.txt
+date > run_reports/run_start.${NOW}.txt
 
 #
 # Run Nextflow sci-ATAC demux pipeline.
 #
 $NEXTFLOW run $NF_DEMUX $PARS
 
-date > reports/run_finish.${NOW}.txt
+date > run_reports/run_finish.${NOW}.txt
 
 popd
