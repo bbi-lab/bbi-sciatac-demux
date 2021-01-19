@@ -65,7 +65,7 @@ import re
 #      files.
 
 
-version = '20200831.1'
+version = '20210114.1'
 
 
 application_name_dict = {
@@ -179,7 +179,7 @@ def get_run_info( flow_cell_path ):
         run_stats['instrument_type'] = 'unknown'
     
     # reverse_complement_i5 is used in fastq sequence demultiplexing
-    run_stats['reverse_complement_i5'] = reverse_complement_i5( run_stats['instrument_type'] )
+#     run_stats['reverse_complement_i5'] = reverse_complement_i5( run_stats['instrument_type'] )
 
     return( run_stats )
 
@@ -218,6 +218,7 @@ def get_run_info_nextseq500( instrument_model, application_version, tree ):
         run_stats['paired_end'] = False
 
     run_stats['instrument_type'] = instrument_model
+    run_stats['reverse_complement_i5'] = True
 
     return run_stats
 
@@ -259,6 +260,7 @@ def get_run_info_nextseq2000( instrument_model, application_version, tree ):
         run_stats['paired_end'] = False
 
     run_stats['instrument_type'] = instrument_model
+    run_stats['reverse_complement_i5'] = True
 
     return run_stats
 
@@ -307,6 +309,7 @@ def get_run_info_miseq( instrument_model, application_version, tree ):
       run_stats['paired_end'] = True
 
     run_stats['instrument_type'] = instrument_model
+    run_stats['reverse_complement_i5'] = False
 
     return run_stats
 
@@ -358,6 +361,29 @@ def get_run_info_novaseq( instrument_model, application_version, tree ):
 
     run_stats['instrument_type'] = instrument_model
 
+    # Notes:
+    #   o  NovaSeq application 1.7.0 can run reagent kit version 1.0 and 1.5
+    #   o  the NWGC tells us:
+    #      The NovaSeq v1.5 reagents are run on the NovaSeq that has an updated
+    #      software which is version 1.7 that flips the i5 indices already on
+    #      the sequencer when the data comes off. Typically, when the data
+    #      comes off the sequencers, we need to flip both the i7 and i5 indices
+    #      to the reverse complement in order to run fastqs or demux the data.
+    #      With this being the case, only the i7 will need to be reverse
+    #      complemented typically when data comes off the v1.5 version.
+    #   o  however, not reverse complementing v1.5 fastqs in demultiplexing
+    #      gives 'normal' looking sample-specific fastq files so I do not
+    #      reverse complement here but allow for the possiblity in future
+    #      reagent kits.
+    if( application_version == '1.7.0' ):
+        sbs_consumable_version = flowcell_node.find('SbsConsumableVersion')
+        if( sbs_consumable_version == '1' ):
+            run_stats['reverse_complement_i5'] = False
+        elif( sbs_consumable_version == '3' ):
+            run_stats['reverse_complement_i5'] = False
+    else:
+        run_stats['reverse_complement_i5'] = False
+
     return run_stats
 
 
@@ -395,6 +421,13 @@ def get_run_info_hiseq( instrument_model, application_version, tree ):
         run_stats['paired_end'] = False
 
     run_stats['instrument_type'] = instrument_model
+    if( instrument_model == 'HiSeq3000' ):
+        run_stats['reverse_complement_i5'] = False
+    elif( instrument_model == 'HiSeq4000' ):
+        run_stats['reverse_complement_i5'] = True
+    else:
+        print( 'Error: unrecognized HiSeq model: \'%s\'' % ( instrument_model ) )
+        sys.exit( -1 )
 
     return( run_stats )
 
