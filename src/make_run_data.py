@@ -27,14 +27,18 @@ def read_lane_stats( lane_file ):
   return( lane_stats )
 
 
-def make_lane_stats_list( args_json ):
+def make_lane_stats_list( args, args_json ):
   """
   Make a list of lane stats from lane stats files.
   """
+  if( args.input_folder is None ):
+    json_directory = args_json['RUN001']['DEMUX']['demux_dir'] + '/fastqs_barcode'
+  else:
+    json_directory = args.input_folder
   lane_stats_list = []
   num_lanes = args_json['RUN001']['sequencing_run_metadata']['lanes']
   for ilane in range( num_lanes ):
-    lane_file = '%s/fastqs_barcode/RUN001_L%03d.stats.json' % ( args_json['RUN001']['DEMUX']['demux_dir'], ilane + 1 )
+    lane_file = '%s/RUN001_L%03d.stats.json' % ( json_directory, ilane + 1 )
     lane_stats_list.append( read_lane_stats( open( lane_file ) ) )
   return( lane_stats_list )
 
@@ -101,9 +105,9 @@ def make_pcr_combo_list( args_json ):
   return( pcr_combo_list )
 
 
-def make_run_data_dict( args_json ):
+def make_run_data_dict( args, args_json ):
   run_name_list = ['sci-ATAC-seq']
-  lane_stats_list = make_lane_stats_list( args_json )
+  lane_stats_list = make_lane_stats_list( args, args_json )
   num_lanes = args_json['RUN001']['sequencing_run_metadata']['lanes']
   lane_list = []
   for ilane in range( num_lanes ):
@@ -141,10 +145,11 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='A program to write run_data.js file for sci-ATAC demux dashboard.')
   parser.add_argument('-i', '--input_file', required=True, help='Path to args.json input file in sci-ATAC demux output directory.')
   parser.add_argument('-o', '--output_file', required=True, help='Name of output file.')
+  parser.add_argument('-d', '--input_folder', required=False, help='Path to directory that has the \'stats.json\' files. The default is to use the path in \'args.json\'.')
   args = parser.parse_args()
 
   args_json = read_args_json( open( args.input_file ) )
-  run_data_dict = make_run_data_dict( args_json )
+  run_data_dict = make_run_data_dict( args, args_json )
   write_run_data( run_data_dict, open( args.output_file, 'w' ) )
 
 

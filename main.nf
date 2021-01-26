@@ -514,7 +514,8 @@ process demux_dash {
                                      --project_name=$project_name \
                                      --image_output_folder="demux_dash/img"
 
-  $script_dir/make_run_data.py --input_file="$demux_dir/args.json" \
+  $script_dir/make_run_data.py --input_folder="." \
+                               --input_file="$demux_dir/args.json" \
                                --output_file="demux_dash/js/run_data.js"
   """
 }
