@@ -38,6 +38,13 @@ import groovy.json.JsonSlurper
 */
 def timeNow = new Date()
 
+
+/*
+** Minimum required samplesheet file version.
+*/
+minimum_samplesheet_version = "2.0.0"
+
+
 /*
 ** Where to find scripts.
 ** Note: script_dir needs to be visible within Groovy functions
@@ -136,6 +143,14 @@ checkDirectories( params )
 ** Read sample sheet file.
 */
 sampleSheetMap = readSampleSheetJson( params )
+
+/*
+** Test samplesheet version.
+*/
+if( ! checkSamplesheetVersion( sampleSheetMap['json_file_version'], minimum_samplesheet_version ) ) {
+  println "Error: bad samplesheet version"
+  System.exit( -1 )
+}
 
 /*
 ** Report run parameter values.
@@ -598,6 +613,41 @@ def reportRunParams( params, sampleSheetMap ) {
 
 
 /*
+** Check that current version is acceptable given a minimum required version.
+*/
+def checkVersion( test_version, minimum_version ) {
+
+  def List test_tokens = test_version.tokenize( '.' )
+  def List minimum_tokens = minimum_version.tokenize( '.' )
+
+  def num_tokens = Math.min( test_tokens.size(), minimum_tokens.size() )
+
+  def test_ok = true
+  for( int i = 0; i < num_tokens; ++i ) {
+    def test_int = test_tokens[i].toInteger()
+    def minimum_int = minimum_tokens[i].toInteger()
+    if( test_int > minimum_int ) {
+      break
+    }
+    if( test_int < minimum_int ) {
+      test_ok = false
+      break
+    }
+  }
+
+  return( test_ok )
+}
+
+
+def checkSamplesheetVersion( testVersion, minimumVersion ) {
+  if( testVersion == null ) {
+    return( false )
+  }
+  return( checkVersion( testVersion, minimumVersion ) )
+}
+
+
+/*
 ** Make directory, if it does not exist.
 */
 def makeDirectory( directoryName ) {
@@ -724,6 +774,7 @@ def writeArgsJson( params, timeNow ) {
     */
     def genomeInfo = [:]
     def samples = []
+    def peakGroups = [:]
     def fhSampleSheet = new File( params.sample_sheet )
     def jsonSlurper = new JsonSlurper()
     def sampleData = jsonSlurper.parse( fhSampleSheet )
@@ -731,13 +782,15 @@ def writeArgsJson( params, timeNow ) {
     sampleData['sample_index_list'].each { aSample ->
         samples.add( aSample['sample_id'] )
         genomeInfo.put( aSample['sample_id'], aSample['genome'] )
-
+        peakGroups.put( aSample['sample_id'], aSample['peak_group'] )
     }
+
 
     mapRunInfo['DEMUX'] = demuxDict
     mapRunInfo['sample_data'] = sampleData
     mapRunInfo['samples'] = samples
     mapRunInfo['genomes'] = genomeInfo
+    mapRunInfo['peak_groups'] = peakGroups
 
     /*
     ** Add Illumina sequencing run parameters.

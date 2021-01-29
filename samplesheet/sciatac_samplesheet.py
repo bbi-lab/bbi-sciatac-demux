@@ -31,6 +31,7 @@ Input (front-end) samplesheet format:
           or 'p7_rows'
        o  sample name identifier with value: 'sample_name'
        o  genome label identifier with value: 'genome'
+       o  peak_group (called peaks are merged by peak group)
   o  the column order is arbitrary (but must be consistent within the file)
   o  the header values do not depend on case
   o  ranges: index, well, column, and row range values are separated by either
@@ -63,6 +64,11 @@ Input (front-end) samplesheet format:
           is passed to the processing pipeline, and the pipeline uses it to
           find required files. Available genomes are defined by the 'name'
            field in the bbi-sciatac-analyze/genomes.json file.
+  o  peak groups
+       o  the called peaks of samples with the same peak group name are merged
+          prior to downstream analysis
+       o  peak group names consist of alphabetic, positive integers, and
+          underscore characters
   o  wells:
        o  samplesheet wells are converted to indexes where indexes refer to
           physical wells, which are in the order used in Andrew's pipeline;
@@ -113,19 +119,19 @@ Input (front-end) samplesheet format:
 
   Example samplesheet file:
 
-  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome
-  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse
-  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human
-  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse
-  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human
-  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human
-  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse
-  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse
-  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse
-  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse
-  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human
-  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human
-  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard
+  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group
+  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse,group_1
+  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human,group_2
+  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse,group_1
+  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human,group_2
+  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human,group_2
+  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse,group_1
+  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse,group_1
+  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse,group_1
+  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse,group_1
+  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human,group_2
+  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human,group_2
+  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard,group_3
   
   Notes:
     o  the p7_row and p5_column value sets are enclosed in quotes
@@ -214,8 +220,8 @@ import argparse
 #
 # Samplesheet JSON file version.
 #
-program_version = '1.0.0'
-json_file_version = '1.0.0'
+program_version = '2.0.0'
+json_file_version = '2.0.0'
 
 #
 # List of recognizable genome names.
@@ -261,11 +267,16 @@ n7_column_values = 'n7_wells n7_indexes'
 p5_column_values = 'p5_wells p5_indexes p5_columns'
 p7_column_values = 'p7_wells p7_indexes p7_rows'
 
-column_header_value_list = [ 'sample_name', 'genome' ]
+column_header_value_list = [ 'sample_name', 'genome', 'peak_group' ]
 column_header_value_list.extend( n5_column_values.split() )
 column_header_value_list.extend( n7_column_values.split() )
 column_header_value_list.extend( p5_column_values.split() )
 column_header_value_list.extend( p7_column_values.split() )
+
+#
+# Number of columns in input spreadsheet.
+#
+g_num_col = 7
 
 
 def display_documentation():
@@ -296,6 +307,8 @@ def parse_header_column_name( string_in, column_name_list, error_string ):
     column_name_dict = { 'type': 'sample_name', 'format': None }
   elif( string_in == 'genome' ):
     column_name_dict = { 'type': 'genome', 'format': None }
+  elif( string_in == 'peak_group' ):
+    column_name_dict = { 'type': 'peak_group', 'format': None }
   else:
     mobj = re.match( r'([np][57])_(wells|indexes|rows|columns)', string_in )
     column_name_dict = { 'type': mobj.group( 1 ), 'format': mobj.group( 2 ) }
@@ -310,7 +323,7 @@ def check_header_column_names( column_name_list ):
     o  check that each required column type occurs once
     o  check that if either p5 or p7 are specified by columns and rows, then both are.
   """
-  columns_required = { 'n5': 0, 'n7': 0, 'p5': 0, 'p7': 0, 'sample_name': 0, 'genome': 0 }
+  columns_required = { 'n5': 0, 'n7': 0, 'p5': 0, 'p7': 0, 'sample_name': 0, 'genome': 0, 'peak_group': 0 }
   for column_name_dict in column_name_list:
     columns_required[column_name_dict['type']] += 1
   error_flag = 0
@@ -681,7 +694,7 @@ def check_rows( csv_rows ):
   internal row.
   Notes:
     o  we expect
-         o  6 columns
+         o  7 columns
          o  nrows 
   """
   # check for internal empty row
@@ -690,7 +703,7 @@ def check_rows( csv_rows ):
     num_empty = 0
     row_elements_out = []
     for icol, cell in enumerate( row_elements ):
-      if( icol == 6 ):
+      if( icol == g_num_col ):
         break
       if( len( cell ) > 0 ):
         row_elements_out.append( cell )
@@ -698,7 +711,7 @@ def check_rows( csv_rows ):
         num_empty += 1
     if( num_empty == 0 ):
       csv_rows_out.append( row_elements_out )
-    elif( num_empty > 0 and num_empty < 6 ):
+    elif( num_empty > 0 and num_empty < g_num_col ):
       print( 'Error: row %d has empty cells' % ( irow + 1 ) )
       sys.exit( -1 )
   return( csv_rows_out )
@@ -727,6 +740,7 @@ def check_sample_names( column_name_list, samplesheet_row_list ):
   Check for name degeneracy.
   Check sample names for unacceptable characters and, if present, convert them to '.'.
   Sample names must begin with [a-zA-Z].
+  Check that peak groups are positive integers.
   Unacceptable characters are characters that are not a-z, A-Z, 0-9, and '.'
   Check for name degeneracy after substitutions.
   Check that the barnyard sample is labeled 'Barnyard'.
@@ -797,13 +811,35 @@ def check_genome_names( column_name_list, samplesheet_row_list ):
   return( 0 )
 
 
+def check_peak_groups( column_name_list, samplesheet_row_list ):
+  """
+  Check peak group names and exit on error.
+  """
+  bad_peak_groups_dict = {}
+  for row_elements in samplesheet_row_list:
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'peak_group' ):
+        continue
+      if( re.search(r'[^a-zA-Z0-9_]', row_elements[i] ) ):
+        bad_peak_groups_dict.setdefault( row_elements[i], True )
+  if( len( bad_peak_groups_dict.keys() ) > 0 ):
+    print('Unacceptable peak group names (must use only alphabetic, positive integer, and underscore characters):')
+    for bad_peak_group in bad_peak_groups_dict.keys():
+      print( '  \'%s\'' % ( row_elements[i] ) )
+    sys.exit( -1 )
+        
+  return( 0 )
+
+
 def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
   """
   Make well index lists for N5, N7, P5, P7 barcode wells from the input samplesheet information.
   """
   row_out_list = []
   for irow, row_elements in enumerate( samplesheet_row_list ):
-    if( len( row_elements ) < 6 ):
+    if( len( row_elements ) < g_num_col ):
       print( 'Error: missing cells in row %d: %s' % ( irow + 1, ', '.join('"{0}"'.format(e) for e in row_elements ) ), file=sys.stderr )
       sys.exit( -1 )
     icol = 0
@@ -854,13 +890,16 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
           sample_name = element_string
       elif( column_name_dict['type'] == 'genome' ):
           genome = element_string
+      elif( column_name_dict['type'] == 'peak_group' ):
+          peak_group = element_string
     #
     row_out_list.append( { 'sample_name': sample_name,
                            'n7_index_list': n7_index_list,
                            'p7_index_list': p7_index_list,
                            'n5_index_list': n5_index_list,
                            'p5_index_list': p5_index_list,
-                           'genome': genome } )
+                           'genome': genome,
+                           'peak_group': peak_group } )
   return(  row_out_list )
 
 
@@ -914,12 +953,13 @@ def write_samplesheet_index_format( file, row_out_list ):
   """
   print( 'sample_id\tranges\tgenome', file=file )
   for row_out in row_out_list:
-    print( '%s\t%s:%s:%s:%s\t%s' % ( row_out['sample_name'],
+    print( '%s\t%s:%s:%s:%s\t%s\t%s' % ( row_out['sample_name'],
                                      make_index_string( row_out['n7_index_list'] ),
                                      make_index_string( row_out['p7_index_list'] ),
                                      make_index_string( row_out['p5_index_list'] ),
                                      make_index_string( row_out['n5_index_list'] ),
-                                     row_out['genome'] ), file=file )
+                                     row_out['genome'],
+                                     row_out['peak_group'] ), file=file )
 
   return( 0 )
 
@@ -1097,7 +1137,8 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
                                                          make_index_string( row_out['p7_index_list'] ),
                                                          make_index_string( row_out['p5_index_list'] ),
                                                          make_index_string( row_out['n5_index_list'] ) ] ),
-                                  'genome' : row_out['genome'] })
+                                  'genome' : row_out['genome'],
+                                  'peak_group' : row_out['peak_group'] })
 
   # Store information for dashboard(s).
 
@@ -1224,6 +1265,7 @@ if __name__ == '__main__':
   column_name_list, samplesheet_row_list = read_samplesheet( open( filename_in, newline='' ) )
   samplesheet_row_list = check_sample_names( column_name_list, samplesheet_row_list )
   check_genome_names( column_name_list, samplesheet_row_list )
+  check_peak_groups( column_name_list, samplesheet_row_list )
   row_out_list = make_samplesheet_indexes( column_name_list, samplesheet_row_list )
   check_sample_identifier( row_out_list, args.sample_identifier )
   if( args.format == 'json' ):
