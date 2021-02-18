@@ -542,7 +542,9 @@ process demux_dash {
 */
 
 
-def printErr = System.err.&println
+def printErr( errString ) {
+    System.err.println( errString )
+}
 
 
 /*
