@@ -357,7 +357,7 @@ def get_run_info_novaseq( instrument_model, application_version, tree ):
         run_stats['paired_end'] = False
 
     application = setup_node.find('Application').text
-    application_version = setup_node.find('ApplicationVersion')
+    application_version = setup_node.find('ApplicationVersion').text
 
     run_stats['instrument_type'] = instrument_model
 
@@ -375,8 +375,13 @@ def get_run_info_novaseq( instrument_model, application_version, tree ):
     #      gives 'normal' looking sample-specific fastq files so I do not
     #      reverse complement here but allow for the possiblity in future
     #      reagent kits.
+    #   o  The SBS consumable version differs between the two kits.  The line is
+    #      <SbsConsumableVersion>1</SbsConsumableVersion>
+    #        Key
+    #        1= v1.0 SBS Reagents
+    #        3= v1.5 SBS Reagents
     if( application_version == '1.7.0' ):
-        sbs_consumable_version = flowcell_node.find('SbsConsumableVersion')
+        sbs_consumable_version = flowcell_node.find('SbsConsumableVersion').text
         if( sbs_consumable_version == '1' ):
             run_stats['reverse_complement_i5'] = False
         elif( sbs_consumable_version == '3' ):

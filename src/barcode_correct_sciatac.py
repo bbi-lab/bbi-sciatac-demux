@@ -318,6 +318,7 @@ if __name__ == '__main__':
     parser.add_argument('--filename', required=True, help='The R1 file name.')
     parser.add_argument('--samplesheet', required=True, help='Samplesheet describing the layout of the samples.')
     parser.add_argument('--out_dir', required=True, help='Output directory.')
+    parser.add_argument('--num_pigz_threads', help='Number of processes used by pigz to compress fastq files.')
     parser.add_argument('--stats_out', required=True, help='write JSON file with output stats about processed reads and correction rates (0=no;1=yes.')
     parser.add_argument('--two_level_indexed_tn5', action='store_true', help='Flag to run assuming that the library is a two-level indexed-TN5 sample.')
     parser.add_argument('--wells_384', action='store_true', help='Flag to run assuming that the known barcode set is the 384 well set.')
@@ -425,9 +426,9 @@ if __name__ == '__main__':
         output_file_1 = os.path.join(args.out_dir, '%s-RUN001_%s_R1.fastq' % (sample, lane_str))
         output_file_2 = os.path.join(args.out_dir, '%s-RUN001_%s_R2.fastq' % (sample, lane_str))
         output_files[sample] = {}
-        output_files[sample]['r1'] = open(output_file_1, 'w')
+        output_files[sample]['r1'] = open(output_file_1, 'w', buffering=8192*8192)
         output_files[sample]['r1_name'] = output_file_1
-        output_files[sample]['r2'] = open(output_file_2, 'w')
+        output_files[sample]['r2'] = open(output_file_2, 'w', buffering=8192*8192)
         output_files[sample]['r2_name'] = output_file_2
 
     
@@ -595,6 +596,6 @@ if __name__ == '__main__':
     for sample in output_files:
         output_files[sample]['r1'].close()
         output_files[sample]['r2'].close()
-        subprocess.check_call('pigz %s' % output_files[sample]['r1_name'], shell=True)
-        subprocess.check_call('pigz %s' % output_files[sample]['r2_name'], shell=True)
+        subprocess.check_call('pigz --processes %s %s' % ( args.num_pigz_threads, output_files[sample]['r1_name'] ), shell=True)
+        subprocess.check_call('pigz --processes %s %s' % ( args.num_pigz_threads, output_files[sample]['r2_name'] ), shell=True)
     print('Done compressing with pigz in %s minutes.' % ((time.time() - start) / 60.0))

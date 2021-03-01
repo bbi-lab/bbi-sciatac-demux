@@ -42,7 +42,7 @@ def timeNow = new Date()
 /*
 ** Minimum required samplesheet file version.
 */
-minimum_samplesheet_version = "2.0.0"
+minimum_samplesheet_version = "3.0.0"
 
 
 /*
@@ -360,6 +360,7 @@ process barcode_correct {
                        --filename $R1 \
                        --out_dir . \
                        --stats_out 1 \
+                       --num_pigz_threads ${task.ext.num_pigz_threads} \
                        $options_barcode_correct \
                        $sequencer_flag
   deactivate

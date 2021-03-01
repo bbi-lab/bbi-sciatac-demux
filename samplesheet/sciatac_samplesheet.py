@@ -3,7 +3,7 @@
 #
 # Notes:
 #   o  the master file is bbi-sciatac-demux/samplesheet/sciatac_samplesheet.py
-#
+#   o  if adding columns, increment g_num_col!
 
 """
 Program: sciatac_samplesheet.py
@@ -18,10 +18,10 @@ Input (front-end) samplesheet format:
   o  the input samplesheet file is a CSV format spreadsheet file (use a
      spreadsheet program to create the CSV file)
   o  checks rows
-       o  checks the first six cells in each row and trims off additional cells
+       o  checks the first eight cells in each row and trims off additional cells
        o  ignores rows with all empty cells
        o  reports an error if there are both empty and non-empty cells amongst
-          the first six
+          the first six (the last two cells in a non-header row may be empty)
   o  the first row is a header with the following required columns
        o  n5 barcode identifier with possible values: 'n5_wells' or 'n5_indexes'
        o  n7 barcode identifier with possible values: 'n7_wells' or 'n7_indexes'
@@ -32,6 +32,8 @@ Input (front-end) samplesheet format:
        o  sample name identifier with value: 'sample_name'
        o  genome label identifier with value: 'genome'
        o  peak_group (called peaks are merged by peak group)
+       o  peak_file (a bed file of peaks; will be merged with called peaks if the
+          peak_group value has non-zero length)
   o  the column order is arbitrary (but must be consistent within the file)
   o  the header values do not depend on case
   o  ranges: index, well, column, and row range values are separated by either
@@ -67,8 +69,14 @@ Input (front-end) samplesheet format:
   o  peak groups
        o  the called peaks of samples with the same peak group name are merged
           prior to downstream analysis
+       o  a sample peak group string (cell) may be empty
        o  peak group names consist of alphabetic, positive integers, and
           underscore characters
+  o  peak files
+       o  a path a peak bed file
+       o  a sample peak file string (cell) may be empty
+       o  if a peak group is specified, the peaks in the peak bed file is
+          merged with the called peaks in the group
   o  wells:
        o  samplesheet wells are converted to indexes where indexes refer to
           physical wells, which are in the order used in Andrew's pipeline;
@@ -220,8 +228,8 @@ import argparse
 #
 # Samplesheet JSON file version.
 #
-program_version = '2.0.0'
-json_file_version = '2.0.0'
+program_version = '3.0.0'
+json_file_version = '3.0.0'
 
 #
 # List of recognizable genome names.
@@ -261,22 +269,32 @@ genome_name_list = [
 #
 # List of recognizable CSV column header names.
 # These are used to check labels in the file.
+# The n5, n7, p5, and p7 names are assigned to
+# individual strings for error reporting.
 #
-n5_column_values = 'n5_wells n5_indexes'
-n7_column_values = 'n7_wells n7_indexes'
-p5_column_values = 'p5_wells p5_indexes p5_columns'
-p7_column_values = 'p7_wells p7_indexes p7_rows'
+n5_column_names = 'n5_wells n5_indexes'
+n7_column_names = 'n7_wells n7_indexes'
+p5_column_names = 'p5_wells p5_indexes p5_columns'
+p7_column_names = 'p7_wells p7_indexes p7_rows'
 
-column_header_value_list = [ 'sample_name', 'genome', 'peak_group' ]
-column_header_value_list.extend( n5_column_values.split() )
-column_header_value_list.extend( n7_column_values.split() )
-column_header_value_list.extend( p5_column_values.split() )
-column_header_value_list.extend( p7_column_values.split() )
+column_header_name_list = [ 'sample_name', 'genome', 'peak_group', 'peak_file' ]
+column_header_name_list.extend( n5_column_names.split() )
+column_header_name_list.extend( n7_column_names.split() )
+column_header_name_list.extend( p5_column_names.split() )
+column_header_name_list.extend( p7_column_names.split() )
+
+
+#
+# Columns that may have empty cells. This is used to prevent
+# errors when testing for empty cells in check_rows().
+#
+column_allow_empty_cell = [ 'peak_group', 'peak_file' ]
+
 
 #
 # Number of columns in input spreadsheet.
 #
-g_num_col = 7
+g_num_col = 8
 
 
 def display_documentation():
@@ -299,7 +317,7 @@ def parse_header_column_name( string_in, column_name_list, error_string ):
   """
   Split column header name into a 'type' and a 'format' and store as dictionary in column_name_list.
   """
-  if( not string_in.lower() in column_header_value_list ):
+  if( not string_in.lower() in column_header_name_list ):
     error_string += '  %s' % ( string_in )
     return( column_name_list, error_string )
   string_in = string_in.lower()
@@ -309,6 +327,8 @@ def parse_header_column_name( string_in, column_name_list, error_string ):
     column_name_dict = { 'type': 'genome', 'format': None }
   elif( string_in == 'peak_group' ):
     column_name_dict = { 'type': 'peak_group', 'format': None }
+  elif( string_in == 'peak_file' ):
+    column_name_dict = { 'type': 'peak_file', 'format': None }
   else:
     mobj = re.match( r'([np][57])_(wells|indexes|rows|columns)', string_in )
     column_name_dict = { 'type': mobj.group( 1 ), 'format': mobj.group( 2 ) }
@@ -323,7 +343,7 @@ def check_header_column_names( column_name_list ):
     o  check that each required column type occurs once
     o  check that if either p5 or p7 are specified by columns and rows, then both are.
   """
-  columns_required = { 'n5': 0, 'n7': 0, 'p5': 0, 'p7': 0, 'sample_name': 0, 'genome': 0, 'peak_group': 0 }
+  columns_required = { 'n5': 0, 'n7': 0, 'p5': 0, 'p7': 0, 'sample_name': 0, 'genome': 0, 'peak_group': 0, 'peak_file': 0 }
   for column_name_dict in column_name_list:
     columns_required[column_name_dict['type']] += 1
   error_flag = 0
@@ -331,13 +351,13 @@ def check_header_column_names( column_name_list ):
     if( columns_required[column_name] == 0 ):
       print( 'Error: column for \'%s\' missing.' % ( column_name ), file=sys.stderr )
       if( column_name == 'n5' ):
-        print( '  acceptable n5 header values: %s' % ( n5_column_values ), file=sys.stderr )
+        print( '  acceptable n5 header values: %s' % ( n5_column_names ), file=sys.stderr )
       elif( column_name == 'n7' ):
-        print( '  acceptable n7 header values: %s' % ( n7_column_values ), file=sys.stderr )
+        print( '  acceptable n7 header values: %s' % ( n7_column_names ), file=sys.stderr )
       elif( column_name == 'p5' ):
-        print( '  acceptable p5 header values: %s' % ( p5_column_values ), file=sys.stderr )
+        print( '  acceptable p5 header values: %s' % ( p5_column_names ), file=sys.stderr )
       elif( column_name == 'p7' ):
-        print( '  acceptable p7 header values: %s' % ( p7_column_values ), file=sys.stderr )
+        print( '  acceptable p7 header values: %s' % ( p7_column_names ), file=sys.stderr )
       error_flag = 1
     elif( columns_required[column_name] > 1 ):
       print( 'Error: column for \'%s\' occurs %d times.' % ( column_name, columns_required[column_name] ), file=sys.stderr )
@@ -362,8 +382,8 @@ def parse_header( row_header ):
   Convert column header (row) into a list of column name dictionaries.
   The dictionary has the elements
     key     value description
-    type    entry type name: n5, n7, p5, p7, sample_name, genome
-    format  barcode format values: wells, indexes, rows, columns, None (see column_header_value_list for allowed combinations of type and format)
+    type    entry type name: n5, n7, p5, p7, sample_name, genome, peak_group, peak_file
+    format  barcode format values: wells, indexes, rows, columns, None (see column_header_name_list for allowed combinations of type and format)
   """
   column_name_list = []
   error_string = ''
@@ -687,14 +707,14 @@ def parse_columns( string_in, element_coordinates = [ None, None ] ):
   return( check_index_list( index_list, element_coordinates ) )
 
 
-def check_rows( csv_rows ):
+def check_rows( column_name_list, csv_rows ):
   """
   Trim off empty cells at end of rows and columns
   and check for internal empty cells. Allow empty
   internal row.
   Notes:
     o  we expect
-         o  7 columns
+         o  g_num_col columns
          o  nrows 
   """
   # check for internal empty row
@@ -705,7 +725,7 @@ def check_rows( csv_rows ):
     for icol, cell in enumerate( row_elements ):
       if( icol == g_num_col ):
         break
-      if( len( cell ) > 0 ):
+      if( len( cell ) > 0 or ( column_name_list[icol]['type'] in column_allow_empty_cell ) ):
         row_elements_out.append( cell )
       else:
         num_empty += 1
@@ -722,14 +742,15 @@ def read_samplesheet( file ):
   Read CSV samplesheet input file.
   Notes:
     o  the first row in the file must have column header names.
-    o  the column header names must be in the list 'column_header_value_list'.
+    o  the column header names must be in the list 'column_header_name_list'.
     o  the column order is arbitrary.
   """
   samplesheet_row_list = []
   csv_rows = csv.reader( file, delimiter=',', quotechar='"')
-  csv_rows = check_rows( csv_rows )
+  csv_rows = list( csv_rows )
   row_header = csv_rows[0]
   column_name_list = parse_header( row_header )
+  csv_rows = check_rows( column_name_list, csv_rows )
   for row_elements in csv_rows[1:]:
     samplesheet_row_list.append( row_elements )
   return( column_name_list, samplesheet_row_list )
@@ -822,14 +843,34 @@ def check_peak_groups( column_name_list, samplesheet_row_list ):
       element_string = row_elements[i]
       if( column_name_dict['type'] != 'peak_group' ):
         continue
-      if( re.search(r'[^a-zA-Z0-9_]', row_elements[i] ) ):
-        bad_peak_groups_dict.setdefault( row_elements[i], True )
+      if( len( element_string ) > 0 and re.search(r'[^a-zA-Z0-9_]', element_string ) ):
+        bad_peak_groups_dict.setdefault( element_string, True )
   if( len( bad_peak_groups_dict.keys() ) > 0 ):
     print('Unacceptable peak group names (must use only alphabetic, positive integer, and underscore characters):')
     for bad_peak_group in bad_peak_groups_dict.keys():
-      print( '  \'%s\'' % ( row_elements[i] ) )
+      print( '  \'%s\'' % ( bad_peak_group ) )
     sys.exit( -1 )
-        
+  return( 0 )
+
+
+def check_peak_files( column_name_list, samplesheet_row_list ):
+  """
+  Check peak file names and exit on error.
+  """
+  bad_peak_files_dict = {}
+  for row_elements in samplesheet_row_list:
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'peak_file' ):
+        continue
+      if( ( len( element_string ) > 0 ) and re.search(r'[\0]+', element_string ) ):
+        bad_peak_files_dict.setdefault( element_string, True )
+  if( len( bad_peak_files_dict.keys() ) > 0 ):
+    print('Unacceptable peak file names (must not contain null characters):')
+    for bad_peak_file in bad_peak_files_dict.keys():
+      print( '  \'%s\'' % ( bad_peak_file ) )
+    sys.exit( -1 )
   return( 0 )
 
 
@@ -892,6 +933,8 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
           genome = element_string
       elif( column_name_dict['type'] == 'peak_group' ):
           peak_group = element_string
+      elif( column_name_dict['type'] == 'peak_file' ):
+          peak_file = element_string
     #
     row_out_list.append( { 'sample_name': sample_name,
                            'n7_index_list': n7_index_list,
@@ -899,7 +942,8 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
                            'n5_index_list': n5_index_list,
                            'p5_index_list': p5_index_list,
                            'genome': genome,
-                           'peak_group': peak_group } )
+                           'peak_group': peak_group,
+                           'peak_file': peak_file } )
   return(  row_out_list )
 
 
@@ -959,7 +1003,8 @@ def write_samplesheet_index_format( file, row_out_list ):
                                      make_index_string( row_out['p5_index_list'] ),
                                      make_index_string( row_out['n5_index_list'] ),
                                      row_out['genome'],
-                                     row_out['peak_group'] ), file=file )
+                                     row_out['peak_group'],
+                                     row_out['peak_file'] ), file=file )
 
   return( 0 )
 
@@ -1138,7 +1183,8 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
                                                          make_index_string( row_out['p5_index_list'] ),
                                                          make_index_string( row_out['n5_index_list'] ) ] ),
                                   'genome' : row_out['genome'],
-                                  'peak_group' : row_out['peak_group'] })
+                                  'peak_group' : row_out['peak_group'],
+                                  'peak_file' : row_out['peak_file'] })
 
   # Store information for dashboard(s).
 
@@ -1186,17 +1232,39 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
   return( 0 )
 
 
+#
+# Count distinct well indexes.
+#
+def count_wells( index_list ):
+  num_well = len( set( index_list ) )
+  return( num_well )
+
+
 def samplesheet_report( samplesheet_row_list, row_out_list, args ):
   print()
-  print( 'Samplesheet information' )
+  print( '== Samplesheet information ==' )
   print( '  Tn5 barcodes:      %r' % ( args.tn5_barcodes ) )
   print( '  Level:             %s' % ( args.level ) )
   print( '  Number of wells:   %d' % ( args.number_wells ) )
   print( '  Sample identifier: %s' % ( args.sample_identifier ) )
   print( '  Use all barcodes:  %r' % ( args.use_all_barcodes ) )
-  print( '  Sample names after converting unacceptable characters to \'.\'.' )
+
+  print( '  Sample names after converting unacceptable characters to \'.\':' )
   for row_out in row_out_list:
     print( '    %s' % ( row_out['sample_name'] ) )
+
+  print( '  Sample well counts:' )
+  max_len_samplename = 0
+  for row_out in row_out_list:
+    if( len( row_out['sample_name'] ) > max_len_samplename ):
+      max_len_samplename = len( row_out['sample_name'] )
+  print( '    name%s\tN7\tP7\tP5\tN5' % ( ' ' * ( max_len_samplename - len( 'name' ) ) ) )
+  for row_out in row_out_list:
+    print( '    %s%s\t%d\t%d\t%d\t%d' % ( row_out['sample_name'], ' ' * ( max_len_samplename - len( row_out['sample_name'] ) ),
+                                          count_wells( row_out['n7_index_list'] ),
+                                          count_wells( row_out['p7_index_list'] ),
+                                          count_wells( row_out['p5_index_list'] ),
+                                          count_wells( row_out['n5_index_list'] ) ) )
   print( '  Illumina run directory: %s' % ( args.run_dir ) )
   print( '  Run sciatac_samplesheet.py -d for more information.' )
   return( 0 )
@@ -1266,6 +1334,7 @@ if __name__ == '__main__':
   samplesheet_row_list = check_sample_names( column_name_list, samplesheet_row_list )
   check_genome_names( column_name_list, samplesheet_row_list )
   check_peak_groups( column_name_list, samplesheet_row_list )
+  check_peak_files( column_name_list, samplesheet_row_list )
   row_out_list = make_samplesheet_indexes( column_name_list, samplesheet_row_list )
   check_sample_identifier( row_out_list, args.sample_identifier )
   if( args.format == 'json' ):
