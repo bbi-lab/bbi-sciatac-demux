@@ -778,6 +778,7 @@ def writeArgsJson( params, timeNow ) {
     def genomeInfo = [:]
     def samples = []
     def peakGroups = [:]
+    def peakFiles = [:]
     def fhSampleSheet = new File( params.sample_sheet )
     def jsonSlurper = new JsonSlurper()
     def sampleData = jsonSlurper.parse( fhSampleSheet )
@@ -786,6 +787,7 @@ def writeArgsJson( params, timeNow ) {
         samples.add( aSample['sample_id'] )
         genomeInfo.put( aSample['sample_id'], aSample['genome'] )
         peakGroups.put( aSample['sample_id'], aSample['peak_group'] )
+        peakFiles.put( aSample['sample_id'], aSample['peak_file'] )
     }
 
 
@@ -793,7 +795,7 @@ def writeArgsJson( params, timeNow ) {
     mapRunInfo['sample_data'] = sampleData
     mapRunInfo['samples'] = samples
     mapRunInfo['genomes'] = genomeInfo
-    mapRunInfo['peak_groups'] = peakGroups
+    mapRunInfo['peak_files'] = peakFiles
 
     /*
     ** Add Illumina sequencing run parameters.
