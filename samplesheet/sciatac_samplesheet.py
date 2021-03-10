@@ -72,11 +72,13 @@ Input (front-end) samplesheet format:
        o  a sample peak group string (cell) may be empty
        o  peak group names consist of alphabetic, positive integers, and
           underscore characters
+       o  each sample must have a peak_group or a peak_file or both
   o  peak files
        o  a path a peak bed file
        o  a sample peak file string (cell) may be empty
        o  if a peak group is specified, the peaks in the peak bed file is
           merged with the called peaks in the group
+       o  each sample must have a peak_group or a peak_file or both
   o  wells:
        o  samplesheet wells are converted to indexes where indexes refer to
           physical wells, which are in the order used in Andrew's pipeline;
@@ -874,6 +876,33 @@ def check_peak_files( column_name_list, samplesheet_row_list ):
   return( 0 )
 
 
+def check_peak_spec( column_name_list, samplesheet_row_list ):
+  """
+  Check that each sample has a peak_group or a peak_file or both.
+  """
+  bad_peak_dict = {}
+  for row_elements in samplesheet_row_list:
+    peak_group_flag = False
+    peak_file_flag = False
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] == 'sample_name' ):
+        sample_name = element_string
+      if( column_name_dict['type'] == 'peak_group' and len( element_string ) > 0 ):
+        peak_group_flag = True
+      if( column_name_dict['type'] == 'peak_file' and len( element_string ) > 0 ):
+        peak_file_flag = True
+    if( ( not peak_group_flag ) and ( not peak_file_flag ) ):
+      bad_peak_dict.setdefault( sample_name, True )
+  if( len( bad_peak_dict.keys() ) > 0 ):
+    print('Samples have no peak_group and no peak_file values:')
+    for bad_peak_spec in bad_peak_dict.keys():
+      print( '  \'%s\'' % ( bad_peak_spec ) )
+    sys.exit( -1 )
+  return( 0 )
+
+
 def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
   """
   Make well index lists for N5, N7, P5, P7 barcode wells from the input samplesheet information.
@@ -1258,13 +1287,32 @@ def samplesheet_report( samplesheet_row_list, row_out_list, args ):
   for row_out in row_out_list:
     if( len( row_out['sample_name'] ) > max_len_samplename ):
       max_len_samplename = len( row_out['sample_name'] )
-  print( '    name%s\tN7\tP7\tP5\tN5' % ( ' ' * ( max_len_samplename - len( 'name' ) ) ) )
+  if( len( 'name' ) > max_len_samplename ):
+    max_len_samplename = len( 'name' )
+  print( '    name%s    N7    P7    P5    N5' % ( ' ' * ( max_len_samplename - len( 'name' ) ) ) )
   for row_out in row_out_list:
-    print( '    %s%s\t%d\t%d\t%d\t%d' % ( row_out['sample_name'], ' ' * ( max_len_samplename - len( row_out['sample_name'] ) ),
+    print( '    %s%s    %d    %d    %d    %d' % ( row_out['sample_name'],
+                                          ' ' * ( max_len_samplename - len( row_out['sample_name'] ) ),
                                           count_wells( row_out['n7_index_list'] ),
                                           count_wells( row_out['p7_index_list'] ),
                                           count_wells( row_out['p5_index_list'] ),
                                           count_wells( row_out['n5_index_list'] ) ) )
+  print( 'Sample peak groups and files:' )
+  max_len_peak_group = 0
+  for row_out in row_out_list:
+    if( len( row_out['peak_group'] ) > max_len_peak_group ):
+      max_len_peak_group = len( row_out['peak_group'] )
+  if( len( 'peak_group' ) > max_len_peak_group ):
+    max_len_peak_group = len( 'peak_group' )
+  print( '    name%s    peak_group%s    peak_file' % ( ' ' * ( max_len_samplename - len( 'name' ) ), ' ' * ( max_len_peak_group - len( 'peak_group' ) ) ) )
+  for row_out in row_out_list:
+    print( '    %s%s    %s%s    %s' % ( row_out['sample_name'],
+                                          ' ' * ( max_len_samplename - len( row_out['sample_name'] ) ),
+                                          row_out['peak_group'],
+                                          ' ' * ( max_len_peak_group - len( row_out['peak_group'] ) ),
+                                          row_out['peak_file'] ) )
+
+
   print( '  Illumina run directory: %s' % ( args.run_dir ) )
   print( '  Run sciatac_samplesheet.py -d for more information.' )
   return( 0 )
@@ -1335,6 +1383,7 @@ if __name__ == '__main__':
   check_genome_names( column_name_list, samplesheet_row_list )
   check_peak_groups( column_name_list, samplesheet_row_list )
   check_peak_files( column_name_list, samplesheet_row_list )
+  check_peak_spec( column_name_list, samplesheet_row_list )
   row_out_list = make_samplesheet_indexes( column_name_list, samplesheet_row_list )
   check_sample_identifier( row_out_list, args.sample_identifier )
   if( args.format == 'json' ):

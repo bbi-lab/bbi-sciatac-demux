@@ -795,6 +795,7 @@ def writeArgsJson( params, timeNow ) {
     mapRunInfo['sample_data'] = sampleData
     mapRunInfo['samples'] = samples
     mapRunInfo['genomes'] = genomeInfo
+    mapRunInfo['peak_groups'] = peakGroups
     mapRunInfo['peak_files'] = peakFiles
 
     /*

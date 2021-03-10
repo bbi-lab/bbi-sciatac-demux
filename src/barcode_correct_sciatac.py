@@ -426,9 +426,9 @@ if __name__ == '__main__':
         output_file_1 = os.path.join(args.out_dir, '%s-RUN001_%s_R1.fastq' % (sample, lane_str))
         output_file_2 = os.path.join(args.out_dir, '%s-RUN001_%s_R2.fastq' % (sample, lane_str))
         output_files[sample] = {}
-        output_files[sample]['r1'] = open(output_file_1, 'w', buffering=8192*8192)
+        output_files[sample]['r1'] = open(output_file_1, 'w', buffering=8192*16384)
         output_files[sample]['r1_name'] = output_file_1
-        output_files[sample]['r2'] = open(output_file_2, 'w', buffering=8192*8192)
+        output_files[sample]['r2'] = open(output_file_2, 'w', buffering=8192*16384)
         output_files[sample]['r2_name'] = output_file_2
 
     
