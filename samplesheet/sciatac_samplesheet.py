@@ -73,12 +73,17 @@ Input (front-end) samplesheet format:
        o  peak group names consist of alphabetic, positive integers, and
           underscore characters
        o  each sample must have a peak_group or a peak_file or both
+       o  if both a peak group and peak file are specified, the peaks in
+          the peak bed file are merged with the called peaks in the group
+          during the pipeline run
   o  peak files
        o  an absolute path to a peak bed file (it must begin with '/')
-       o  a sample peak file string (cell) may be empty
+       o  a sample peak file string (cell) is empty when no peak
+          file is wanted for the sample
        o  each sample must have a peak_group or a peak_file or both
        o  if both a peak group and peak file are specified, the peaks in
           the peak bed file are merged with the called peaks in the group
+          during the pipeline run
   o  wells:
        o  samplesheet wells are converted to indexes where indexes refer to
           physical wells, which are in the order used in Andrew's pipeline;
@@ -129,19 +134,19 @@ Input (front-end) samplesheet format:
 
   Example samplesheet file:
 
-  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group
-  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse,group_1
-  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human,group_2
-  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse,group_1
-  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human,group_2
-  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human,group_2
-  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse,group_1
-  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse,group_1
-  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse,group_1
-  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse,group_1
-  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human,group_2
-  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human,group_2
-  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard,group_3
+  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group,peak_file
+  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse,group_1,
+  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human,group_2,
+  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse,group_1,
+  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human,group_2,/home/me/my_peaks.bed
+  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human,group_2,
+  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse,group_1,
+  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse,group_1,
+  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse,group_1,
+  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse,group_1,
+  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human,group_2,
+  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human,group_2,
+  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard,group_3,
   
   Notes:
     o  the p7_row and p5_column value sets are enclosed in quotes
@@ -230,7 +235,7 @@ import argparse
 #
 # Samplesheet JSON file version.
 #
-program_version = '3.0.0'
+program_version = '3.0.1'
 json_file_version = '3.0.0'
 
 #
