@@ -74,11 +74,11 @@ Input (front-end) samplesheet format:
           underscore characters
        o  each sample must have a peak_group or a peak_file or both
   o  peak files
-       o  a path a peak bed file
+       o  an absolute path to a peak bed file (it must begin with '/')
        o  a sample peak file string (cell) may be empty
-       o  if a peak group is specified, the peaks in the peak bed file is
-          merged with the called peaks in the group
        o  each sample must have a peak_group or a peak_file or both
+       o  if both a peak group and peak file are specified, the peaks in
+          the peak bed file are merged with the called peaks in the group
   o  wells:
        o  samplesheet wells are converted to indexes where indexes refer to
           physical wells, which are in the order used in Andrew's pipeline;
@@ -866,10 +866,10 @@ def check_peak_files( column_name_list, samplesheet_row_list ):
       element_string = row_elements[i]
       if( column_name_dict['type'] != 'peak_file' ):
         continue
-      if( ( len( element_string ) > 0 ) and re.search(r'[\0]+', element_string ) ):
+      if( ( len( element_string ) > 0 ) and ( re.search(r'[\0]+', element_string ) or re.match(r'[^/]', element_string ) ) ):
         bad_peak_files_dict.setdefault( element_string, True )
   if( len( bad_peak_files_dict.keys() ) > 0 ):
-    print('Unacceptable peak file names (must not contain null characters):')
+    print('Unacceptable peak file names (must start with \'/\' and must not contain null characters):')
     for bad_peak_file in bad_peak_files_dict.keys():
       print( '  \'%s\'' % ( bad_peak_file ) )
     sys.exit( -1 )
@@ -1297,7 +1297,7 @@ def samplesheet_report( samplesheet_row_list, row_out_list, args ):
                                           count_wells( row_out['p7_index_list'] ),
                                           count_wells( row_out['p5_index_list'] ),
                                           count_wells( row_out['n5_index_list'] ) ) )
-  print( 'Sample peak groups and files:' )
+  print( '  Sample peak groups and files:' )
   max_len_peak_group = 0
   for row_out in row_out_list:
     if( len( row_out['peak_group'] ) > max_len_peak_group ):

@@ -81,6 +81,7 @@ def onError = { return( "retry" ) }
 params.help = false
 params.max_cores = 6
 params.max_mem_bcl2fastq = 40
+params.demux_buffer_blocks = 16
 
 /*
 ** Initialize optional parameters to null.
@@ -93,7 +94,10 @@ params.max_mem_bcl2fastq = 40
 */
 def sample_sheet = params.sample_sheet
 def run_dir      = params.run_dir
+def demux_buffer_blocks = params.demux_buffer_blocks
+
 def options_barcode_correct = ''
+
 
 num_threads_bcl2fasta_process = params.max_cores
 num_threads_bcl2fastq_io = 6
@@ -121,7 +125,6 @@ if( !params.sample_sheet ) {
 	printErr( "Error: missing params.sample_sheet in parameters file" )
 	System.exit( -1 )
 }
-
 
 /*
 ** Global variables accessible in process blocks.
@@ -361,6 +364,7 @@ process barcode_correct {
                        --out_dir . \
                        --stats_out 1 \
                        --num_pigz_threads ${task.ext.num_pigz_threads} \
+                       --write_buffer_blocks ${demux_buffer_blocks} \
                        $options_barcode_correct \
                        $sequencer_flag
   deactivate
@@ -601,6 +605,7 @@ def reportRunParams( params, sampleSheetMap ) {
     s += String.format( "Use all barcodes               %b\n", sampleSheetMap['use_all_barcodes'] )
     s += String.format( "Maximum cores:                 %d\n", params.max_cores )
     s += String.format( "Maximum memory for bcl2fastq:  %d\n", params.max_mem_bcl2fastq )
+    s += String.format( "Demux buffer blocks:           %d\n", params.demux_buffer_blocks )
     s += String.format( "\n" )
     print( s )
 

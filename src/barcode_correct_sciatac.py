@@ -325,6 +325,7 @@ if __name__ == '__main__':
     parser.add_argument('--well_ids', action='store_true', help='Flag to output cell IDs that are composed of well IDs rather than the actual sequences.')
     parser.add_argument('-X', '--nextseq', help='NextSeq run indicator', dest='nextseq', action="store_true")
     parser.add_argument('--no_mask', action='store_true', help='Use all four barcodes. By default, do not use (mask out) a barcode(s) when all samples have the same index set (flag).')
+    parser.add_argument('--write_buffer_blocks', type=int, default=16, help='Number of 8K blocks for fastq write buffers. Default is 16.')
 
     args = parser.parse_args()
 
@@ -422,13 +423,14 @@ if __name__ == '__main__':
         os.mkdir(args.out_dir)
     
     output_files = {}
+    buffer_size = args.write_buffer_blocks * 8192
     for sample in list(set(sample_lookup.values())):
         output_file_1 = os.path.join(args.out_dir, '%s-RUN001_%s_R1.fastq' % (sample, lane_str))
         output_file_2 = os.path.join(args.out_dir, '%s-RUN001_%s_R2.fastq' % (sample, lane_str))
         output_files[sample] = {}
-        output_files[sample]['r1'] = open(output_file_1, 'w', buffering=8192*16384)
+        output_files[sample]['r1'] = open(output_file_1, 'w', buffering=buffer_size)
         output_files[sample]['r1_name'] = output_file_1
-        output_files[sample]['r2'] = open(output_file_2, 'w', buffering=8192*16384)
+        output_files[sample]['r2'] = open(output_file_2, 'w', buffering=buffer_size)
         output_files[sample]['r2_name'] = output_file_2
 
     
