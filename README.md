@@ -4,9 +4,16 @@
 
 ## Requirements
 
-In order to run these scripts, Nextflow must be installed on the system where you will run the processing pipeline. You can find Nextflow [installation instructions](https://www.nextflow.io/docs/latest/getstarted.html#installation) on the [Nextflow web site](https://www.nextflow.io).
+In order to run these pipeline scripts, Nextflow must be installed on the system where they will run. You can find Nextflow [installation instructions](https://www.nextflow.io/docs/latest/getstarted.html#installation) on the [Nextflow web site](https://www.nextflow.io).
 
 These scripts are written to run on the UW Genome Sciences computing cluster: they depend on the Univa Grid Engine and various installed modules.
+
+Install the scripts using the *git* program to clone the *bbi-lab/bbi-sciatac-demux* and *bbi-lab/bbi-sciatac-analyze* repositories on your computer. Use the commands
+
+```
+git clone https://github.com/bbi-lab/bbi-sciatac-demux
+git clone https://github.com/bbi-lab/bbi-sciatac-analyze
+```
 
 For efficiency and convenience, they are written to run certain stages in python virtual environments. The environments may need to be built on a node with the CPU architecture on which you will run the scripts. In order to build the environments use the commands
 
@@ -29,42 +36,37 @@ The above is a one-time installation setup, or may be required if you need to up
 
 #### Nextflow
 
-Nextflow is both a language specification for writing scientific processing pipeline scripts and a program for running such scripts. Important features offered by Nextflow include support for distributed computing on the Univa Grid Engine and the ability to resume processing at a failed stage processing step.
+Nextflow is both a language specification for writing scientific processing pipeline scripts and a program for running such scripts. Important features offered by Nextflow include support for distributed computing on the Univa Grid Engine and the ability to resume processing at a failed processing stage.
 
-The Nextflow pipeline components required for the bbi-sciatac pipeline consist of the
+The Nextflow pipeline components required for the bbi-sciatac pipelines consist of the
 
 * nextflow program, the executable in the Nextflow distribution,
-* nextflow.config file, gives processing parameters, for example, the Univa Grid Engine,
+* nextflow.config file, gives processing parameters, for example, for the Univa Grid Engine,
 * params.config file, gives parameters for a particular processing run,
+* samplesheet.json file, gives information about the samples in the sequencing run,
 * work directory, where Nextflow 'stages' the processing steps. In particular, files created during the processing are stored in sub-directories of work,
 * genome file sets,
 * computing resources.
 
 #### bbi-sciatac pipeline
 
-The bbi-sciatac pipelines consist of a pair of Nextflow scripts. The first script (bbi-sciatac-demux/main.nf) converts an Illumina bcl file to fastq files, corrects barcode errors, partitions reads into fastq files by sample, and trims off adapter sequence from the reads. The second script (bbi-sciatac-analyze/main.nf) continues processing with read alignments through to making count matrices.
+The bbi-sciatac pipelines consist of a pair of Nextflow scripts. The first script, *bbi-sciatac-demux/main.nf*, converts Illumina bcl files to fastq files, corrects barcode errors, partitions reads into fastq files by sample, and trims off adapter sequence from the reads. The second script, *bbi-sciatac-analyze/main.nf*, continues processing with read alignments.
 
 #### Samplesheet file
 
-The user-generated samplesheet file (front-end samplesheet) is in CSV format. The program *bbi-sciatac-demux/samplesheet/sciatac_samplesheet.py* converts this file to a JSON file (back-end samplesheet), which is required by the pipeline. In addition, the user sets various processing parameters as *sciatac_samplesheet.py* command line arguments. For additional information about *sciatac_samplesheet.py*, including a detailed description of the front-end samplesheet format, run
+The user-generated samplesheet file (front-end samplesheet) is in CSV format. The program *bbi-sciatac-demux/samplesheet/sciatac_samplesheet.py* converts this file to a JSON file (back-end samplesheet), which is required by the pipeline. In addition, the user can set various processing parameters using *sciatac_samplesheet.py* command line parameters. For additional information about *sciatac_samplesheet.py*, including a detailed description of the front-end samplesheet format, run
 
 ```
-sciatac_samplesheet -d
+sciatac_samplesheet.py -d
 ```
 
 #### Genome files
 
-The required genome-related files are specified in the *bbi-sciatac-analyze/genomes.json* file. The required files include
-
-* bowtie genome indexes
-* genome whitelist regions
-* chromosome sizes
-
-The *bbi-sciatac-analyze* repository has some scripts for assisting with building these files in the *genomes* subdirectory. These scripts are from Andrew Hill.
+The required genome-related files are specified in the *bbi-sciatac-analyze/genomes.json* file. The file *genomes_format.txt* in the *bbi-sciatac-analyze/genomes* directory describes the *genomes.json* file format. This description is from Andrew Hill.
 
 #### nextflow.config file
 
-The *nextflow.config* file defines processing values such as the required modules, memory, and number of CPUs for each processing stage, which do not change typically from run-to-run. The file can be left in the bbi-sciatac-\* installation directory where Nextflow searches for it automatically when the pipeline starts up. The supplied *nextflow.config* file has two profiles: the default profile, called *standard*, defines modules used by the pipeline on CentOS 7 systems in the UW Genome Sciences cluster, and the *centos_6* profile, which defines modules used by the pipeline on CentOS 6 systems in the UW Genome Sciences cluster. In order to run the pipelines with the *centos_6* profile, add the command line parameter `-profile centos_6` to the nextflow run command, for example
+The *nextflow.config* file defines processing values such as the required modules, memory, and number of CPUs for each processing stage, which do not change typically from run-to-run. The file can be left in the bbi-sciatac-\* installation directory where Nextflow searches for it automatically when a pipeline run starts. The supplied *nextflow.config* file has two profiles: the default profile, called *standard*, defines modules used by the pipeline on CentOS 7 systems in the UW Genome Sciences cluster, and the *centos_6* profile, which defines modules used by the pipeline on CentOS 6 systems in the UW Genome Sciences cluster. In order to run the pipelines with the *centos_6* profile, add the command line parameter `-profile centos_6` to the nextflow run command, for example
 
 
 ```
@@ -79,13 +81,13 @@ The lines in the *experiment.config* file define parameters required by the proc
 
 #### Running the pipeline scripts.
 
-Run the pipeline scripts in a cluster node with significant a significant memory resource. For example, use
+Run the pipeline scripts in a cluster node a significant memory resource. For example, use
 
 ```
 qlogin -l mfree=16G
 ```
 
-Copy the *experiment.config* file and bash scripts *bbi-sciatac-demux/scripts/run.sciatac-demux.sh* and *bbi-sciatac-analyze/scripts/run.sciatac-analyze.sh* to the directory where want the pipeline output files. Edit *experiment.config* as required then run *run.sciatac-demux.sh* followed by *run.sciatac-analyze.sh*.
+Copy the *experiment.config* file and bash scripts *bbi-sciatac-demux/scripts/run.sciatac-demux.sh* and *bbi-sciatac-analyze/scripts/run.sciatac-analyze.sh* to the directory where you want the pipeline output files. Edit *run.sciatac-demux.sh* and *n.sciatac-analyze.sh*as described in the script comments. Edit *experiment.config* as required then run *run.sciatac-demux.sh* followed by *run.sciatac-analyze.sh*.
 
 ```
 bash run.sciatac-demux.sh
@@ -95,9 +97,13 @@ bash run.sciatac-demux.sh
 bash run.sciatac-analyze.sh
 ```
 
+Each script starts by reporting important parameters and then waits run confirmation.
+
+The script *run.sciatac-demux.sh* creates a sub-directory called *demux_out* where the demux pipeline writes its output files. The *run.sciatac-analyze.sh* script creates a sub-directory called *analyze_out* where the analyze pipeline writes its output files.
+
 #### Additional information
 
-We advise users to run the pipelines in tmux sessions so closing the terminal window does not terminate the pipeline.
+We advise users to run the pipelines in tmux sessions so that closing the terminal window does not terminate the pipeline.
 
 #### Questions and errors:
 If you run into problems, please leave a detailed description in the issue tab above.

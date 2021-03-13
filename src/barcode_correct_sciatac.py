@@ -8,6 +8,7 @@ import gzip
 import io
 import itertools
 import time
+import timeit
 import json
 import re
 import collections
@@ -421,7 +422,7 @@ if __name__ == '__main__':
     # Set up all input/output files
     if( not os.path.exists(args.out_dir)):
         os.mkdir(args.out_dir)
-    
+
     output_files = {}
     buffer_size = args.write_buffer_blocks * 8192
     for sample in list(set(sample_lookup.values())):
@@ -462,6 +463,9 @@ if __name__ == '__main__':
     pcr_i7_count = [0] * 384
     pcr_i5_count = [0] * 384
     tagmentation_i5_count = [0] * 384
+
+    # demux run time
+    start_time = timeit.default_timer()
  
     for (r1_name, r1_seq, r1_qual),(r2_name, r2_seq, r2_qual) in zip(if1, if2):
 
@@ -530,6 +534,12 @@ if __name__ == '__main__':
         else:
             output_files[sample]['r1'].write(''.join(['@', barcodes_string, ':', str(totreads), '\n', r1_seq, '\n+\n', r1_qual, '\n']))
             output_files[sample]['r2'].write(''.join(['@', barcodes_string, ':', str(totreads), '\n', r2_seq, '\n+\n', r2_qual, '\n']))
+
+    # Write an empty file with an informational name.
+    elapsed_time = timeit.default_timer() - start_time
+    info_file_name = 'buffer_blocks_%d_run_time_%d_min.inf' % ( args.write_buffer_blocks, int( elapsed_time / 60.0 ) )
+    fp = open(info_file_name, 'wt')
+    fp.close()
 
     if totreads == 0:
         raise ValueError('No reads found in fastq input.')

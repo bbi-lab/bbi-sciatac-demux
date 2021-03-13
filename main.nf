@@ -79,7 +79,7 @@ def onError = { return( "retry" ) }
 ** Initial pre-defined, required parameter values.
 */
 params.help = false
-params.max_cores = 6
+params.bcl2fastq_cpus = 6
 params.max_mem_bcl2fastq = 40
 params.demux_buffer_blocks = 16
 
@@ -97,10 +97,6 @@ def run_dir      = params.run_dir
 def demux_buffer_blocks = params.demux_buffer_blocks
 
 def options_barcode_correct = ''
-
-
-num_threads_bcl2fasta_process = params.max_cores
-num_threads_bcl2fastq_io = 6
 
 /*
 ** Print usage when run with --help parameter.
@@ -215,11 +211,11 @@ options_barcode_correct += ' --well_ids'
 ** Set number of threads and amount of memory per core
 ** allocated for bcl2fastq run.
 */
-if( params.max_cores > 16 ) {
+if( params.bcl2fastq_cpus > 16 ) {
 	num_threads_bcl2fasta_process = 16
 	mem_bcl2fastq = params.max_mem_bcl2fastq / 16
 } else {
-	num_threads_bcl2fasta_process = params.max_cores
+	num_threads_bcl2fasta_process = params.bcl2fastq_cpus
 	mem_bcl2fastq = params.max_mem_bcl2fastq / num_threads_bcl2fasta_process
 }
 
@@ -262,7 +258,7 @@ process bcl2fastq {
   errorStrategy onError
   cpus num_threads_bcl2fasta_process
   memory "$mem_bcl2fastq GB"    
-//  note: bge: the following publishDir statement is commented out in bbi_dmux. I want it to work for diagnostics during development.
+//  note: the following publishDir statement may be commented out in bbi_dmux. I want it to work for diagnostics during development.
   publishDir path: "$demux_dir/fastqs_bcl2fastq", pattern: "Undetermined_S0_*.fastq.gz", mode: 'copy'
   publishDir path: "$demux_dir/fastqs_bcl2fastq", pattern: "Stats/*", mode: 'copy'
   publishDir path: "$demux_dir/fastqs_bcl2fastq", pattern: "Reports/*", mode: 'copy'
@@ -576,10 +572,11 @@ def writeHelp() {
     log.info '    params.sample_sheet = SAMPLE_SHEET_PATH    Sample sheet of the format described in the README.'
     log.info ''
     log.info 'Optional parameters (specify in your experiment.config file):'
-    log.info '    params.max_cores = 16                      The maximum number of cores to use - fewer will be used if appropriate.'
+    log.info '    params.bcl2fastq_cpus = 16                 The number of cores to use for the bcl2fastq run.'
+    log.info '    params.max_mem_bcl2fastq = 40              The maximum number of GB of RAM to allocate for bcl2fastq run'
+    log.info '    params.demux_buffer_blocks = 16            The number of 8K blocks to use for demux output buffer.'
     log.info '    process.maxForks = 20                      The maximum number of processes to run at the same time on the cluster.'
     log.info '    process.queue = "trapnell-short.q"         The queue on the cluster where the jobs should be submitted. '
-    log.info '    params.max_mem_bcl2fastq = 40              The maximum number of GB of RAM to allocate for bcl2fastq run'
     log.info ''
     log.info 'Issues? Contact bge@uw.edu'
 }
@@ -603,7 +600,7 @@ def reportRunParams( params, sampleSheetMap ) {
     s += String.format( "Number of wells:               %d\n", sampleSheetMap['number_wells'] )
     s += String.format( "TN5 barcodes:                  %b\n", sampleSheetMap['tn5_barcodes'] )
     s += String.format( "Use all barcodes               %b\n", sampleSheetMap['use_all_barcodes'] )
-    s += String.format( "Maximum cores:                 %d\n", params.max_cores )
+    s += String.format( "Maximum cores:                 %d\n", params.bcl2fastq_cpus )
     s += String.format( "Maximum memory for bcl2fastq:  %d\n", params.max_mem_bcl2fastq )
     s += String.format( "Demux buffer blocks:           %d\n", params.demux_buffer_blocks )
     s += String.format( "\n" )
@@ -774,7 +771,7 @@ def writeArgsJson( params, timeNow ) {
     demuxDict['sample_sheet'] = params.sample_sheet
     demuxDict['num_well'] = sampleSheetMap['number_wells']
     demuxDict['level'] = sampleSheetMap['level']
-    demuxDict['params.max_cores'] = params.max_cores
+    demuxDict['params.bcl2fastq_cpus'] = params.bcl2fastq_cpus
     demuxDict['max_mem_bcl2fastq'] = params.max_mem_bcl2fastq
 
     /*

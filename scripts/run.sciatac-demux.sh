@@ -1,6 +1,24 @@
 #!/bin/bash
 
 #
+# Edit this file to set the NEXTFLOW variable to the location
+# of the Nextflow executable, and NF_MAIN to the location of
+# the bbi-sciatac-demux Nextflow pipeline script, main.nf.
+#
+
+#
+# Copy this file to the directory where you will run the pipeline.
+# The experiment.config file must be in the directory where you
+# run this script.
+#
+
+#
+# Nextflow executable and pipeline script locations.
+#
+NEXTFLOW="/net/gs/vol1/home/bge/bin/nextflow"
+NF_MAIN="/net/gs/vol1/home/bge/git/bbi-sciatac-demux/main.nf"
+
+#
 # Current date and time.
 #
 NOW=`date '+%Y%m%d.%H%M%S'`
@@ -10,12 +28,6 @@ NOW=`date '+%Y%m%d.%H%M%S'`
 #
 PWD=`pwd`
 CONFIG_FILE="$PWD/experiment.config"
-
-#
-# Nextflow executable and pipeline script locations.
-#
-NEXTFLOW="/net/gs/vol1/home/bge/bin/nextflow"
-NF_DEMUX="/net/gs/vol1/home/bge/git/bbi-sciatac-demux/main.nf"
 
 #
 # Get the path to the demux output directory from
@@ -52,7 +64,7 @@ date > run_reports/run_start.${NOW}.txt
 #
 # Run Nextflow sci-ATAC demux pipeline.
 #
-$NEXTFLOW run $NF_DEMUX $PARS
+$NEXTFLOW run $NF_MAIN $PARS
 
 date > run_reports/run_finish.${NOW}.txt
 
