@@ -311,6 +311,14 @@ def get_sample_lookup(samplesheet, no_mask, pcri7, tagi7, tagi5, pcri5):
     return index_mask, sample_lookup_table, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags
 
 
+#
+# Notes:
+#   o  the -X option reverse complements the P5 index and swaps the
+#      locations of the PCR i5 and Ligation i5 sequences in the header
+#      sequence. See the get_barcode_seqs() function above. If a
+#      problem arises, with demuxing a new chemistry/machine, this may
+#      be worth examining.
+#
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='A program to fix erroneous barcodes in scATAC data.')
