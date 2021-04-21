@@ -471,7 +471,7 @@ def check_index_list( index_list, element_coordinates = [ None, None ] ):
     if( index_dict[i] > 1 ):
       duplicate_list.append( str( i ) )
   if( len( duplicate_list ) > 0 ):
-    print( 'Warning: spreadsheet cell: %s %s: duplicate index(es): %s' % ( element_coordinates[0], element_coordinates[1], ' '.join( duplicate_list ) ), file=sys.stderr )
+    print( 'Warning: spreadsheet cell: %s %s: duplicate index(es): %s' % ( element_coordinates[0], element_coordinates[1], ' '.join( sorted(duplicate_list) ) ), file=sys.stderr )
   return( list( set( index_list ) ) )
 
 
@@ -1304,15 +1304,22 @@ def samplesheet_report( samplesheet_row_list, row_out_list, args ):
                                           count_wells( row_out['n5_index_list'] ) ) )
   print( '  Sample peak groups and files:' )
   max_len_peak_group = 0
+  max_len_genome = 0
   for row_out in row_out_list:
     if( len( row_out['peak_group'] ) > max_len_peak_group ):
       max_len_peak_group = len( row_out['peak_group'] )
+    if( len( row_out['genome'] ) > max_len_genome ):
+      max_len_genome = len( row_out['genome'] )
   if( len( 'peak_group' ) > max_len_peak_group ):
     max_len_peak_group = len( 'peak_group' )
-  print( '    name%s    peak_group%s    peak_file' % ( ' ' * ( max_len_samplename - len( 'name' ) ), ' ' * ( max_len_peak_group - len( 'peak_group' ) ) ) )
+  if( len( 'genome' ) > max_len_genome ):
+    max_len_genome = len( 'genome' )
+  print( '    name%s    genome%s    peak_group%s    peak_file' % ( ' ' * ( max_len_samplename - len( 'name' ) ), ' ' * ( max_len_genome - len( 'genome' ) ), ' ' * ( max_len_peak_group - len( 'peak_group' ) ) ) )
   for row_out in row_out_list:
-    print( '    %s%s    %s%s    %s' % ( row_out['sample_name'],
+    print( '    %s%s    %s%s    %s%s    %s' % ( row_out['sample_name'],
                                           ' ' * ( max_len_samplename - len( row_out['sample_name'] ) ),
+                                          row_out['genome'],
+                                          ' ' * ( max_len_genome - len( row_out['genome'] ) ),
                                           row_out['peak_group'],
                                           ' ' * ( max_len_peak_group - len( row_out['peak_group'] ) ),
                                           row_out['peak_file'] ) )
