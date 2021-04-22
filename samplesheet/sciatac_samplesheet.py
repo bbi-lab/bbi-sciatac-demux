@@ -471,7 +471,8 @@ def check_index_list( index_list, element_coordinates = [ None, None ] ):
     if( index_dict[i] > 1 ):
       duplicate_list.append( str( i ) )
   if( len( duplicate_list ) > 0 ):
-    print( 'Warning: spreadsheet cell: %s %s: duplicate index(es): %s' % ( element_coordinates[0], element_coordinates[1], ' '.join( sorted(duplicate_list) ) ), file=sys.stderr )
+    print( 'Warning: spreadsheet cell: %s %s: duplicate well index(es): %s' % ( element_coordinates[0], element_coordinates[1], ' '.join( sorted(duplicate_list) ) ), file=sys.stderr )
+    print( '         These indexes are duplicated within the reported spreadsheet cell, which may be intentional.')
   return( list( set( index_list ) ) )
 
 
