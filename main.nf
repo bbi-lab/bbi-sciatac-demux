@@ -127,6 +127,7 @@ if( !params.sample_sheet ) {
 */
 output_dir = params.output_dir.replaceAll("/\\z", "")
 demux_dir = output_dir + '/demux_out'
+log_dir = output_dir + '/log_dir'
 
 /*
 ** Check sample sheet file.
@@ -136,7 +137,7 @@ checkSamplesheet( params )
 /*
 ** Check that required directories exist or can be made.
 */
-checkDirectories( params )
+checkDirectories( params, log_dir )
 
 /*
 ** Read sample sheet file.
@@ -289,6 +290,9 @@ process bcl2fastq {
     */
     script:
     """
+    PROCESS_BLOCK='01_bcl2fastq'
+    START_TIME=`date '+%Y%m%d:%H%M%S'`
+
     bcl2fastq --runfolder-dir      ${params.run_dir} \
               --output-dir         . \
               --interop-dir        . \
@@ -300,6 +304,15 @@ process bcl2fastq {
               --ignore-missing-controls \
               --ignore-missing-filter \
               --ignore-missing-bcls
+
+    STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+    $script_dir/pipeline_logger.py \
+    -n NA \
+    -p \${PROCESS_BLOCK} \
+    -v 'bcl2fastq --version' \
+    -s \${START_TIME} \
+    -e \${STOP_TIME} \
+    -d ${log_dir}
     """
     //               --tiles s_1 \
 }
@@ -348,6 +361,9 @@ process barcode_correct {
 
   script:
   """
+  PROCESS_BLOCK='02_barcode_correct'
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
   source $pipeline_path/load_pypy_env_reqs.sh
   PS1=\${PS1:-}
   source $script_dir/pypy_env/bin/activate
@@ -364,6 +380,15 @@ process barcode_correct {
                        $options_barcode_correct \
                        $sequencer_flag
   deactivate
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -n NA \
+  -p \${PROCESS_BLOCK} \
+  -v 'echo "not available"' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
 
@@ -402,6 +427,9 @@ process adapter_trimming {
   
   script:
   """
+  PROCESS_BLOCK='03_adapter_trimming'
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
   mkdir -p fastqs_trim
   java -Xmx1G -jar $trimmomatic_exe \
        PE \
@@ -415,6 +443,15 @@ process adapter_trimming {
        TRAILING:3 \
        SLIDINGWINDOW:4:10 \
        MINLEN:20
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -n NA \
+  -p \${PROCESS_BLOCK} \
+  -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
 
@@ -440,8 +477,20 @@ process fastqc_lanes {
 
   script:
   """
+  PROCESS_BLOCK='04_fastqc_lanes'
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
   mkdir fastqc_lanes
   fastqc *.fastq.gz -t $task.cpus -o fastqc_lanes
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -n NA \
+  -p \${PROCESS_BLOCK} \
+  -v 'fastqc -version' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
 
@@ -462,8 +511,20 @@ process fastqc_samples {
 
   script:
   """
+  PROCESS_BLOCK='05_fastqc_samples'
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
   mkdir fastqc_sample
   fastqc *.fastq.gz -t $task.cpus -o fastqc_sample
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -n NA \
+  -p \${PROCESS_BLOCK} \
+  -v 'fastqc -version' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
 
@@ -522,6 +583,9 @@ process demux_dash {
 
   script:
   """
+  PROCESS_BLOCK='06_demux_dash'
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
   mkdir demux_dash
   cp -R $script_dir/skeleton_dash/* demux_dash
 
@@ -533,6 +597,15 @@ process demux_dash {
   $script_dir/make_run_data.py --input_folder="." \
                                --input_file="$demux_dir/args.json" \
                                --output_file="demux_dash/js/run_data.js"
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -n NA \
+  -p \${PROCESS_BLOCK} \
+  -v 'echo "not available"' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
 
@@ -666,7 +739,7 @@ def makeDirectory( directoryName ) {
 }
 
 
-def checkDirectories( params ) {
+def checkDirectories( params, log_dir ) {
     /*
     ** Check for existence of run_dir.
     */
@@ -684,6 +757,11 @@ def checkDirectories( params ) {
     ** Check that either the demux_dir exists or we can create it.
     */
     makeDirectory( demux_dir )
+
+    /*
+    ** Check that either the log_dir exists or we can create it.
+    */
+    makeDirectory( log_dir )
 }
 
 
