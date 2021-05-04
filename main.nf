@@ -809,7 +809,7 @@ def readSampleSheetJson( params ) {
 
 
 def readIlluminaRunInfo( params ) {
-    def command = "${script_dir}/read_run_info.py ${params.run_dir}"
+    def command = "${script_dir}/read_run_info.py ${params.run_dir} ATAC-seq"
     def strOut = new StringBuffer()
     def strErr = new StringBuffer()
     def proc = command.execute()
