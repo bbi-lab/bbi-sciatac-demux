@@ -127,7 +127,7 @@ if( !params.sample_sheet ) {
 */
 output_dir = params.output_dir.replaceAll("/\\z", "")
 demux_dir = output_dir + '/demux_out'
-log_dir = output_dir + '/log_dir'
+log_dir = output_dir + '/demux_log_dir'
 
 /*
 ** Check sample sheet file.
@@ -290,7 +290,7 @@ process bcl2fastq {
     */
     script:
     """
-    PROCESS_BLOCK='01_bcl2fastq'
+    PROCESS_BLOCK='bcl2fastq'
     START_TIME=`date '+%Y%m%d:%H%M%S'`
 
     bcl2fastq --runfolder-dir      ${params.run_dir} \
@@ -361,7 +361,7 @@ process barcode_correct {
 
   script:
   """
-  PROCESS_BLOCK='02_barcode_correct'
+  PROCESS_BLOCK='barcode_correct'
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   source $pipeline_path/load_pypy_env_reqs.sh
@@ -427,7 +427,7 @@ process adapter_trimming {
   
   script:
   """
-  PROCESS_BLOCK='03_adapter_trimming'
+  PROCESS_BLOCK='adapter_trimming'
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir -p fastqs_trim
@@ -477,7 +477,7 @@ process fastqc_lanes {
 
   script:
   """
-  PROCESS_BLOCK='04_fastqc_lanes'
+  PROCESS_BLOCK='fastqc_lanes'
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir fastqc_lanes
@@ -511,7 +511,7 @@ process fastqc_samples {
 
   script:
   """
-  PROCESS_BLOCK='05_fastqc_samples'
+  PROCESS_BLOCK='fastqc_samples'
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir fastqc_sample
@@ -583,7 +583,7 @@ process demux_dash {
 
   script:
   """
-  PROCESS_BLOCK='06_demux_dash'
+  PROCESS_BLOCK='demux_dash'
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir demux_dash

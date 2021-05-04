@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
   # Write to log file.
   if(args.output_file == None):
-    log_file_name = args.sample_name + '.' + args.process_name + '.' + args.start_time.replace(':', '') + '.' + work_id + '.log'
+    log_file_name = args.sample_name + '.' + args.start_time.replace(':', '') + '.' + args.process_name + '.' + work_id + '.log'
   else:
     log_file_name = args.output_file
   if(args.output_directory != None):
