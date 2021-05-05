@@ -65,7 +65,7 @@ import re
 #      files.
 
 
-version = '20210114.1'
+version = '20210429.1'
 
 
 application_name_dict = {
@@ -77,16 +77,18 @@ application_name_dict = {
 
 
 #
+# This dictionary is no longer used.
+#
 # Is the p5 index reverse complemented?
 #
-SEQUENCERS_P5_RC_MAP = {
-    'NextSeq500': True,
-    'NextSeq2000': True,
-    'MiSeq': False,
-    'NovaSeq': False,
-    'HiSeq3000': False,
-    'HiSeq4000': True
-}
+# SEQUENCERS_P5_RC_MAP = {
+#     'NextSeq500': True,
+#     'NextSeq2000': True,
+#     'MiSeq': False,
+#     'NovaSeq': False,
+#     'HiSeq3000': False,
+#     'HiSeq4000': True
+# }
 
 
 def open_file(f, mode='rt'):
@@ -144,11 +146,12 @@ def get_application_info( tree ):
     return( instrument_model, application_version )
 
 
-def get_run_info( flow_cell_path ):
+def get_run_info( flow_cell_path, pipeline_type='RNA-seq' ):
     """
     Helper function to get some info about the sequencing runs.
     Args:
         flow_cell_path (str): Path to BCL directory for run.
+        pipeline_type (str): Processing pipeline type. Either 'RNA-seq' or 'ATAC-seq'.
     Returns:
         dict: basic statistics about run, like date, instrument, number of lanes, flowcell ID, read lengths, etc.
     """
@@ -172,7 +175,7 @@ def get_run_info( flow_cell_path ):
     elif( instrument_model == 'MiSeq' ):
         run_stats = get_run_info_miseq( instrument_model, application_version, tree )
     elif( instrument_model == 'NovaSeq' ):
-        run_stats = get_run_info_novaseq( instrument_model, application_version, tree )
+        run_stats = get_run_info_novaseq( instrument_model, application_version, tree, pipeline_type )
     elif( instrument_model == 'HiSeq3000' or instrument_model == 'HiSeq4000' ):
         run_stats = get_run_info_hiseq( instrument_model, application_version, tree )
     else:
@@ -314,7 +317,7 @@ def get_run_info_miseq( instrument_model, application_version, tree ):
     return run_stats
 
 
-def get_run_info_novaseq( instrument_model, application_version, tree ):
+def get_run_info_novaseq( instrument_model, application_version, tree, pipeline_type ):
     """
     Helper function to get some info about the sequencing runs.
     Args:
@@ -385,7 +388,12 @@ def get_run_info_novaseq( instrument_model, application_version, tree ):
         if( sbs_consumable_version == '1' ):
             run_stats['reverse_complement_i5'] = False
         elif( sbs_consumable_version == '3' ):
-            run_stats['reverse_complement_i5'] = False
+            if( pipeline_type == 'RNA-seq' ):
+              run_stats['reverse_complement_i5'] = True
+            elif( pipeline_type == 'ATAC-seq' ):
+              run_stats['reverse_complement_i5'] = False
+            else:
+              raise ValueError('Unrecognized pipeline_type value \'%s\'' % ( pipeline_type ))
     else:
         run_stats['reverse_complement_i5'] = False
 
@@ -437,28 +445,30 @@ def get_run_info_hiseq( instrument_model, application_version, tree ):
     return( run_stats )
 
 
-def reverse_complement_i5(name):
-    """
-    Take a BCL directory or instrument type (NextSeq500, NextSeq2000, MiSeq,
-    NovaSeq, HiSeq4000, HiSeq3000, ...) and return whether or not i5 should
-    be reverse complemented. This assumes that NextSeq instruments and other
-    similar machines should be reverse complemented whereas MiSeq should not.
-    Args:
-        name (str): BCL directory or one of the instrument types as mentioned above    
-    
-    Returns:
-        bool: True if user would typically reverse complement i5 index and False otherwise.
-    """
-    
-    if name in SEQUENCERS_P5_RC_MAP:
-        sequencer_type = name
-    elif os.path.exists(name):
-        sequencer_type = get_run_info(name)['instrument_type']
-        
-        if sequencer_type not in SEQUENCERS_P5_RC_MAP:
-            raise ValueError('Sequencer type detected from BCL is %s, which is not in our known list of which sequencers require P5 reverse complementing or not.' % sequencer_type)
-    else:
-        raise ValueError('Invalid input, could not detect BCL or instrument ID.')
-
-    return SEQUENCERS_P5_RC_MAP[sequencer_type]
+# The following code is no longer used, I believe.
+#
+# def reverse_complement_i5(name):
+#     """
+#     Take a BCL directory or instrument type (NextSeq500, NextSeq2000, MiSeq,
+#     NovaSeq, HiSeq4000, HiSeq3000, ...) and return whether or not i5 should
+#     be reverse complemented. This assumes that NextSeq instruments and other
+#     similar machines should be reverse complemented whereas MiSeq should not.
+#     Args:
+#         name (str): BCL directory or one of the instrument types as mentioned above    
+#     
+#     Returns:
+#         bool: True if user would typically reverse complement i5 index and False otherwise.
+#     """
+#     
+#     if name in SEQUENCERS_P5_RC_MAP:
+#         sequencer_type = name
+#     elif os.path.exists(name):
+#         sequencer_type = get_run_info(name)['instrument_type']
+#         
+#         if sequencer_type not in SEQUENCERS_P5_RC_MAP:
+#             raise ValueError('Sequencer type detected from BCL is %s, which is not in our known list of which sequencers require P5 reverse complementing or not.' % sequencer_type)
+#     else:
+#         raise ValueError('Invalid input, could not detect BCL or instrument ID.')
+# 
+#     return SEQUENCERS_P5_RC_MAP[sequencer_type]
 
