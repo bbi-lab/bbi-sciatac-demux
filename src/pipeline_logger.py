@@ -76,7 +76,7 @@ if __name__ == '__main__':
   if(args.file_name != None):
     log_text += 'Additional logged information:\n'
     ifp = open(args.file_name, 'r')
-    log_text += ifp.read()
+    log_text += '  %s\n' % (textwrap.indent(ifp.read().rstrip(), ' ' * 2).lstrip())
 
   log_text += '\n'
 

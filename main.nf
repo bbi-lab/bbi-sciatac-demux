@@ -307,7 +307,7 @@ process bcl2fastq {
 
     STOP_TIME=`date '+%Y%m%d:%H%M%S'`
     $script_dir/pipeline_logger.py \
-    -n NA \
+    -n all \
     -p \${PROCESS_BLOCK} \
     -v 'bcl2fastq --version' \
     -s \${START_TIME} \
@@ -383,7 +383,7 @@ process barcode_correct {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
-  -n NA \
+  -n all \
   -p \${PROCESS_BLOCK} \
   -v 'echo "not available"' \
   -s \${START_TIME} \
@@ -418,12 +418,14 @@ process adapter_trimming {
   cache 'lenient'
   errorStrategy onError
   publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
+  publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*-trimmomatic.stderr", mode: 'copy'
   
   input:
   set prefix, file(read_pair) from barcode_fastqs_paired
   
   output:
   set file("*_R1.trimmed.fastq.gz"), file("*_R2.trimmed.fastq.gz"), file("*_R1.trimmed_unpaired.fastq.gz"), file("*_R2.trimmed_unpaired.fastq.gz") into fastqs_trim
+  file("*-trimmomatic.stderr") into fastqs_trim_stderr
   
   script:
   """
@@ -442,15 +444,16 @@ process adapter_trimming {
        ILLUMINACLIP:${adapters_path} \
        TRAILING:3 \
        SLIDINGWINDOW:4:10 \
-       MINLEN:20
+       MINLEN:20 2> ${prefix}-trimmomatic.stderr
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
-  -n NA \
+  -n ${prefix} \
   -p \${PROCESS_BLOCK} \
   -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
   -s \${START_TIME} \
   -e \${STOP_TIME} \
+  -f ${prefix}-trimmomatic.stderr \
   -d ${log_dir}
   """
 }
@@ -484,8 +487,9 @@ process fastqc_lanes {
   fastqc *.fastq.gz -t $task.cpus -o fastqc_lanes
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+
   $script_dir/pipeline_logger.py \
-  -n NA \
+  -n all \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
   -s \${START_TIME} \
@@ -518,8 +522,9 @@ process fastqc_samples {
   fastqc *.fastq.gz -t $task.cpus -o fastqc_sample
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  sample_name=`echo "${fastq}" | awk 'BEGIN{FS="-"}{print\$1}'`
   $script_dir/pipeline_logger.py \
-  -n NA \
+  -n \${sample_name} \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
   -s \${START_TIME} \
@@ -600,7 +605,7 @@ process demux_dash {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
-  -n NA \
+  -n all \
   -p \${PROCESS_BLOCK} \
   -v 'echo "not available"' \
   -s \${START_TIME} \
