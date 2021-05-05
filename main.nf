@@ -81,7 +81,7 @@ def onError = { return( "retry" ) }
 params.help = false
 params.bcl2fastq_cpus = 6
 params.max_mem_bcl2fastq = 40
-params.demux_buffer_blocks = 16
+params.demux_buffer_blocks = 8192
 
 /*
 ** Initialize optional parameters to null.
