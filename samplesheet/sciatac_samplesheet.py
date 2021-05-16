@@ -235,7 +235,7 @@ import argparse
 #
 # Samplesheet JSON file version.
 #
-program_version = '3.0.1'
+program_version = '3.0.2'
 json_file_version = '3.0.0'
 
 #
@@ -795,8 +795,7 @@ def check_sample_names( column_name_list, samplesheet_row_list ):
   errorFlag = False
   for sample_name in sample_name_in_dict.keys():
     if( sample_name_in_dict[sample_name] > 1 ):
-      print( 'Error: sample name \'%s\' not unique. It is used %d times.' % ( sample_name, sample_name_in_dict[sample_name] ), file=sys.stderr )
-      errorFlag = True
+      print( 'Warning: sample name \'%s\' not unique. It is used %d times.' % ( sample_name, sample_name_in_dict[sample_name] ), file=sys.stderr )
   if( len( sample_name_out_dict ) != len( sample_name_in_dict ) ):
     print( 'Error: unacceptable names are not distinct after editing', file=sys.stderr )
     errorFlag = True
