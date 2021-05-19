@@ -307,6 +307,7 @@ process bcl2fastq {
 
     STOP_TIME=`date '+%Y%m%d:%H%M%S'`
     $script_dir/pipeline_logger.py \
+    -r ${workflow.runName} \
     -n all \
     -p \${PROCESS_BLOCK} \
     -v 'bcl2fastq --version' \
@@ -383,6 +384,7 @@ process barcode_correct {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
+  -r ${workflow.runName} \
   -n all \
   -p \${PROCESS_BLOCK} \
   -v 'echo "not available"' \
@@ -448,6 +450,7 @@ process adapter_trimming {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
+  -r ${workflow.runName} \
   -n ${prefix} \
   -p \${PROCESS_BLOCK} \
   -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
@@ -489,6 +492,7 @@ process fastqc_lanes {
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
 
   $script_dir/pipeline_logger.py \
+  -r ${workflow.runName} \
   -n all \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
@@ -524,6 +528,7 @@ process fastqc_samples {
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   sample_name=`echo "${fastq}" | awk 'BEGIN{FS="-"}{print\$1}'`
   $script_dir/pipeline_logger.py \
+  -r ${workflow.runName} \
   -n \${sample_name} \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
@@ -605,9 +610,10 @@ process demux_dash {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
+  -r ${workflow.runName} \
   -n all \
   -p \${PROCESS_BLOCK} \
-  -v 'echo "not available"' \
+  -v 'R --version | head -1' \
   -s \${START_TIME} \
   -e \${STOP_TIME} \
   -d ${log_dir}

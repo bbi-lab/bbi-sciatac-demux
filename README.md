@@ -105,6 +105,8 @@ The script *run.sciatac-demux.sh* creates a sub-directory called *demux_out* whe
 
 We advise users to run the pipelines in tmux sessions so that closing the terminal window does not terminate the pipeline.
 
+When run with the *-with-trace <trace_file_name>* command line parameter, Nextflow writes helpful information to a trace file. In the case that Nextflow is run on a Grid Engine, the trace file has a column labelled *native_id*, which is the Grid Engine job id. You can use this job id with the *qacct -j <job_id>* Grid Engine command to better understand why the Grid Engine may have killed a process. Additionally, the trace file has columns with the amount of memory used by each process and process hash strings, which you can use to tune the Grid Engine memory requests and find the corresponding process sub-directory in the Nextflow work directory, respectively.
+
 #### Questions and errors:
 If you run into problems, please leave a detailed description in the issue tab above.
 

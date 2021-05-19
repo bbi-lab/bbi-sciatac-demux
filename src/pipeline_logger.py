@@ -31,6 +31,7 @@ def split_path(path):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser('Script to log processing pipeline run information.')
+  parser.add_argument('-r', '--nextflow_run_name', required=True, help='Nextflow run name referenced by \'$workflow.runName\'.')
   parser.add_argument('-n', '--sample_name', required=True, help='Sample name.')
   parser.add_argument('-p', '--process_name', required=True, help='Nextflow process name (prefix the name with a block sequence number in order to sort files).')
   parser.add_argument('-c', '--process_command_list', nargs='+', required=False, help='List of process commands separated by whitespace.')
@@ -45,6 +46,7 @@ if __name__ == '__main__':
   # Directory in which this script runs.
   cwd = os.getcwd()
   cwd_parts = split_path(cwd)
+  cwd_parts[-1] = cwd_parts[-1][0:6]
   nparts = len( cwd_parts )
   work_id = '_'.join(cwd_parts[-2:])
 
@@ -57,6 +59,7 @@ if __name__ == '__main__':
   log_text = ''
   log_text += '========================================\n'
   log_text += '\n'
+  log_text += 'Run name: %s\n' % (args.nextflow_run_name)
   log_text += 'Sample: %s\n' % (args.sample_name)
   log_text += 'Process: %s\n' % (args.process_name)
   log_text += 'Work directory: %s\n' % (cwd)
@@ -82,7 +85,7 @@ if __name__ == '__main__':
 
   # Write to log file.
   if(args.output_file == None):
-    log_file_name = args.sample_name + '.' + args.start_time.replace(':', '') + '.' + args.process_name + '.' + work_id + '.log'
+    log_file_name = args.sample_name + '.' + args.start_time.replace(':', '') + '.' + args.process_name + '.' + args.nextflow_run_name + '.' + work_id + '.log'
   else:
     log_file_name = args.output_file
   if(args.output_directory != None):
