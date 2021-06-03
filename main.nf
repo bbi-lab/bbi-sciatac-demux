@@ -128,6 +128,7 @@ if( !params.sample_sheet ) {
 output_dir = params.output_dir.replaceAll("/\\z", "")
 demux_dir = output_dir + '/demux_out'
 log_dir = output_dir + '/demux_log_dir'
+tmp_dir = output_dir + '/tmp'
 
 /*
 ** Check sample sheet file.
@@ -137,7 +138,7 @@ checkSamplesheet( params )
 /*
 ** Check that required directories exist or can be made.
 */
-checkDirectories( params, log_dir )
+checkDirectories( params, log_dir, tmp_dir )
 
 /*
 ** Read sample sheet file.
@@ -161,6 +162,16 @@ reportRunParams( params, sampleSheetMap )
 ** Archive configuration and samplesheet files in demux_dir.
 */
 archiveRunFiles( params, timeNow )
+
+/*
+** Save workflow.runName to a file that can be
+** by logger in each process.
+** Note: using ${workflow.runName} in a process
+** causes the -resume to fail because the runName
+** changes from run-to-run.
+*/
+File tfile = new File("${tmp_dir}/nextflow_run_name.txt")
+tfile.write("${workflow.runName}")
 
 /*
 ** Read Illumina run information.
@@ -307,7 +318,7 @@ process bcl2fastq {
 
     STOP_TIME=`date '+%Y%m%d:%H%M%S'`
     $script_dir/pipeline_logger.py \
-    -r ${workflow.runName} \
+    -r `cat ${tmp_dir}/nextflow_run_name.txt` \
     -n all \
     -p \${PROCESS_BLOCK} \
     -v 'bcl2fastq --version' \
@@ -364,6 +375,7 @@ process barcode_correct {
   """
   PROCESS_BLOCK='barcode_correct'
   START_TIME=`date '+%Y%m%d:%H%M%S'`
+  LANE_ID=`echo \${R1} | awk 'BEGIN{FS="_"}{print\$3}'`
 
   source $pipeline_path/load_pypy_env_reqs.sh
   PS1=\${PS1:-}
@@ -384,12 +396,13 @@ process barcode_correct {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
-  -r ${workflow.runName} \
-  -n all \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+  -n \${LANE_ID} \
   -p \${PROCESS_BLOCK} \
   -v 'echo "not available"' \
   -s \${START_TIME} \
   -e \${STOP_TIME} \
+  -f *.stats.json \
   -d ${log_dir}
   """
 }
@@ -421,7 +434,8 @@ process adapter_trimming {
   errorStrategy onError
   publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
   publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*-trimmomatic.stderr", mode: 'copy'
-  
+ 
+ 
   input:
   set prefix, file(read_pair) from barcode_fastqs_paired
   
@@ -450,7 +464,7 @@ process adapter_trimming {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
-  -r ${workflow.runName} \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
   -n ${prefix} \
   -p \${PROCESS_BLOCK} \
   -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
@@ -492,7 +506,7 @@ process fastqc_lanes {
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
 
   $script_dir/pipeline_logger.py \
-  -r ${workflow.runName} \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
   -n all \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
@@ -528,7 +542,7 @@ process fastqc_samples {
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   sample_name=`echo "${fastq}" | awk 'BEGIN{FS="-"}{print\$1}'`
   $script_dir/pipeline_logger.py \
-  -r ${workflow.runName} \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
   -n \${sample_name} \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
@@ -610,7 +624,7 @@ process demux_dash {
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
-  -r ${workflow.runName} \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
   -n all \
   -p \${PROCESS_BLOCK} \
   -v 'R --version | head -1' \
@@ -680,11 +694,12 @@ def reportRunParams( params, sampleSheetMap ) {
     s += String.format( "Launch directory:              %s\n", workflow.launchDir )
     s += String.format( "Work directory:                %s\n", workflow.workDir )
     s += String.format( "Sample sheet file:             %s\n", params.sample_sheet )
+    s += String.format( "Genomes json file:             %s\n", params.genomes_json )
     s += String.format( "Level:                         %d\n", sampleSheetMap['level'] )
     s += String.format( "Number of wells:               %d\n", sampleSheetMap['number_wells'] )
     s += String.format( "TN5 barcodes:                  %b\n", sampleSheetMap['tn5_barcodes'] )
     s += String.format( "Use all barcodes               %b\n", sampleSheetMap['use_all_barcodes'] )
-    s += String.format( "Maximum cores:                 %d\n", params.bcl2fastq_cpus )
+    s += String.format( "Maximum bcl2fastq cpus:        %d\n", params.bcl2fastq_cpus )
     s += String.format( "Maximum memory for bcl2fastq:  %d\n", params.max_mem_bcl2fastq )
     s += String.format( "Demux buffer blocks:           %d\n", params.demux_buffer_blocks )
     s += String.format( "\n" )
@@ -750,29 +765,34 @@ def makeDirectory( directoryName ) {
 }
 
 
-def checkDirectories( params, log_dir ) {
+def checkDirectories( params, log_dir, tmp_dir ) {
     /*
     ** Check for existence of run_dir.
     */
     def dhRunDir = new File( params.run_dir )
     if( !dhRunDir.exists() ) {
-    	printErr( "Error: unable to find Illumina run directory $run_dir" )
+    	printErr( "Error: unable to find Illumina run directory $params.run_dir" )
     	System.exit( -1 )
     }
     if( !dhRunDir.canRead() ) {
-    	printErr( "Error: unable to read Illumina run directory $run_dir" )
+    	printErr( "Error: unable to read Illumina run directory $params.run_dir" )
     	System.exit( -1 )
     }
 
     /*
     ** Check that either the demux_dir exists or we can create it.
     */
-    makeDirectory( demux_dir )
+    makeDirectory( params.demux_dir )
 
     /*
     ** Check that either the log_dir exists or we can create it.
     */
     makeDirectory( log_dir )
+
+    /*
+    ** Check that either the tmp_dir exists or we can create it.
+    */
+    makeDirectory( tmp_dir )
 }
 
 

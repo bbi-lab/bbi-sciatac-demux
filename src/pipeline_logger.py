@@ -11,6 +11,7 @@ import os
 import subprocess
 import argparse
 import textwrap
+import json
 
 
 def split_path(path):
@@ -36,7 +37,7 @@ if __name__ == '__main__':
   parser.add_argument('-p', '--process_name', required=True, help='Nextflow process name (prefix the name with a block sequence number in order to sort files).')
   parser.add_argument('-c', '--process_command_list', nargs='+', required=False, help='List of process commands separated by whitespace.')
   parser.add_argument('-v', '--version_command_list', nargs='+', required=True, help='List of version information commands separated by whitespace.')
-  parser.add_argument('-f', '--file_name', required=False, help='Name of file with additional logging information.')
+  parser.add_argument('-f', '--file_name_list', nargs='+', required=False, help='Names of file with additional logging information.')
   parser.add_argument('-s', '--start_time', required=True, help='Process start time.')
   parser.add_argument('-e', '--end_time', required=True, help='Process end time.')
   parser.add_argument('-d', '--output_directory', required=False, help='Output directory.')
@@ -50,48 +51,45 @@ if __name__ == '__main__':
   nparts = len( cwd_parts )
   work_id = '_'.join(cwd_parts[-2:])
 
-  # Run commands and collect output.
-  out_text = []
+  # Save to dictionary in order to write to json file.
+  out_dict = {}
+
+  # Process run information.
+  out_dict['process'] = {}
+  out_dict['process']['run_name'] = args.nextflow_run_name
+  out_dict['process']['sample_name'] = args.sample_name
+  out_dict['process']['process_name'] = args.process_name
+  out_dict['process']['work_directory'] = cwd
+  out_dict['process']['start_time'] = args.start_time
+  out_dict['process']['end_time'] = args.end_time
+
+  # Run version commands and collect output.
+  out_dict['program_versions'] = []
   for command in args.version_command_list:
-#    out_text.append(os.popen(command).read().rstrip())
-    out_text.append(subprocess.run(command, shell=True, stderr=subprocess.STDOUT, stdout=subprocess.PIPE).stdout.decode('ascii'))
+    out_dict['program_versions'].append({'command': command.rstrip(),
+                                         'output': subprocess.run(command, shell=True, stderr=subprocess.STDOUT, stdout=subprocess.PIPE).stdout.decode('ascii')})
 
-  log_text = ''
-  log_text += '========================================\n'
-  log_text += '\n'
-  log_text += 'Run name: %s\n' % (args.nextflow_run_name)
-  log_text += 'Sample: %s\n' % (args.sample_name)
-  log_text += 'Process: %s\n' % (args.process_name)
-  log_text += 'Work directory: %s\n' % (cwd)
-  log_text += 'Start time: %s\n' % (args.start_time)
-  log_text += 'End time: %s\n' % (args.end_time)
-
+  # Process commands.
   if(args.process_command_list != None):
-    log_text += 'Process commands:\n'
+    out_dict['command_list'] = []
     for command in args.process_command_list:
-      log_text += '  %s\n' % ( command.rstrip())
+      out_dict['command_list'].append(command.rstrip())
 
-  log_text += 'Version commands:\n'
-  for (command, result) in zip(args.version_command_list, out_text):
-    log_text += '  Cmd: %s\n' % (textwrap.indent(command.rstrip(), ' ' * 7).lstrip())
-    log_text += '  Out: %s\n' % (textwrap.indent(result.rstrip(), ' ' * 7).lstrip())
+  # Additional logged text.
+  if(args.file_name_list != None):
+    out_dict['additional_information'] = []
+    for file_name in args.file_name_list:
+      ifp = open(file_name, 'r')
+      out_dict['additional_information'].append( {'file_name': file_name, 'file_content': ifp.read().rstrip()})
 
-  if(args.file_name != None):
-    log_text += 'Additional logged information:\n'
-    ifp = open(args.file_name, 'r')
-    log_text += '  %s\n' % (textwrap.indent(ifp.read().rstrip(), ' ' * 2).lstrip())
-
-  log_text += '\n'
-
-  # Write to log file.
+  # Write to JSON file.
   if(args.output_file == None):
-    log_file_name = args.sample_name + '.' + args.start_time.replace(':', '') + '.' + args.process_name + '.' + args.nextflow_run_name + '.' + work_id + '.log'
+    log_file_name = args.sample_name + '.' + args.start_time.replace(':', '') + '.' + args.process_name + '.' + args.nextflow_run_name + '.' + work_id + '.json'
   else:
     log_file_name = args.output_file
   if(args.output_directory != None):
     log_file_name = os.path.join(args.output_directory, log_file_name)
 
-  ofp = open(log_file_name, 'w')
-  ofp.write(log_text)
-  ofp.close()
+  with open(log_file_name, 'w') as json_file:
+    json.dump(out_dict, json_file)
 
