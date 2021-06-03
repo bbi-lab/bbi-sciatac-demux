@@ -596,6 +596,7 @@ def reportRunParams( params, sampleSheetMap ) {
     s += String.format( "Launch directory:              %s\n", workflow.launchDir )
     s += String.format( "Work directory:                %s\n", workflow.workDir )
     s += String.format( "Sample sheet file:             %s\n", params.sample_sheet )
+    s += String.format( "Genomes json file:             %s\n", params.genomes_json )
     s += String.format( "Level:                         %d\n", sampleSheetMap['level'] )
     s += String.format( "Number of wells:               %d\n", sampleSheetMap['number_wells'] )
     s += String.format( "TN5 barcodes:                  %b\n", sampleSheetMap['tn5_barcodes'] )
