@@ -375,7 +375,7 @@ process barcode_correct {
   """
   PROCESS_BLOCK='barcode_correct'
   START_TIME=`date '+%Y%m%d:%H%M%S'`
-  LANE_ID=`echo \${R1} | awk 'BEGIN{FS="_"}{print\$3}'`
+  LANE_ID=`echo ${R1} | awk 'BEGIN{FS="_"}{print\$3}'`
 
   source $pipeline_path/load_pypy_env_reqs.sh
   PS1=\${PS1:-}
@@ -782,7 +782,7 @@ def checkDirectories( params, log_dir, tmp_dir ) {
     /*
     ** Check that either the demux_dir exists or we can create it.
     */
-    makeDirectory( params.demux_dir )
+    makeDirectory( demux_dir )
 
     /*
     ** Check that either the log_dir exists or we can create it.
