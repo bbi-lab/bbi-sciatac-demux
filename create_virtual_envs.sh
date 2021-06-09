@@ -34,13 +34,8 @@ echo "one may be able to build the virtual environment on a node"
 echo "of the earliest generation."
 
 echo
-echo "Press any key to continue."
-echo -n "> "
-while read -r -n1 key
-do
-  echo "Create virtual environment..."
-done
-
+read -r -n1 -p "Press any key to continue: " key 
+echo
 
 #
 # Prepare pypy virtual environment.
