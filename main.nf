@@ -904,7 +904,7 @@ def writeArgsJson( params, timeNow ) {
 
     mapRunInfo['DEMUX'] = demuxDict
     mapRunInfo['sample_data'] = sampleData
-    mapRunInfo['samples'] = samples
+    mapRunInfo['samples'] = samples.unique(mutate=false)
     mapRunInfo['genomes'] = genomeInfo
     mapRunInfo['peak_groups'] = peakGroups
     mapRunInfo['peak_files'] = peakFiles
