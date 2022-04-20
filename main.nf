@@ -165,7 +165,7 @@ archiveRunFiles( params, timeNow )
 
 /*
 ** Save workflow.runName to a file that can be
-** by logger in each process.
+** read by the logger in each process.
 ** Note: using ${workflow.runName} in a process
 ** causes the -resume to fail because the runName
 ** changes from run-to-run.
