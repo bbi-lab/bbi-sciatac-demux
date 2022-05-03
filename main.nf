@@ -487,9 +487,11 @@ process adapter_trimming {
   script:
   """
   sample_name=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$1}'`
+  run_lane=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$2}'`
 
   PROCESS_BLOCK='adapter_trimming'
   SAMPLE_NAME="\${sample_name}"
+  RUN_LANE="\${run_lane}"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir -p fastqs_trim
@@ -510,6 +512,7 @@ process adapter_trimming {
   $script_dir/pipeline_logger.py \
   -r `cat ${tmp_dir}/nextflow_run_name.txt` \
   -n \${SAMPLE_NAME} \
+  -x \${RUN_LANE} \
   -p \${PROCESS_BLOCK} \
   -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
   -s \${START_TIME} \
@@ -692,7 +695,7 @@ process demux_dash {
 ** Run log distiller when the pipeline finishes.
 ** ================================================================================
 */
-addShutdownHook {
+addShutdownHook({
 
     /*
     ** Add sample sheet information.
@@ -705,42 +708,26 @@ addShutdownHook {
     samples.unique()
 
     def proc
-    def command = new StringBuffer()
-    def strOut = new StringBuffer()
-    def strErr = new StringBuffer()
+    def command = new StringBuilder()
 
     command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -o ${log_dir}/log.all_samples.txt")
     proc = command.toString().execute()
-    proc.consumeProcessOutput(strOut, strErr)
-    proc.waitForProcessOutput()
-    if( proc.exitValue() != 0 ) {
-        System.err << strErr.toString()
-        System.exit( -1 )
-    }
-
-   
     command.setLength(0) 
+    proc = null
+   
     command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s lane pipeline -o ${log_dir}/log.lane.txt")
     proc = command.toString().execute()
-    proc.consumeProcessOutput(strOut, strErr)
-    proc.waitForProcessOutput()
-    if( proc.exitValue() != 0 ) {
-        System.err << strErr.toString()
-        System.exit( -1 )
-    }
+    command.setLength(0) 
+    proc = null
 
     samples.each { aSample ->
-        command.setLength(0) 
         command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s ${aSample} pipeline -o ${log_dir}/log.${aSample}.txt")
         proc = command.toString().execute()
-        proc.consumeProcessOutput(strOut, strErr)
-        proc.waitForProcessOutput()
-        if( proc.exitValue() != 0 ) {
-            System.err << strErr.toString()
-            System.exit( -1 )
-        }
+        command.setLength(0) 
+        proc = null
     }
-}
+    samples = null
+})
 
 
 /*
