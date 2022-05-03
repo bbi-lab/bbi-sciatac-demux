@@ -34,6 +34,13 @@ import groovy.json.JsonSlurper
 
 
 /*
+** Nextflow and main.nf versions.
+*/
+nextflow_version = nextflow.version.toString()
+bbi_sciatac_demux_version = "1.0.0"
+
+
+/*
 ** Run date/time.
 */
 def timeNow = new Date()
@@ -239,6 +246,31 @@ if( num_threads_bcl2fasta_process / 2 < 4 ) {
 
 
 /*
+** Write nextflow and main.nf versions to a log file.
+*/
+process log_pipeline_versions {
+
+    script:
+    """
+    PROCESS_BLOCK='log_pipeline_versions'
+    SAMPLE_NAME="pipeline"
+    START_TIME=`date '+%Y%m%d:%H%M%S'`
+    STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+    PIPELINE_VERSIONS_JSON="{\\\"nextflow_version\\\": ${nextflow_version}, {\\\"bbi_sciatac_demux_version\\\": ${bbi_sciatac_demux_version}}"
+
+    $script_dir/pipeline_logger.py \
+    -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+    -n \${SAMPLE_NAME} \
+    -p \${PROCESS_BLOCK} \
+    -v "echo -n \\\"Nextflow version: ${nextflow_version}\\\"" "echo -n \\\"bbi_sciatac_demux_version: ${bbi_sciatac_demux_version}\\\"" \
+    -s \${START_TIME} \
+    -e \${STOP_TIME} \
+    -d ${log_dir}
+    """
+}
+
+
+/*
 ** Make a fake sample sheet required by bcl2fastq. The sample sheet has Ns for
 ** the sequence in order to force bcl2fastq to make undetermined fastqs.
 */
@@ -302,6 +334,7 @@ process bcl2fastq {
     script:
     """
     PROCESS_BLOCK='bcl2fastq'
+    SAMPLE_NAME="lane"
     START_TIME=`date '+%Y%m%d:%H%M%S'`
 
     bcl2fastq --runfolder-dir      ${params.run_dir} \
@@ -316,14 +349,20 @@ process bcl2fastq {
               --ignore-missing-filter \
               --ignore-missing-bcls
 
+    $script_dir/json_extractor.py \
+    -i Stats/Stats.json \
+    -k ReadInfosForLanes ConversionResults \
+    -o bcl2fastq_stats.json
+
     STOP_TIME=`date '+%Y%m%d:%H%M%S'`
     $script_dir/pipeline_logger.py \
     -r `cat ${tmp_dir}/nextflow_run_name.txt` \
-    -n all \
+    -n \${SAMPLE_NAME} \
     -p \${PROCESS_BLOCK} \
     -v 'bcl2fastq --version' \
     -s \${START_TIME} \
     -e \${STOP_TIME} \
+    -J bcl2fastq_stats.json \
     -d ${log_dir}
     """
     //               --tiles s_1 \
@@ -374,6 +413,7 @@ process barcode_correct {
   script:
   """
   PROCESS_BLOCK='barcode_correct'
+  SAMPLE_NAME="lane"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
   LANE_ID=`echo ${R1} | awk 'BEGIN{FS="_"}{print\$3}'`
 
@@ -397,7 +437,8 @@ process barcode_correct {
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
   -r `cat ${tmp_dir}/nextflow_run_name.txt` \
-  -n \${LANE_ID} \
+  -n  \${SAMPLE_NAME} \
+  -x \${LANE_ID} \
   -p \${PROCESS_BLOCK} \
   -v 'echo "not available"' \
   -s \${START_TIME} \
@@ -434,7 +475,7 @@ process adapter_trimming {
   errorStrategy onError
   publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
   publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*-trimmomatic.stderr", mode: 'copy'
- 
+
  
   input:
   set prefix, file(read_pair) from barcode_fastqs_paired
@@ -445,7 +486,10 @@ process adapter_trimming {
   
   script:
   """
+  sample_name=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$1}'`
+
   PROCESS_BLOCK='adapter_trimming'
+  SAMPLE_NAME="\${sample_name}"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir -p fastqs_trim
@@ -465,7 +509,7 @@ process adapter_trimming {
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
   -r `cat ${tmp_dir}/nextflow_run_name.txt` \
-  -n ${prefix} \
+  -n \${SAMPLE_NAME} \
   -p \${PROCESS_BLOCK} \
   -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
   -s \${START_TIME} \
@@ -498,7 +542,10 @@ process fastqc_lanes {
   script:
   """
   PROCESS_BLOCK='fastqc_lanes'
+  SAMPLE_NAME="lane"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
+
+  LANE_ID=`echo ${fastq} | awk 'BEGIN{FS="_"}{print\$3}'`
 
   mkdir fastqc_lanes
   fastqc *.fastq.gz -t $task.cpus -o fastqc_lanes
@@ -507,7 +554,8 @@ process fastqc_lanes {
 
   $script_dir/pipeline_logger.py \
   -r `cat ${tmp_dir}/nextflow_run_name.txt` \
-  -n all \
+  -n \${SAMPLE_NAME} \
+  -x \${LANE_ID} \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
   -s \${START_TIME} \
@@ -533,17 +581,20 @@ process fastqc_samples {
 
   script:
   """
+  sample_name=`echo "${fastq}" | awk 'BEGIN{FS="-"}{print\$1}'`
+
   PROCESS_BLOCK='fastqc_samples'
+  SAMPLE_NAME="all_samples"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
+
 
   mkdir fastqc_sample
   fastqc *.fastq.gz -t $task.cpus -o fastqc_sample
 
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
-  sample_name=`echo "${fastq}" | awk 'BEGIN{FS="-"}{print\$1}'`
   $script_dir/pipeline_logger.py \
   -r `cat ${tmp_dir}/nextflow_run_name.txt` \
-  -n \${sample_name} \
+  -n \${SAMPLE_NAME} \
   -p \${PROCESS_BLOCK} \
   -v 'fastqc -version' \
   -s \${START_TIME} \
@@ -608,6 +659,7 @@ process demux_dash {
   script:
   """
   PROCESS_BLOCK='demux_dash'
+  SAMPLE_NAME="dashboard"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir demux_dash
@@ -625,7 +677,7 @@ process demux_dash {
   STOP_TIME=`date '+%Y%m%d:%H%M%S'`
   $script_dir/pipeline_logger.py \
   -r `cat ${tmp_dir}/nextflow_run_name.txt` \
-  -n all \
+  -n \${SAMPLE_NAME} \
   -p \${PROCESS_BLOCK} \
   -v 'R --version | head -1' \
   -s \${START_TIME} \
@@ -633,6 +685,62 @@ process demux_dash {
   -d ${log_dir}
   """
 }
+
+
+/*
+** ================================================================================
+** Run log distiller when the pipeline finishes.
+** ================================================================================
+*/
+addShutdownHook {
+
+    /*
+    ** Add sample sheet information.
+    */ 
+    def samples = [] 
+    
+    sampleSheetMap['sample_index_list'].each { aSample ->
+        samples.add( aSample['sample_id'] )
+    }
+
+    def proc
+    def command = new StringBuffer()
+    def strOut = new StringBuffer()
+    def strErr = new StringBuffer()
+
+    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -o ${log_dir}/log.all_samples.txt")
+    proc = command.toString().execute()
+    proc.consumeProcessOutput(strOut, strErr)
+    proc.waitForProcessOutput()
+    if( proc.exitValue() != 0 ) {
+        System.err << strErr.toString()
+        System.exit( -1 )
+    }
+
+   
+    command.setLength(0) 
+    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s lane pipeline -o ${log_dir}/log.lane.txt")
+    proc = command.toString().execute()
+    proc.consumeProcessOutput(strOut, strErr)
+    proc.waitForProcessOutput()
+    if( proc.exitValue() != 0 ) {
+        System.err << strErr.toString()
+        System.exit( -1 )
+    }
+
+    samples.each { aSample ->
+        command.setLength(0) 
+        command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s ${aSample} pipeline -o ${log_dir}/log.${aSample}.txt")
+        proc = command.toString().execute()
+        proc.consumeProcessOutput(strOut, strErr)
+        proc.waitForProcessOutput()
+        if( proc.exitValue() != 0 ) {
+            System.err << strErr.toString()
+            System.exit( -1 )
+        }
+    }
+}
+
 
 /*
 ** ================================================================================
