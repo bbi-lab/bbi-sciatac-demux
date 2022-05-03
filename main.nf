@@ -702,6 +702,7 @@ addShutdownHook {
     sampleSheetMap['sample_index_list'].each { aSample ->
         samples.add( aSample['sample_id'] )
     }
+    samples.unique()
 
     def proc
     def command = new StringBuffer()
