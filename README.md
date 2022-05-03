@@ -32,6 +32,9 @@ cd ..
 
 The above is a one-time installation setup, or may be required if you need to update the environment.
 
+In addition, a python 3 interpreter is required.
+
+
 ## Overview
 
 #### Nextflow
