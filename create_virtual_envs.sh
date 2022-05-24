@@ -22,6 +22,21 @@
 #   o  the pypy virtual environment is used only to run 'barcode_correct_sciatac.py'
 #
 
+
+echo "The virtual environment may depend on the CPU architecture."
+echo "Clusters with mixed node architectures may fail, possibly"
+echo "with Illegal Instruction core dumps when a python script"
+echo "runs in a virtual environment. In this case, you may need" 
+echo "to restrict the hardware resource to the architecture in"
+echo "which the virtual environment was built. If the cluster has" 
+echo "nodes of similar architecture but different generations," 
+echo "one may be able to build the virtual environment on a node" 
+echo "of the earliest generation."
+
+echo
+read -r -n1 -p "Press any key to continue: " key 
+echo
+
 #
 # Prepare pypy virtual environment.
 #

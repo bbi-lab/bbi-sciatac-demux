@@ -34,6 +34,13 @@ import groovy.json.JsonSlurper
 
 
 /*
+** Nextflow and main.nf versions.
+*/
+nextflow_version = nextflow.version.toString()
+bbi_sciatac_demux_version = "1.0.0"
+
+
+/*
 ** Run date/time.
 */
 def timeNow = new Date()
@@ -127,6 +134,8 @@ if( !params.sample_sheet ) {
 */
 output_dir = params.output_dir.replaceAll("/\\z", "")
 demux_dir = output_dir + '/demux_out'
+log_dir = output_dir + '/demux_log_dir'
+tmp_dir = output_dir + '/tmp'
 
 /*
 ** Check sample sheet file.
@@ -136,7 +145,7 @@ checkSamplesheet( params )
 /*
 ** Check that required directories exist or can be made.
 */
-checkDirectories( params )
+checkDirectories( params, log_dir, tmp_dir )
 
 /*
 ** Read sample sheet file.
@@ -160,6 +169,16 @@ reportRunParams( params, sampleSheetMap )
 ** Archive configuration and samplesheet files in demux_dir.
 */
 archiveRunFiles( params, timeNow )
+
+/*
+** Save workflow.runName to a file that can be
+** read by the logger in each process.
+** Note: using ${workflow.runName} in a process
+** causes the -resume to fail because the runName
+** changes from run-to-run.
+*/
+File tfile = new File("${tmp_dir}/nextflow_run_name.txt")
+tfile.write("${workflow.runName}")
 
 /*
 ** Read Illumina run information.
@@ -227,6 +246,31 @@ if( num_threads_bcl2fasta_process / 2 < 4 ) {
 
 
 /*
+** Write nextflow and main.nf versions to a log file.
+*/
+process log_pipeline_versions {
+
+    script:
+    """
+    PROCESS_BLOCK='log_pipeline_versions'
+    SAMPLE_NAME="pipeline"
+    START_TIME=`date '+%Y%m%d:%H%M%S'`
+    STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+    PIPELINE_VERSIONS_JSON="{\\\"nextflow_version\\\": ${nextflow_version}, {\\\"bbi_sciatac_demux_version\\\": ${bbi_sciatac_demux_version}}"
+
+    $script_dir/pipeline_logger.py \
+    -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+    -n \${SAMPLE_NAME} \
+    -p \${PROCESS_BLOCK} \
+    -v "echo -n \\\"Nextflow version: ${nextflow_version}\\\"" "echo -n \\\"bbi_sciatac_demux_version: ${bbi_sciatac_demux_version}\\\"" \
+    -s \${START_TIME} \
+    -e \${STOP_TIME} \
+    -d ${log_dir}
+    """
+}
+
+
+/*
 ** Make a fake sample sheet required by bcl2fastq. The sample sheet has Ns for
 ** the sequence in order to force bcl2fastq to make undetermined fastqs.
 */
@@ -289,6 +333,10 @@ process bcl2fastq {
     */
     script:
     """
+    PROCESS_BLOCK='bcl2fastq'
+    SAMPLE_NAME="lane"
+    START_TIME=`date '+%Y%m%d:%H%M%S'`
+
     bcl2fastq --runfolder-dir      ${params.run_dir} \
               --output-dir         . \
               --interop-dir        . \
@@ -300,6 +348,22 @@ process bcl2fastq {
               --ignore-missing-controls \
               --ignore-missing-filter \
               --ignore-missing-bcls
+
+    $script_dir/json_extractor.py \
+    -i Stats/Stats.json \
+    -k ReadInfosForLanes ConversionResults \
+    -o bcl2fastq_stats.json
+
+    STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+    $script_dir/pipeline_logger.py \
+    -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+    -n \${SAMPLE_NAME} \
+    -p \${PROCESS_BLOCK} \
+    -v 'bcl2fastq --version' \
+    -s \${START_TIME} \
+    -e \${STOP_TIME} \
+    -J bcl2fastq_stats.json \
+    -d ${log_dir}
     """
     //               --tiles s_1 \
 }
@@ -348,6 +412,11 @@ process barcode_correct {
 
   script:
   """
+  PROCESS_BLOCK='barcode_correct'
+  SAMPLE_NAME="lane"
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+  LANE_ID=`echo ${R1} | awk 'BEGIN{FS="_"}{print\$3}'`
+
   source $pipeline_path/load_pypy_env_reqs.sh
   PS1=\${PS1:-}
   source $script_dir/pypy_env/bin/activate
@@ -364,6 +433,18 @@ process barcode_correct {
                        $options_barcode_correct \
                        $sequencer_flag
   deactivate
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+  -n  \${SAMPLE_NAME} \
+  -x \${LANE_ID} \
+  -p \${PROCESS_BLOCK} \
+  -v 'echo "not available"' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -f *.stats.json \
+  -d ${log_dir}
   """
 }
 
@@ -393,15 +474,26 @@ process adapter_trimming {
   cache 'lenient'
   errorStrategy onError
   publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
-  
+  publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*-trimmomatic.stderr", mode: 'copy'
+
+ 
   input:
   set prefix, file(read_pair) from barcode_fastqs_paired
   
   output:
   set file("*_R1.trimmed.fastq.gz"), file("*_R2.trimmed.fastq.gz"), file("*_R1.trimmed_unpaired.fastq.gz"), file("*_R2.trimmed_unpaired.fastq.gz") into fastqs_trim
+  file("*-trimmomatic.stderr") into fastqs_trim_stderr
   
   script:
   """
+  sample_name=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$1}'`
+  run_lane=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$2}'`
+
+  PROCESS_BLOCK='adapter_trimming'
+  SAMPLE_NAME="\${sample_name}"
+  RUN_LANE="\${run_lane}"
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
   mkdir -p fastqs_trim
   java -Xmx1G -jar $trimmomatic_exe \
        PE \
@@ -414,7 +506,19 @@ process adapter_trimming {
        ILLUMINACLIP:${adapters_path} \
        TRAILING:3 \
        SLIDINGWINDOW:4:10 \
-       MINLEN:20
+       MINLEN:20 2> ${prefix}-trimmomatic.stderr
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+  -n \${SAMPLE_NAME} \
+  -x \${RUN_LANE} \
+  -p \${PROCESS_BLOCK} \
+  -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -f ${prefix}-trimmomatic.stderr \
+  -d ${log_dir}
   """
 }
 
@@ -440,8 +544,26 @@ process fastqc_lanes {
 
   script:
   """
+  PROCESS_BLOCK='fastqc_lanes'
+  SAMPLE_NAME="lane"
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
+  LANE_ID=`echo ${fastq} | awk 'BEGIN{FS="_"}{print\$3}'`
+
   mkdir fastqc_lanes
   fastqc *.fastq.gz -t $task.cpus -o fastqc_lanes
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+
+  $script_dir/pipeline_logger.py \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+  -n \${SAMPLE_NAME} \
+  -x \${LANE_ID} \
+  -p \${PROCESS_BLOCK} \
+  -v 'fastqc -version' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
 
@@ -462,8 +584,25 @@ process fastqc_samples {
 
   script:
   """
+  sample_name=`echo "${fastq}" | awk 'BEGIN{FS="-"}{print\$1}'`
+
+  PROCESS_BLOCK='fastqc_samples'
+  SAMPLE_NAME="all_samples"
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
+
   mkdir fastqc_sample
   fastqc *.fastq.gz -t $task.cpus -o fastqc_sample
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+  -n \${SAMPLE_NAME} \
+  -p \${PROCESS_BLOCK} \
+  -v 'fastqc -version' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
 
@@ -522,6 +661,10 @@ process demux_dash {
 
   script:
   """
+  PROCESS_BLOCK='demux_dash'
+  SAMPLE_NAME="dashboard"
+  START_TIME=`date '+%Y%m%d:%H%M%S'`
+
   mkdir demux_dash
   cp -R $script_dir/skeleton_dash/* demux_dash
 
@@ -533,8 +676,59 @@ process demux_dash {
   $script_dir/make_run_data.py --input_folder="." \
                                --input_file="$demux_dir/args.json" \
                                --output_file="demux_dash/js/run_data.js"
+
+  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
+  $script_dir/pipeline_logger.py \
+  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
+  -n \${SAMPLE_NAME} \
+  -p \${PROCESS_BLOCK} \
+  -v 'R --version | head -1' \
+  -s \${START_TIME} \
+  -e \${STOP_TIME} \
+  -d ${log_dir}
   """
 }
+
+
+/*
+** ================================================================================
+** Run log distiller when the pipeline finishes.
+** ================================================================================
+*/
+addShutdownHook({
+
+    /*
+    ** Add sample sheet information.
+    */ 
+    def samples = [] 
+    
+    sampleSheetMap['sample_index_list'].each { aSample ->
+        samples.add( aSample['sample_id'] )
+    }
+    samples.unique()
+
+    def proc
+    def command = new StringBuilder()
+
+    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -o ${log_dir}/log.all_samples.txt")
+    proc = command.toString().execute()
+    command.setLength(0) 
+    proc = null
+   
+    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s lane pipeline -o ${log_dir}/log.lane.txt")
+    proc = command.toString().execute()
+    command.setLength(0) 
+    proc = null
+
+    samples.each { aSample ->
+        command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s ${aSample} pipeline -o ${log_dir}/log.${aSample}.txt")
+        proc = command.toString().execute()
+        command.setLength(0) 
+        proc = null
+    }
+    samples = null
+})
+
 
 /*
 ** ================================================================================
@@ -601,7 +795,7 @@ def reportRunParams( params, sampleSheetMap ) {
     s += String.format( "Number of wells:               %d\n", sampleSheetMap['number_wells'] )
     s += String.format( "TN5 barcodes:                  %b\n", sampleSheetMap['tn5_barcodes'] )
     s += String.format( "Use all barcodes               %b\n", sampleSheetMap['use_all_barcodes'] )
-    s += String.format( "Maximum cores:                 %d\n", params.bcl2fastq_cpus )
+    s += String.format( "Maximum bcl2fastq cpus:        %d\n", params.bcl2fastq_cpus )
     s += String.format( "Maximum memory for bcl2fastq:  %d\n", params.max_mem_bcl2fastq )
     s += String.format( "Demux buffer blocks:           %d\n", params.demux_buffer_blocks )
     s += String.format( "\n" )
@@ -667,17 +861,17 @@ def makeDirectory( directoryName ) {
 }
 
 
-def checkDirectories( params ) {
+def checkDirectories( params, log_dir, tmp_dir ) {
     /*
     ** Check for existence of run_dir.
     */
     def dhRunDir = new File( params.run_dir )
     if( !dhRunDir.exists() ) {
-    	printErr( "Error: unable to find Illumina run directory $run_dir" )
+    	printErr( "Error: unable to find Illumina run directory $params.run_dir" )
     	System.exit( -1 )
     }
     if( !dhRunDir.canRead() ) {
-    	printErr( "Error: unable to read Illumina run directory $run_dir" )
+    	printErr( "Error: unable to read Illumina run directory $params.run_dir" )
     	System.exit( -1 )
     }
 
@@ -685,6 +879,16 @@ def checkDirectories( params ) {
     ** Check that either the demux_dir exists or we can create it.
     */
     makeDirectory( demux_dir )
+
+    /*
+    ** Check that either the log_dir exists or we can create it.
+    */
+    makeDirectory( log_dir )
+
+    /*
+    ** Check that either the tmp_dir exists or we can create it.
+    */
+    makeDirectory( tmp_dir )
 }
 
 
@@ -796,7 +1000,7 @@ def writeArgsJson( params, timeNow ) {
 
     mapRunInfo['DEMUX'] = demuxDict
     mapRunInfo['sample_data'] = sampleData
-    mapRunInfo['samples'] = samples
+    mapRunInfo['samples'] = samples.unique(mutate=false)
     mapRunInfo['genomes'] = genomeInfo
     mapRunInfo['peak_groups'] = peakGroups
     mapRunInfo['peak_files'] = peakFiles
