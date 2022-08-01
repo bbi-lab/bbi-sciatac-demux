@@ -252,6 +252,9 @@ process log_pipeline_versions {
 
     script:
     """
+    # bash watch for errors
+    set -ueo pipefail
+
     PROCESS_BLOCK='log_pipeline_versions'
     SAMPLE_NAME="pipeline"
     START_TIME=`date '+%Y%m%d:%H%M%S'`
@@ -283,6 +286,9 @@ process make_fake_sample_sheet {
 
   script:
   """
+  # bash watch for errors
+  set -ueo pipefail
+
   $script_dir/make_fake_sample_sheet.py --p7_index_length=${illuminaRunInfoMap['p7_index_length']} --p5_index_length=${illuminaRunInfoMap['p5_index_length']}
   """
 }
@@ -333,10 +339,25 @@ process bcl2fastq {
     */
     script:
     """
+    # bash watch for errors
+    set -ueo pipefail
+
     PROCESS_BLOCK='bcl2fastq'
     SAMPLE_NAME="lane"
     START_TIME=`date '+%Y%m%d:%H%M%S'`
 
+    # bcl2fastq command line parameters
+    #   ignore-missing-positions: The software ignores missing or corrupt cluster location
+    #                             files. When cluster location files are missing, the
+    #                             software writes unique coordinate positions into the FASTQ
+    #                             header.
+    #   ignore-missing-filter: The software ignores missing or corrupt filter files and assumes
+    #                          that all clusters in tiles with missing filter files passed filter.
+    #   ignore-missing-bcls: The software ignores missing or corrupt BCL files and assumes 'N'/'#'
+    #                        for missing calls.
+    #   ignore-missing-controls: Missing or corrupt control files are ignored. Missing
+    #                            controls: 0
+    #
     bcl2fastq --runfolder-dir      ${params.run_dir} \
               --output-dir         . \
               --interop-dir        . \
@@ -412,6 +433,9 @@ process barcode_correct {
 
   script:
   """
+  # bash watch for errors
+  set -ueo pipefail
+
   PROCESS_BLOCK='barcode_correct'
   SAMPLE_NAME="lane"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
@@ -421,6 +445,9 @@ process barcode_correct {
   PS1=\${PS1:-}
   source $script_dir/pypy_env/bin/activate
 
+  #
+  # Partition reads into sample subsets.
+  #
   pypy $script_dir/barcode_correct_sciatac.py \
                        --samplesheet $sample_sheet \
                        -1 <(zcat $R1) \
@@ -486,6 +513,9 @@ process adapter_trimming {
   
   script:
   """
+  # bash watch for errors
+  set -ueo pipefail
+
   sample_name=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$1}'`
   run_lane=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$2}'`
 
@@ -495,6 +525,15 @@ process adapter_trimming {
   START_TIME=`date '+%Y%m%d:%H%M%S'`
 
   mkdir -p fastqs_trim
+  #
+  # Trimmomatic command line parameters
+  #   ILLUMINACLIP: Cut adapter and other illumina-specific sequences from the read
+  #   SLIDINGWINDOW: Performs a sliding window trimming approach. It starts scanning
+  #                  at the 5' end and clips the read once the average quality
+  #                  within the window falls below a threshold.
+  #   TRAILING: Cut bases off the end of a read, if below a threshold quality.
+  #   MINLEN: Drop the read if it is below a specified length.
+  #
   java -Xmx1G -jar $trimmomatic_exe \
        PE \
        -threads $task.cpus \
@@ -544,6 +583,9 @@ process fastqc_lanes {
 
   script:
   """
+  # bash watch for errors
+  set -ueo pipefail
+
   PROCESS_BLOCK='fastqc_lanes'
   SAMPLE_NAME="lane"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
@@ -584,6 +626,9 @@ process fastqc_samples {
 
   script:
   """
+  # bash watch for errors
+  set -ueo pipefail
+
   sample_name=`echo "${fastq}" | awk 'BEGIN{FS="-"}{print\$1}'`
 
   PROCESS_BLOCK='fastqc_samples'
@@ -661,6 +706,9 @@ process demux_dash {
 
   script:
   """
+  # bash watch for errors
+  set -ueo pipefail
+
   PROCESS_BLOCK='demux_dash'
   SAMPLE_NAME="dashboard"
   START_TIME=`date '+%Y%m%d:%H%M%S'`
