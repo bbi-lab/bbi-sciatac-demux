@@ -37,7 +37,7 @@ import groovy.json.JsonSlurper
 ** Nextflow and main.nf versions.
 */
 nextflow_version = nextflow.version.toString()
-bbi_sciatac_demux_version = "1.0.0"
+bbi_sciatac_demux_version = "1.0.2"
 
 
 /*
