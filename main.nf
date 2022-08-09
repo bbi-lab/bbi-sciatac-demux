@@ -35,9 +35,10 @@ import groovy.json.JsonSlurper
 
 /*
 ** Nextflow and main.nf versions.
+** manifest.version in set in the nextflow.config file.
 */
 nextflow_version = nextflow.version.toString()
-bbi_sciatac_demux_version = "1.0.2"
+bbi_sciatac_demux_version = "$params.version"
 
 
 /*
@@ -384,7 +385,18 @@ process bcl2fastq {
     -s \${START_TIME} \
     -e \${STOP_TIME} \
     -J bcl2fastq_stats.json \
-    -d ${log_dir}
+    -d ${log_dir} \
+    -c "bcl2fastq --runfolder-dir      ${params.run_dir} \
+--output-dir         . \
+--interop-dir        . \
+--sample-sheet       $inFile \
+--loading-threads    ${num_threads_bcl2fastq_io} \
+--processing-threads ${num_threads_bcl2fasta_process}  \
+--writing-threads    ${num_threads_bcl2fastq_io} \
+--ignore-missing-positions \
+--ignore-missing-controls \
+--ignore-missing-filter \
+--ignore-missing-bcls"
     """
     //               --tiles s_1 \
 }
@@ -471,7 +483,18 @@ process barcode_correct {
   -s \${START_TIME} \
   -e \${STOP_TIME} \
   -f *.stats.json \
-  -d ${log_dir}
+  -d ${log_dir} \
+  -c "pypy $script_dir/barcode_correct_sciatac.py \
+--samplesheet $sample_sheet \
+-1 <(zcat $R1) \
+-2 <(zcat $R2) \
+--filename $R1 \
+--out_dir . \
+--stats_out 1 \
+--num_pigz_threads ${task.ext.num_pigz_threads} \
+--write_buffer_blocks ${demux_buffer_blocks} \
+$options_barcode_correct \
+$sequencer_flag"
   """
 }
 
@@ -557,7 +580,19 @@ process adapter_trimming {
   -s \${START_TIME} \
   -e \${STOP_TIME} \
   -f ${prefix}-trimmomatic.stderr \
-  -d ${log_dir}
+  -d ${log_dir} \
+  -c "java -Xmx1G -jar $trimmomatic_exe \
+PE \
+-threads $task.cpus \
+$read_pair \
+${prefix}_R1.trimmed.fastq.gz \
+${prefix}_R1.trimmed_unpaired.fastq.gz \
+${prefix}_R2.trimmed.fastq.gz \
+${prefix}_R2.trimmed_unpaired.fastq.gz \
+ILLUMINACLIP:${adapters_path} \
+TRAILING:3 \
+SLIDINGWINDOW:4:10 \
+MINLEN:20 2> ${prefix}-trimmomatic.stderr"
   """
 }
 
@@ -605,7 +640,8 @@ process fastqc_lanes {
   -v 'fastqc -version' \
   -s \${START_TIME} \
   -e \${STOP_TIME} \
-  -d ${log_dir}
+  -d ${log_dir} \
+  -c "fastqc *.fastq.gz -t $task.cpus -o fastqc_lanes"
   """
 }
 
@@ -647,7 +683,8 @@ process fastqc_samples {
   -v 'fastqc -version' \
   -s \${START_TIME} \
   -e \${STOP_TIME} \
-  -d ${log_dir}
+  -d ${log_dir} \
+  -c "fastqc *.fastq.gz -t $task.cpus -o fastqc_sample"
   """
 }
 
