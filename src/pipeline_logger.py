@@ -33,6 +33,12 @@
 #
 #   https://github.com/bbi-lab/bbi-sciatac-analyze/src/pipeline_logger.py
 #
+# Note:
+#   escape string for json:
+#     URL: https://stackoverflow.com/questions/5997029/escape-double-quotes-for-json-in-python
+#     How can I replace double quotes with a backslash and double quotes in Python?
+#     You should be using the json module. json.dumps(string). It can also serialize other python data types.
+#
 
 import os
 import subprocess
@@ -40,7 +46,7 @@ import argparse
 import textwrap
 import json
 
-pipeline_logger_version = '20220429c'
+pipeline_logger_version = '20220808a'
 
 def split_path(path):
   split_parts = []
@@ -108,7 +114,7 @@ if __name__ == '__main__':
   if(args.process_command_list != None):
     out_dict['command_list'] = []
     for command in args.process_command_list:
-      out_dict['command_list'].append(command.rstrip())
+      out_dict['command_list'].append(json.dumps(command.rstrip()))
 
   # Additional logged text.
   if(args.file_name_list != None):
