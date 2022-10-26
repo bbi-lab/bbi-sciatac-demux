@@ -1,3 +1,8 @@
+/*
+** This pipeline is written for Nextflow DSL 1.
+*/
+nextflow.enable.dsl = 1
+
 /* Default configuration parameters.
 ** Typically, many of these are given in a configuration file.
 ** The configuration file is specified as a parameter on the
