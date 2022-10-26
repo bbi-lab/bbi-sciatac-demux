@@ -14,14 +14,15 @@
 
 #
 # Nextflow executable and pipeline script locations.
+# Note: set the paths in the two variables below.
 #
-NEXTFLOW="/net/gs/vol1/home/bge/bin/nextflow"
-NF_MAIN="/net/gs/vol1/home/bge/git/bbi-sciatac-demux/main.nf"
+NEXTFLOW="<path_to_nextflow_program>"
+NF_MAIN="<path_to_bbi-sciatac-demux_repository>/main.nf"
 
 #
 # Current date and time.
 #
-NOW=`date '+%Y%m%d.%H%M%S'`
+NOW=`date '+%Y%m%d_%H%M%S'`
 
 #
 # Path to the Nextflow processing run configuration file.
@@ -47,14 +48,15 @@ WORK_DIR="$DEMUX_DIR/work"
 # Nextflow writes some informative processing information
 # in the analyze output directory.
 #
-REPORT_FIL=$DEMUX_DIR/run_reports/demux.report.html
-TRACE_FIL=$DEMUX_DIR/run_reports/demux.trace.tsv
-TIMELINE_FIL=$DEMUX_DIR/run_reports/demux.timeline.html
+# REPORT_FIL=$DEMUX_DIR/run_reports/demux.report.${NOW}.html
+TRACE_FIL=$DEMUX_DIR/run_reports/demux.trace.${NOW}.tsv
+# TIMELINE_FIL=$DEMUX_DIR/run_reports/demux.timeline.${NOW}.html
 
 #
 # Nextflow run parameters.
 #
-PARS="-c $CONFIG_FILE -w $WORK_DIR -with-report $REPORT_FIL -with-trace $TRACE_FIL -with-timeline $TIMELINE_FIL -resume"
+# PARS="-c $CONFIG_FILE -w $WORK_DIR -with-report $REPORT_FIL -with-trace $TRACE_FIL -with-timeline $TIMELINE_FIL -resume"
+PARS="-c $CONFIG_FILE -w $WORK_DIR -with-trace $TRACE_FIL -resume"
 
 mkdir -p $DEMUX_DIR/run_reports
 pushd $DEMUX_DIR
