@@ -10,4 +10,4 @@ N7_indexes,N5_wells,P7_wells,P5_wells,sample_name,genome,peak_group,peak_file
 1:96,P1-A09:P1-H09,E01-G12,A01-H03,sample.9,human,group_2,
 1:96,P1-A10:P1-A10,E01-G12,A01-H03,sample.10,macaque,group_3,
 1:96,P1-A11:P1-H11,E01-G12,A01-H03,sample.11,macaque,group_3,
-1:96,P1-A12:P1-H12,E01-G12,A01-H03,sample.12,barnyard,group_4
+1:96,P1-A12:P1-H12,E01-G12,A01-H03,sample.12,barnyard,group_4,
