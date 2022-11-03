@@ -3,7 +3,6 @@
 #
 # Notes:
 #   o  the master file is bbi-sciatac-demux/samplesheet/sciatac_samplesheet.py
-#   o  if adding columns, increment g_num_col!
 
 """
 Program: sciatac_samplesheet.py
@@ -36,6 +35,12 @@ Input (front-end) samplesheet format:
        o  peak_group (called peaks are merged by peak group)
        o  peak_file (a bed file of peaks; will be merged with called peaks if the
           peak_group value has non-zero length)
+     and the following optional column
+       o  distribute_group the name of the group to which the results will
+          be distributed. This information is used by the bbi-sciatac-wrap
+          script. Valid names consist of lower and upper case alphabetic
+          characters, numerals, and the symbols '.', '_', and '-'. Cells may
+          be empty in which case those samples are excluded from the wrap.
   o  the column order is arbitrary (but must be consistent within the file)
   o  the header values do not depend on case
   o  ranges: index, well, column, and row range values are separated by either
@@ -160,19 +165,19 @@ Input (front-end) samplesheet format:
 
   Example samplesheet file:
 
-  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group,peak_file
-  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse,group_1,
-  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human,group_2,
-  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse,group_1,
-  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human,group_2,/home/me/my_peaks.bed
-  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human,group_2,
-  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse,group_1,
-  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse,group_1,
-  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse,group_1,
-  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse,group_1,
-  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human,group_2,
-  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human,group_2,
-  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard,group_3,
+  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group,peak_file,distribute_group
+  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse,group_1,,Smith
+  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human,group_2,,Jones
+  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse,group_1,,Smith
+  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human,group_2,,/home/me/my_peaks.bed,Jones
+  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human,group_2,,Jones
+  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse,group_1,,Smith
+  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse,group_1,,Smith
+  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse,group_1,,Smith
+  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse,group_1,,Smith
+  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human,group_2,,Jones
+  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human,group_2,,Jones
+  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard,group_3,,
   
   Notes:
     o  the p7_row and p5_column value sets are enclosed in quotes
@@ -261,8 +266,8 @@ import argparse
 #
 # Samplesheet JSON file version.
 #
-program_version = '4.0.0'
-json_file_version = '3.0.0'
+program_version = '4.1.0'
+json_file_version = '3.1.0'
 
 #
 # List of recognizable genome names.
@@ -310,24 +315,20 @@ n7_column_names = 'n7_wells n7_indexes'
 p5_column_names = 'p5_wells p5_indexes p5_columns'
 p7_column_names = 'p7_wells p7_indexes p7_rows'
 
-column_header_name_list = [ 'sample_name', 'genome', 'peak_group', 'peak_file' ]
+column_header_name_list = [ 'sample_name', 'genome', 'peak_group', 'peak_file', 'distribute_group' ]
 column_header_name_list.extend( n5_column_names.split() )
 column_header_name_list.extend( n7_column_names.split() )
 column_header_name_list.extend( p5_column_names.split() )
 column_header_name_list.extend( p7_column_names.split() )
 
+columns_required_list = [ 'n5', 'n7', 'p5', 'p7', 'sample_name', 'genome', 'peak_group', 'peak_file' ]
+columns_optional_list = [ 'distribute_group' ]
 
 #
 # Columns that may have empty cells. This is used to prevent
 # errors when testing for empty cells in check_rows().
 #
-column_allow_empty_cell = [ 'peak_group', 'peak_file' ]
-
-
-#
-# Number of columns in input spreadsheet.
-#
-g_num_col = 8
+column_allow_empty_cell = [ 'peak_group', 'peak_file', 'distribute_group' ]
 
 
 def display_documentation():
@@ -362,6 +363,8 @@ def parse_header_column_name( string_in, column_name_list, error_string ):
     column_name_dict = { 'type': 'peak_group', 'format': None }
   elif( string_in == 'peak_file' ):
     column_name_dict = { 'type': 'peak_file', 'format': None }
+  elif( string_in == 'distribute_group' ):
+    column_name_dict = { 'type': 'distribute_group', 'format': None }
   else:
     mobj = re.match( r'([np][57])_(wells|indexes|rows|columns)', string_in )
     column_name_dict = { 'type': mobj.group( 1 ), 'format': mobj.group( 2 ) }
@@ -373,15 +376,21 @@ def check_header_column_names( column_name_list ):
   """
   Check column header names.
   Notes:
-    o  check that each required column type occurs once
+    o  check that required columns occur
+    o  check that each allowed column type occurs once
     o  check that if either p5 or p7 are specified by columns and rows, then both are.
   """
-  columns_required = { 'n5': 0, 'n7': 0, 'p5': 0, 'p7': 0, 'sample_name': 0, 'genome': 0, 'peak_group': 0, 'peak_file': 0 }
+  columns_allowed = {}
+  for column_name in columns_required_list:
+    columns_allowed[column_name] = 0
+  for column_name in columns_optional_list:
+    columns_allowed[column_name] = 0
   for column_name_dict in column_name_list:
-    columns_required[column_name_dict['type']] += 1
+    columns_allowed[column_name_dict['type']] += 1
   error_flag = 0
-  for column_name in columns_required:
-    if( columns_required[column_name] == 0 ):
+  # Check for n5, n7, p5, and p7 specification columns.
+  for column_name in columns_allowed:
+    if( columns_allowed[column_name] == 0 and column_name not in columns_optional_list ):
       print( 'Error: column for \'%s\' missing.' % ( column_name ), file=sys.stderr )
       if( column_name == 'n5' ):
         print( '  acceptable n5 header values: %s' % ( n5_column_names ), file=sys.stderr )
@@ -392,8 +401,8 @@ def check_header_column_names( column_name_list ):
       elif( column_name == 'p7' ):
         print( '  acceptable p7 header values: %s' % ( p7_column_names ), file=sys.stderr )
       error_flag = 1
-    elif( columns_required[column_name] > 1 ):
-      print( 'Error: column for \'%s\' occurs %d times.' % ( column_name, columns_required[column_name] ), file=sys.stderr )
+    elif( columns_allowed[column_name] > 1 ):
+      print( 'Error: column for \'%s\' occurs %d times.' % ( column_name, columns_allowed[column_name] ), file=sys.stderr )
       error_flag = 1
   if( error_flag ):
     sys.exit( -1 )
@@ -751,16 +760,16 @@ def check_rows( column_name_list, csv_rows ):
   internal row.
   Notes:
     o  we expect
-         o  g_num_col columns
          o  nrows 
   """
   # check for internal empty row
   csv_rows_out = []
+  num_col = len( column_name_list )
   for irow, row_elements in enumerate( csv_rows ):
     num_empty = 0
     row_elements_out = []
     for icol, cell in enumerate( row_elements ):
-      if( icol == g_num_col ):
+      if( icol == num_col ):
         break
       if( len( cell ) > 0 or ( column_name_list[icol]['type'] in column_allow_empty_cell ) ):
         row_elements_out.append( cell )
@@ -768,7 +777,7 @@ def check_rows( column_name_list, csv_rows ):
         num_empty += 1
     if( num_empty == 0 ):
       csv_rows_out.append( row_elements_out )
-    elif( num_empty > 0 and num_empty < g_num_col ):
+    elif( num_empty > 0 and num_empty < num_col ):
       print( 'Error: row %d has empty cells' % ( irow + 1 ) )
       sys.exit( -1 )
   return( csv_rows_out )
@@ -937,6 +946,32 @@ def check_peak_spec( column_name_list, samplesheet_row_list ):
   return( 0 )
 
 
+def check_distribute_group( column_name_list, samplesheet_row_list ):
+  """
+  Check that each sample has a distribute_group and that the values are valid.
+  """
+  bad_distribute_group_dict = {}
+  for row_elements in samplesheet_row_list:
+    distribute_group_flag = False
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'distribute_group' ):
+        continue
+      sample_name = element_string
+      if( len( element_string ) > 0 and re.search(r'[^-_.a-zA-Z0-9]', element_string ) ):
+        bad_distribute_group_dict.setdefault( element_string, True )
+
+  if( len( bad_distribute_group_dict.keys() ) > 0 ):
+    print('Samples have no distribute_group values or the values' )
+    print('have unacceptable characters. Acceptable characters' )
+    print('are alphabetic, positive integers, and ".", "_", and "-".')
+    for bad_distribute_group in bad_distribute_group_dict.keys():
+      print( '  \'%s\'' % ( bad_distribute_group ) )
+    sys.exit( -1 )
+  return( 0 )
+
+
 def expand_rows( string_in, element_coordinates = [ None, None ] ):
   """
   Expand a P7 row specification to a list of rows.
@@ -1070,14 +1105,16 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
   """
   Make well index lists for N5, N7, P5, P7 barcode wells from the input samplesheet information.
   """
+  num_col = len( column_name_list )
   row_out_list = []
   for irow, row_elements in enumerate( samplesheet_row_list ):
-    if( len( row_elements ) < g_num_col ):
+    if( len( row_elements ) < num_col ):
       print( 'Error: missing cells in row %d: %s' % ( irow + 1, ', '.join('"{0}"'.format(e) for e in row_elements ) ), file=sys.stderr )
       sys.exit( -1 )
     icol = 0
     for element_string, column_name_dict in zip( row_elements, column_name_list ):
       icol += 1
+      distribute_group = None
       element_coordinates = [ str( irow + 2 ), chr( icol + ord( 'A' ) - 1 ) ]
       if( column_name_dict['type'] == 'n7' ):
         max_index = 384
@@ -1127,6 +1164,8 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
           peak_group = element_string
       elif( column_name_dict['type'] == 'peak_file' ):
           peak_file = element_string
+      elif( column_name_dict['type'] == 'distribute_group' ):
+          distribute_group = element_string
     #
     row_out_list.append( { 'sample_name': sample_name,
                            'n7_index_list': n7_index_list,
@@ -1135,8 +1174,9 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
                            'p5_index_list': p5_index_list,
                            'genome': genome,
                            'peak_group': peak_group,
-                           'peak_file': peak_file } )
-  return(  row_out_list )
+                           'peak_file': peak_file,
+                           'distribute_group': distribute_group } )
+  return( row_out_list )
 
 
 def check_sample_identifier( row_out_list, sample_identifier ):
@@ -1357,7 +1397,7 @@ def get_pcr_wells( column_name_list, samplesheet_row_list ):
   return( p5_well_list, p7_well_list )
 
 
-def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list, row_out_list, level = 3, number_wells = 384, tn5_barcodes = False, use_all_barcodes = False, illumina_run_directory = 'NA' ):
+def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list, row_out_list, distribute_groups_dict, level = 3, number_wells = 384, tn5_barcodes = False, use_all_barcodes = False, illumina_run_directory = 'NA' ):
   """
   Write an output samplesheet file in JSON format.
   """
@@ -1370,13 +1410,13 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
   sample_index_list = []
   for row_out in row_out_list:
     sample_index_list.append( { 'sample_id' : row_out['sample_name'],
-                                  'ranges' : ':'.join( [ make_index_string( row_out['n7_index_list'] ),
-                                                         make_index_string( row_out['p7_index_list'] ),
-                                                         make_index_string( row_out['p5_index_list'] ),
-                                                         make_index_string( row_out['n5_index_list'] ) ] ),
-                                  'genome' : row_out['genome'],
-                                  'peak_group' : row_out['peak_group'],
-                                  'peak_file' : row_out['peak_file'] })
+                                'ranges' : ':'.join( [ make_index_string( row_out['n7_index_list'] ),
+                                                       make_index_string( row_out['p7_index_list'] ),
+                                                       make_index_string( row_out['p5_index_list'] ),
+                                                       make_index_string( row_out['n5_index_list'] ) ] ),
+                                'genome' : row_out['genome'],
+                                'peak_group' : row_out['peak_group'],
+                                'peak_file' : row_out['peak_file'] })
 
   # Store information for dashboard(s).
 
@@ -1417,7 +1457,8 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
                   'p7_row_list' : p7_row_list,
                   'p5_well_list' : p5_well_list,
                   'p7_well_list' : p7_well_list,
-                  'sample_index_list' : sample_index_list
+                  'sample_index_list' : sample_index_list,
+                  'distribute_groups_dict': distribute_groups_dict,
                 }
   file.write(json.dumps(sample_data, indent=4))
 
@@ -1432,7 +1473,27 @@ def count_wells( index_list ):
   return( num_well )
 
 
-def samplesheet_report( samplesheet_row_list, row_out_list, args ):
+#
+# Gather distribution group information. That is, the
+# distribution group names, if they are given in the
+# input samplesheet file, and the samples that belong
+# to them.
+#
+def get_distribution_groups( row_out_list ):
+  distribute_groups_dict = {}
+  for irow, row_out in enumerate(row_out_list):
+    # Gather distribute_group values in distribute_groups_dict.
+    # Does this sample have a distribute group value?
+    if( row_out.get( 'distribute_group' ) != None and row_out['distribute_group'] != '' ):
+      if( distribute_groups_dict.get( row_out['distribute_group'] ) == None ):
+        distribute_groups_dict[row_out['distribute_group']] = [ row_out['sample_name'] ]
+      elif( row_out['sample_name'] not in distribute_groups_dict[row_out['distribute_group']] ):
+        distribute_groups_dict[row_out['distribute_group']].append( row_out['sample_name'] )
+  return( distribute_groups_dict )
+
+
+
+def samplesheet_report( samplesheet_row_list, row_out_list, distribute_groups_dict, args ):
   print()
   print( '== Samplesheet information ==' )
   print( '  Tn5 barcodes:      %r' % ( args.tn5_barcodes ) )
@@ -1500,6 +1561,15 @@ def samplesheet_report( samplesheet_row_list, row_out_list, args ):
                                           ' ' * ( max_len_peak_group - len( row_out['peak_group'] ) ),
                                           row_out['peak_file'] ) )
 
+  # Report information about distribution groups for the wrapping,
+  # if it exists in the input samplesheet file.
+  if( len( distribute_groups_dict.keys() ) > 0 ):
+    print( '  Distribution groups:' )
+    for distribute_group in distribute_groups_dict.keys():
+      print( '   Group: %s' % ( distribute_group ) )
+      print( '     Samples:' )
+      for sample_name in distribute_groups_dict[distribute_group]:
+        print( '        %s' % ( sample_name ) )
 
   print( '  Illumina run directory: %s' % ( args.run_dir ) )
   print( '  Run sciatac_samplesheet.py -d for more information.' )
@@ -1573,17 +1643,19 @@ if __name__ == '__main__':
   check_peak_groups( column_name_list, samplesheet_row_list )
   check_peak_files( column_name_list, samplesheet_row_list )
   check_peak_spec( column_name_list, samplesheet_row_list )
+  check_distribute_group( column_name_list, samplesheet_row_list )
 
   if(not args.no_expand_pcr_rows_columns):
     samplesheet_row_list = expand_sample_rows(column_name_list, samplesheet_row_list)
 
   row_out_list = make_samplesheet_indexes( column_name_list, samplesheet_row_list )
   check_sample_identifier( row_out_list, args.sample_identifier )
+  distribute_groups_dict = get_distribution_groups( row_out_list )
   if( args.format == 'json' ):
-    write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, level = args.level, number_wells = args.number_wells, tn5_barcodes = args.tn5_barcodes, use_all_barcodes = args.use_all_barcodes, illumina_run_directory = args.run_dir )
+    write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, distribute_groups_dict, level = args.level, number_wells = args.number_wells, tn5_barcodes = args.tn5_barcodes, use_all_barcodes = args.use_all_barcodes, illumina_run_directory = args.run_dir )
   else:
     write_samplesheet_index_format( open( filename_out, 'w' ), row_out_list )
-  samplesheet_report( samplesheet_row_list, row_out_list, args )
+  samplesheet_report( samplesheet_row_list, row_out_list, distribute_groups_dict, args )
   # diagnostic dump
   # dump_row_out_list( row_out_list )
 
