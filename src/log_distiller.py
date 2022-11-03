@@ -21,7 +21,7 @@ import argparse
 import textwrap
 import json
 
-LOG_DISTILLER_VERSION = '20220502a'
+LOG_DISTILLER_VERSION = '20221101a'
 
 
 # Sample ordering lists. In fact these are non-sample-based processes such as
