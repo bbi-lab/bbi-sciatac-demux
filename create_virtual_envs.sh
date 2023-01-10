@@ -61,7 +61,20 @@ fi
 # First, the pypy virtualenv
 echo 'Building pypy virtualenv...'
 # export PYTHONPATH=''
-virtualenv -p /net/gs/vol3/software/modules-sw-python/3.6.5/pypy/7.3.1/Linux/CentOS7/x86_64/bin/pypy3 $DIR/src/pypy_env
+# virtualenv -p /net/gs/vol3/software/modules-sw-python/3.6.5/pypy/7.3.1/Linux/CentOS7/x86_64/bin/pypy3 $DIR/src/pypy_env
+virtualenv $DIR/src/pypy_env
+
+if [ "$?" != 0 ]
+then
+  echo "Error: the virtualenv command returned an error."
+  exit -1
+fi
+
+if [ ! -d $DIR/src/pypy_env ]
+then
+  echo "Error: failed to make Python virtual environment in $DIR/src/pypy_env."
+  exit -1
+fi
 
 source $DIR/src/pypy_env/bin/activate
 
@@ -71,10 +84,13 @@ pip install -r $DIR/pypy_requirements.txt
 #
 # Clone the repository.
 #
-git clone https://github.com/andrewhill157/barcodeutils.git
+if [ ! -d barcodeutils ]
+then
+  git clone https://github.com/andrewhill157/barcodeutils.git
+fi
 
 pushd barcodeutils
-pypy setup.py install
+pypy setup.py install --user
 popd
 
 deactivate
