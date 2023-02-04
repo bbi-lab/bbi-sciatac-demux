@@ -177,6 +177,11 @@ reportRunParams( params, sampleSheetMap )
 archiveRunFiles( params, timeNow )
 
 /*
+** Make a groovy list of sample names.
+*/
+sampleList = makeSampleList(sampleSheetMap)
+
+/*
 ** Save workflow.runName to a file that can be
 ** read by the logger in each process.
 ** Note: using ${workflow.runName} in a process
@@ -447,6 +452,7 @@ process barcode_correct {
     file "*.index_counts.csv" into index_counts_csv mode flatten
     file "*.tag_pair_counts.csv" into tag_pair_counts_csv mode flatten
     file "*.pcr_pair_counts.csv" into pcr_pair_counts_csv mode flatten
+    file "finish_flag" into barcodeCorrectFinishFlagOutChannel mode flatten
 
   script:
   """
@@ -500,6 +506,8 @@ process barcode_correct {
 --write_buffer_blocks ${demux_buffer_blocks} \
 $options_barcode_correct \
 $sequencer_flag"
+
+  touch finish_flag
   """
 }
 
@@ -523,6 +531,10 @@ barcode_fastqsCopy01
 /*
 ** Run adapter trimming script.
 */
+
+/*
+** Move trimming to analyze pipeline so disable here.
+**
 def trimmomatic_exe="${script_dir}/Trimmomatic-0.36/trimmomatic-0.36.jar"
 def adapters_path="${script_dir}/Trimmomatic-0.36/adapters/NexteraPE-PE.fa:2:30:10:1:true"
 process adapter_trimming {
@@ -600,7 +612,8 @@ SLIDINGWINDOW:4:10 \
 MINLEN:20 2> ${prefix}-trimmomatic.stderr"
   """
 }
-
+** disable trimming
+*/
 
 /*
 ** This is the end of the 'fastq-producing' sciatac_pipeline processing steps.
@@ -780,44 +793,54 @@ process demux_dash {
 }
 
 
+barcodeCorrectFinishFlagOutChannel
+  .last()
+  .into { logDistillFlagInputChannelCopy01;
+          logDistillFlagInputChannelCopy02 }
+
 /*
-** ================================================================================
-** Run log distiller when the pipeline finishes.
-** ================================================================================
+** Distill the logs for all samples.
 */
-addShutdownHook({
+process logDistillAllProcess {
+  cache 'lenient'
+  errorStrategy onError
 
-    /*
-    ** Add sample sheet information.
-    */ 
-    def samples = [] 
-    
-    sampleSheetMap['sample_index_list'].each { aSample ->
-        samples.add( aSample['sample_id'] )
-    }
-    samples.unique()
+  input:
+    file log_file from logDistillFlagInputChannelCopy01
 
-    def proc
-    def command = new StringBuilder()
 
-    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -o ${log_dir}/log.all_samples.txt")
-    proc = command.toString().execute()
-    command.setLength(0) 
-    proc = null
-   
-    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s lane pipeline -o ${log_dir}/log.lane.txt")
-    proc = command.toString().execute()
-    command.setLength(0) 
-    proc = null
+  script:
+  """
+  set -ueo pipefail
 
-    samples.each { aSample ->
-        command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s ${aSample} pipeline -o ${log_dir}/log.${aSample}.txt")
-        proc = command.toString().execute()
-        command.setLength(0) 
-        proc = null
-    }
-    samples = null
-})
+  ${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -o ${log_dir}/log.all_samples.txt
+  ${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s lane pipeline -o ${log_dir}/log.lane.txt
+  """
+}
+
+
+Channel
+  .fromList( sampleList )
+  .set { logDistillSamplesInputChannel }
+
+/*
+** Distill individual sample logs.
+*/
+process logDistillSampleProcess {
+  cache 'lenient'
+  errorStrategy onError
+
+  input:
+    file log_file from logDistillFlagInputChannelCopy01
+    val sample_name from logDistillSamplesInputChannel    
+
+  script:
+  """
+  set -ueo pipefail
+
+  ${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s ${sample_name} pipeline -o ${log_dir}/log.${sample_name}.txt
+  """
+}
 
 
 /*
@@ -1022,6 +1045,17 @@ def readSampleSheetJson( params ) {
     def jsonSlurper = new JsonSlurper()
     sampleSheetMap = jsonSlurper.parse(new File(params.sample_sheet))
     return( sampleSheetMap )
+}
+
+
+def makeSampleList(sampleData) {
+  def samples = []
+
+  sampleData['sample_index_list'].each { aSample ->
+    samples.add( aSample['sample_id'] )
+  }
+  samples = samples.unique(mutate=false)
+  return(samples)
 }
 
 
