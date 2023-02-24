@@ -177,6 +177,11 @@ reportRunParams( params, sampleSheetMap )
 archiveRunFiles( params, timeNow )
 
 /*
+** Make a groovy list of sample names.
+*/
+sampleList = makeSampleList(sampleSheetMap)
+
+/*
 ** Save workflow.runName to a file that can be
 ** read by the logger in each process.
 ** Note: using ${workflow.runName} in a process
@@ -447,6 +452,7 @@ process barcode_correct {
     file "*.index_counts.csv" into index_counts_csv mode flatten
     file "*.tag_pair_counts.csv" into tag_pair_counts_csv mode flatten
     file "*.pcr_pair_counts.csv" into pcr_pair_counts_csv mode flatten
+    file ("stop_flag") into bcl2fastq_fastqsStopFlagOutChannel
 
   script:
   """
@@ -500,104 +506,8 @@ process barcode_correct {
 --write_buffer_blocks ${demux_buffer_blocks} \
 $options_barcode_correct \
 $sequencer_flag"
-  """
-}
 
-
-barcode_fastqs
-  .into { barcode_fastqsCopy01;
-          barcode_fastqsCopy02 }
-
-/*
-** Gather R1/R2 pairs of fastq filenames because
-** Trimmomatic processes read pairs using separate
-** input/output files for reads 1 and 2.
-*/
-get_prefix_barcode_fastqs = { file -> (file - ~/_R[12]\.fastq\.gz/) }
-
-barcode_fastqsCopy01
-  .map { file -> tuple( get_prefix_barcode_fastqs(file.name), file) }
-  .groupTuple()
-  .set { barcode_fastqs_paired }
-
-/*
-** Run adapter trimming script.
-*/
-def trimmomatic_exe="${script_dir}/Trimmomatic-0.36/trimmomatic-0.36.jar"
-def adapters_path="${script_dir}/Trimmomatic-0.36/adapters/NexteraPE-PE.fa:2:30:10:1:true"
-process adapter_trimming {
-  cache 'lenient'
-  errorStrategy onError
-  publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*.fastq.gz", mode: 'copy'
-  publishDir path: "$demux_dir", saveAs: { qualifyFilename( it, "fastqs_trim" ) }, pattern: "*-trimmomatic.stderr", mode: 'copy'
-
- 
-  input:
-  set prefix, file(read_pair) from barcode_fastqs_paired
-  
-  output:
-  set file("*_R1.trimmed.fastq.gz"), file("*_R2.trimmed.fastq.gz"), file("*_R1.trimmed_unpaired.fastq.gz"), file("*_R2.trimmed_unpaired.fastq.gz") into fastqs_trim
-  file("*-trimmomatic.stderr") into fastqs_trim_stderr
-  
-  script:
-  """
-  # bash watch for errors
-  set -ueo pipefail
-
-  sample_name=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$1}'`
-  run_lane=`echo "${prefix}" | awk 'BEGIN{FS="-"}{print\$2}'`
-
-  PROCESS_BLOCK='adapter_trimming'
-  SAMPLE_NAME="\${sample_name}"
-  RUN_LANE="\${run_lane}"
-  START_TIME=`date '+%Y%m%d:%H%M%S'`
-
-  mkdir -p fastqs_trim
-  #
-  # Trimmomatic command line parameters
-  #   ILLUMINACLIP: Cut adapter and other illumina-specific sequences from the read
-  #   SLIDINGWINDOW: Performs a sliding window trimming approach. It starts scanning
-  #                  at the 5' end and clips the read once the average quality
-  #                  within the window falls below a threshold.
-  #   TRAILING: Cut bases off the end of a read, if below a threshold quality.
-  #   MINLEN: Drop the read if it is below a specified length.
-  #
-  java -Xmx1G -jar $trimmomatic_exe \
-       PE \
-       -threads $task.cpus \
-       $read_pair \
-       ${prefix}_R1.trimmed.fastq.gz \
-       ${prefix}_R1.trimmed_unpaired.fastq.gz \
-       ${prefix}_R2.trimmed.fastq.gz \
-       ${prefix}_R2.trimmed_unpaired.fastq.gz \
-       ILLUMINACLIP:${adapters_path} \
-       TRAILING:3 \
-       SLIDINGWINDOW:4:10 \
-       MINLEN:20 2> ${prefix}-trimmomatic.stderr
-
-  STOP_TIME=`date '+%Y%m%d:%H%M%S'`
-  $script_dir/pipeline_logger.py \
-  -r `cat ${tmp_dir}/nextflow_run_name.txt` \
-  -n \${SAMPLE_NAME} \
-  -x \${RUN_LANE} \
-  -p \${PROCESS_BLOCK} \
-  -v 'java -Xmx1G -jar $trimmomatic_exe -version' \
-  -s \${START_TIME} \
-  -e \${STOP_TIME} \
-  -f ${prefix}-trimmomatic.stderr \
-  -d ${log_dir} \
-  -c "java -Xmx1G -jar $trimmomatic_exe \
-PE \
--threads $task.cpus \
-$read_pair \
-${prefix}_R1.trimmed.fastq.gz \
-${prefix}_R1.trimmed_unpaired.fastq.gz \
-${prefix}_R2.trimmed.fastq.gz \
-${prefix}_R2.trimmed_unpaired.fastq.gz \
-ILLUMINACLIP:${adapters_path} \
-TRAILING:3 \
-SLIDINGWINDOW:4:10 \
-MINLEN:20 2> ${prefix}-trimmomatic.stderr"
+  touch stop_flag
   """
 }
 
@@ -620,6 +530,7 @@ process fastqc_lanes {
 
   output:
     file fastqc_lanes into fastqcLanesOutChannel
+    file ("stop_flag") into fastqcLanesStopFlagOutChannel
 
   script:
   """
@@ -647,6 +558,8 @@ process fastqc_lanes {
   -e \${STOP_TIME} \
   -d ${log_dir} \
   -c "fastqc *.fastq.gz -t $task.cpus -o fastqc_lanes"
+
+  touch stop_flag
   """
 }
 
@@ -660,10 +573,11 @@ process fastqc_samples {
   publishDir path: "$output_dir", pattern: "fastqc_sample", mode: 'copy'
 
   input:
-    file fastq from barcode_fastqsCopy02.collect()
+    file fastq from barcode_fastqs.collect()
 
   output:
     file fastqc_sample into fastqcSampleOutChannel
+    file ("stop_flag") into fastqcSampleStopFlagOutChannel
 
   script:
   """
@@ -690,6 +604,8 @@ process fastqc_samples {
   -e \${STOP_TIME} \
   -d ${log_dir} \
   -c "fastqc *.fastq.gz -t $task.cpus -o fastqc_sample"
+
+  touch stop_flag
   """
 }
 
@@ -745,6 +661,7 @@ process demux_dash {
 
   output:
     file demux_dash into demux_dashOutChannel
+    file ("stop_flag") into demux_dashStopFlagOutChannel
 
   script:
   """
@@ -776,48 +693,63 @@ process demux_dash {
   -s \${START_TIME} \
   -e \${STOP_TIME} \
   -d ${log_dir}
+
+  touch stop_flag
   """
 }
 
 
+bcl2fastq_fastqsStopFlagOutChannel
+  .concat( fastqcLanesStopFlagOutChannel,
+           fastqcSampleStopFlagOutChannel,
+           demux_dashStopFlagOutChannel )
+  .last()
+  .into { logDistillFlagInputChannelCopy01;
+          logDistillFlagInputChannelCopy02 }
+
 /*
-** ================================================================================
-** Run log distiller when the pipeline finishes.
-** ================================================================================
+** Distill the logs for all samples.
 */
-addShutdownHook({
+process logDistillAllProcess {
+  cache 'lenient'
+  errorStrategy onError
 
-    /*
-    ** Add sample sheet information.
-    */ 
-    def samples = [] 
-    
-    sampleSheetMap['sample_index_list'].each { aSample ->
-        samples.add( aSample['sample_id'] )
-    }
-    samples.unique()
+  input:
+    file log_file from logDistillFlagInputChannelCopy01
 
-    def proc
-    def command = new StringBuilder()
 
-    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -o ${log_dir}/log.all_samples.txt")
-    proc = command.toString().execute()
-    command.setLength(0) 
-    proc = null
-   
-    command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s lane pipeline -o ${log_dir}/log.lane.txt")
-    proc = command.toString().execute()
-    command.setLength(0) 
-    proc = null
+  script:
+  """
+  set -ueo pipefail
 
-    samples.each { aSample ->
-        command.append("${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s ${aSample} pipeline -o ${log_dir}/log.${aSample}.txt")
-        proc = command.toString().execute()
-        command.setLength(0) 
-        proc = null
-    }
-    samples = null
-})
+  ${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -o ${log_dir}/log.all_samples.txt
+  ${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s lane pipeline -o ${log_dir}/log.lane.txt
+  """
+}
+
+
+Channel
+  .fromList( sampleList )
+  .set { logDistillSamplesInputChannel }
+
+/*
+** Distill individual sample logs.
+*/
+process logDistillSampleProcess {
+  cache 'lenient'
+  errorStrategy onError
+
+  input:
+    file log_file from logDistillFlagInputChannelCopy01
+    val sample_name from logDistillSamplesInputChannel    
+
+  script:
+  """
+  set -ueo pipefail
+
+  ${script_dir}/log_distiller.py -p atac_demux -d ${log_dir} -s ${sample_name} pipeline -o ${log_dir}/log.${sample_name}.txt
+  """
+}
 
 
 /*
@@ -1022,6 +954,17 @@ def readSampleSheetJson( params ) {
     def jsonSlurper = new JsonSlurper()
     sampleSheetMap = jsonSlurper.parse(new File(params.sample_sheet))
     return( sampleSheetMap )
+}
+
+
+def makeSampleList(sampleData) {
+  def samples = []
+
+  sampleData['sample_index_list'].each { aSample ->
+    samples.add( aSample['sample_id'] )
+  }
+  samples = samples.unique(mutate=false)
+  return(samples)
 }
 
 
