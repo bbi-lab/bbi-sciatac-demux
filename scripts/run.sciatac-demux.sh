@@ -16,8 +16,11 @@
 # Nextflow executable and pipeline script locations.
 # Note: set the paths in the two variables below.
 #
-NEXTFLOW="<path_to_nextflow_program>"
-NF_MAIN="<path_to_bbi-sciatac-demux_repository>/main.nf"
+#NEXTFLOW="<path_to_nextflow_program>"
+#NF_MAIN="<path_to_bbi-sciatac-demux_repository>/main.nf"
+
+NEXTFLOW="$HOME/bin/nextflow"
+NF_MAIN="$HOME/git/bbi-sciatac-demux/main.nf"
 
 #
 # Current date and time.
