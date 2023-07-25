@@ -14,13 +14,11 @@
 
 #
 # Nextflow executable and pipeline script locations.
-# Note: set the paths in the two variables below.
+# Note: set the paths in the three variables below.
 #
-#NEXTFLOW="<path_to_nextflow_program>"
-#NF_MAIN="<path_to_bbi-sciatac-demux_repository>/main.nf"
-
 NEXTFLOW="$HOME/bin/nextflow"
-NF_MAIN="$HOME/git/bbi-sciatac-demux/main.nf"
+NF_HOME="$HOME/git/bbi-sciatac-demux"
+NF_MAIN="${NF_HOME}/main.nf"
 
 #
 # Current date and time.
@@ -74,3 +72,9 @@ $NEXTFLOW run $NF_MAIN $PARS
 date > run_reports/run_finish.${NOW}.txt
 
 popd
+
+#
+# Set run directory file and directory permissions.
+#
+${NF_HOME}/scripts/set_run_permissions.sh ${OUTPUT_DIR}
+
