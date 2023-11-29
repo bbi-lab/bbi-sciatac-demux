@@ -35,12 +35,13 @@ Input (front-end) samplesheet format:
        o  peak_group (called peaks are merged by peak group)
        o  peak_file (a bed file of peaks; will be merged with called peaks if the
           peak_group value has non-zero length)
-     and the following optional column
+       o  external_sample_name the name of the sample supplied by the sample
+          submitter
+     and the following optional columns
+       o  tissue the name of the tissue from which the sample was collected
        o  wrap_group the name of the group to which the results will
           be distributed. This information is used by the bbi-sciatac-wrap
-          script. Valid names consist of lower and upper case alphabetic
-          characters, numerals, and the symbols '.', '_', and '-'. Cells may
-          be empty in which case those samples are excluded from the wrap.
+          script.
   o  the column order is arbitrary (but must be consistent within the file)
   o  the header values do not depend on case
   o  ranges: index, well, column, and row range values are separated by either
@@ -57,12 +58,20 @@ Input (front-end) samplesheet format:
        o  rows:    E,F,G
        o  columns: 3,7,12
   o  sample names:
-       o  begin with an alphabetic character: a-z and A-Z
+       o  begin with an alphanumeric characters: a-z, A-Z, and 0-9
        o  allowed characters are alphabetic (a-z and A-Z), numeric (0-9), and
           period '.'
        o  this program converts other characters in the sample name to '.',
           and then checks for sample name degeneracy. If there is, the program
           exits immediately.
+  o  external sample names
+       o  cannot contain the following characters: backspace, form feed,
+          newline, carriage return, double quote, or backslash. Contiguous
+          tabs are converted to a single space.
+  o  tissue
+       o  cannot contain the following characters: backspace, form feed, 
+          newline, carriage return, double quote, or backslash. Contiguous
+          tabs are converted to a single space.
   o  genomes:
        o  recognized genome names are listed in the variable 'genome_name_list'
           in this program's code. If a samplesheet genome name is not in the
@@ -91,6 +100,10 @@ Input (front-end) samplesheet format:
        o  if both a peak group and peak file are specified, the peaks in
           the peak bed file are merged with the called peaks in the group
           during the pipeline run
+  o  wrap_group
+       o  valid names consist of lower and upper case alphabetic
+          characters, numerals, and the symbols '.', '_', and '-'. Cells may
+          be empty in which case those samples are excluded from the wrap.
   o  wells:
        o  samplesheet wells are converted to indexes where indexes refer to
           physical wells, which are in the order used in Andrew's pipeline;
@@ -165,19 +178,19 @@ Input (front-end) samplesheet format:
 
   Example samplesheet file:
 
-  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group,peak_file,wrap_group
-  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse,group_1,,Smith
-  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human,group_2,,Jones
-  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse,group_1,,Smith
-  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human,group_2,,/home/me/my_peaks.bed,Jones
-  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human,group_2,,Jones
-  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse,group_1,,Smith
-  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse,group_1,,Smith
-  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse,group_1,,Smith
-  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse,group_1,,Smith
-  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human,group_2,,Jones
-  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human,group_2,,Jones
-  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard,group_3,,
+  N7_indexes,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group,peak_file,external_sample_name,tissue,wrap_group
+  1:96,P1-A01:P1-H01,"E,F,G","1,2,3",sample.1,mouse,group_1,,exsample.1,,Smith
+  1:96,P1-A02:P1-H02,"E,F,G","1,2,3",sample.2,human,group_2,,exsample.2,,Jones
+  1:96,P1-A03:P1-H03,"E,F,G","1,2,3",sample.3,mouse,group_1,,exsample.3,,Smith
+  1:96,P1-A04:P1-H04,"E,F,G","1,2,3",sample.4,human,group_2,/home/me/my_peaks.bed,exsample.4,,Jones
+  1:96,P1-A05:P1-H05,"E,F,G","1,2,3",sample.5,human,group_2,,exsample.5,,Jones
+  1:96,P1-A06:P1-H06,"E,F,G","1,2,3",sample.6,mouse,group_1,,exsample.6,,Smith
+  1:96,P1-A07:P1-H07,"E,F,G","1,2,3",sample.7,mouse,group_1,,exsample.7,,Smith
+  1:96,P1-A08:P1-H08,"E,F,G","1,2,3",sample.8,mouse,group_1,,exsample.8,,Smith
+  1:96,P1-A09:P1-H09,"E,F,G","1,2,3",sample.9,mouse,group_1,,exsample.9,,Smith
+  1:96,P1-A10:P1-A10,"E,F,G","1,2,3",sample.10,human,group_2,,exsample.10,,Jones
+  1:96,P1-A11:P1-H11,"E,F,G","1,2,3",sample.11,human,group_2,,exsample.11,,Jones
+  1:96,P1-A12:P1-H12,"E,F,G","1,2,3",sample.12,barnyard,group_3,,exsample.12,,
   
   Notes:
     o  the p7_row and p5_column value sets are enclosed in quotes
@@ -266,8 +279,8 @@ import argparse
 #
 # Samplesheet JSON file version.
 #
-program_version = '4.1.1'
-json_file_version = '3.1.1'
+program_version = '4.2.0'
+json_file_version = '3.2.0'
 
 #
 # List of recognizable genome names.
@@ -315,25 +328,61 @@ n7_column_names = 'n7_wells n7_indexes'
 p5_column_names = 'p5_wells p5_indexes p5_columns'
 p7_column_names = 'p7_wells p7_indexes p7_rows'
 
-column_header_name_list = [ 'sample_name', 'genome', 'peak_group', 'peak_file', 'wrap_group' ]
+column_header_name_list = [ 'sample_name', 'genome', 'peak_group', 'peak_file', 'external_sample_name', 'tissue', 'wrap_group' ]
 column_header_name_list.extend( n5_column_names.split() )
 column_header_name_list.extend( n7_column_names.split() )
 column_header_name_list.extend( p5_column_names.split() )
 column_header_name_list.extend( p7_column_names.split() )
 
-columns_required_list = [ 'n5', 'n7', 'p5', 'p7', 'sample_name', 'genome', 'peak_group', 'peak_file' ]
-columns_optional_list = [ 'wrap_group' ]
+columns_required_list = [ 'n5', 'n7', 'p5', 'p7', 'sample_name', 'genome', 'peak_group', 'peak_file', 'external_sample_name' ]
+columns_optional_list = [ 'tissue', 'wrap_group' ]
 
 #
 # Columns that may have empty cells. This is used to prevent
 # errors when testing for empty cells in check_rows().
 #
-column_allow_empty_cell = [ 'peak_group', 'peak_file', 'wrap_group' ]
-
+column_allow_empty_cell = [ 'peak_group', 'peak_file', 'external_sample_name', 'tissue', 'wrap_group' ]
 
 def display_documentation():
   print( __doc__ )
   return( 0 )
+
+
+def clean_string(instring):
+  # Remove leading and trailing whitespace.
+  outstring = instring.strip()
+  # Convert contiguous tabs to a space.
+  outstring = re.sub( r'[\t]+', ' ', outstring )
+  return( outstring )
+
+
+def is_printable(string):
+  # Check for non-printable characters.
+  if(not string.isprintable()):
+    return(False)
+  return( True )
+
+
+def has_space(string):
+  if( re.search( r'[ ]', string ) ):
+    return( True )
+  return( False )
+
+
+#
+# Trim off leading and trailing whitespace and convert
+# contiguous tabs to a space.
+#
+def clean_samplesheet_data( column_name_list, samplesheet_row_list ):
+  errorFlag = False
+  for irow, row_elements in enumerate(samplesheet_row_list):
+    for icol in range( len( row_elements ) ):
+      clean_string( row_elements[icol] )
+      if( not is_printable( row_elements[icol] ) ):
+        print('Error: non-printable character(s) in row %d column %d' % ( irow, icol + 1 ))
+        errorFlag = True
+  if( errorFlag ):
+    sys.exit( -1 )
 
 
 def check_args( args ):
@@ -363,6 +412,10 @@ def parse_header_column_name( string_in, column_name_list, error_string ):
     column_name_dict = { 'type': 'peak_group', 'format': None }
   elif( string_in == 'peak_file' ):
     column_name_dict = { 'type': 'peak_file', 'format': None }
+  elif( string_in == 'external_sample_name' ):
+    column_name_dict = { 'type': 'external_sample_name', 'format': None }
+  elif( string_in == 'tissue' ):
+    column_name_dict = { 'type': 'tissue', 'format': None }
   elif( string_in == 'wrap_group' ):
     column_name_dict = { 'type': 'wrap_group', 'format': None }
   else:
@@ -387,7 +440,7 @@ def check_header_column_names( column_name_list ):
     columns_allowed[column_name] = 0
   for column_name_dict in column_name_list:
     columns_allowed[column_name_dict['type']] += 1
-  error_flag = 0
+  errorFlag = 0
   # Check for n5, n7, p5, and p7 specification columns.
   for column_name in columns_allowed:
     if( columns_allowed[column_name] == 0 and column_name not in columns_optional_list ):
@@ -400,11 +453,11 @@ def check_header_column_names( column_name_list ):
         print( '  acceptable p5 header values: %s' % ( p5_column_names ), file=sys.stderr )
       elif( column_name == 'p7' ):
         print( '  acceptable p7 header values: %s' % ( p7_column_names ), file=sys.stderr )
-      error_flag = 1
+      errorFlag = 1
     elif( columns_allowed[column_name] > 1 ):
       print( 'Error: column for \'%s\' occurs %d times.' % ( column_name, columns_allowed[column_name] ), file=sys.stderr )
-      error_flag = 1
-  if( error_flag ):
+      errorFlag = 1
+  if( errorFlag ):
     sys.exit( -1 )
   p5_col = False
   p7_row = False
@@ -424,7 +477,7 @@ def parse_header( row_header ):
   Convert column header (row) into a list of column name dictionaries.
   The dictionary has the elements
     key     value description
-    type    entry type name: n5, n7, p5, p7, sample_name, genome, peak_group, peak_file
+    type    entry type name: n5, n7, p5, p7, sample_name, genome, peak_group, peak_file, external_sample_name, tissue, wrap_group
     format  barcode format values: wells, indexes, rows, columns, None (see column_header_name_list for allowed combinations of type and format)
   """
   column_name_list = []
@@ -766,18 +819,27 @@ def check_rows( column_name_list, csv_rows ):
   csv_rows_out = []
   num_col = len( column_name_list )
   for irow, row_elements in enumerate( csv_rows ):
+    if(len(row_elements) < num_col):
+      print('Error: missing %d cell(s) in row %d' % ( num_col - len(row_elements), irow))
+      sys.exit( -1 )
+    # Number of cells that are supposed to have
+    # content but don't.
     num_empty = 0
     row_elements_out = []
     for icol, cell in enumerate( row_elements ):
       if( icol == num_col ):
         break
+      # Add valid cell to output row.
       if( len( cell ) > 0 or ( column_name_list[icol]['type'] in column_allow_empty_cell ) ):
         row_elements_out.append( cell )
       else:
         num_empty += 1
+    # Save the row if there are no invalid empty cells.
     if( num_empty == 0 ):
       csv_rows_out.append( row_elements_out )
     elif( num_empty > 0 and num_empty < num_col ):
+      # Note: we allow for an empty row with
+      #       num_empty == num_col.
       print( 'Error: row %d has empty cells' % ( irow + 1 ) )
       sys.exit( -1 )
   return( csv_rows_out )
@@ -824,10 +886,11 @@ def check_sample_names( column_name_list, samplesheet_row_list ):
       sample_name_in_dict.setdefault( element_string, 0 )
       sample_name_in_dict[element_string] += 1
       num_sample_name += 1
-      mobj = re.match( r'[a-zA-Z]', element_string )
+      mobj = re.match( r'[a-zA-Z0-9]', element_string )
       if( not mobj ):
-        print( 'Error: sample names must begin with an alphabetic character', file=sys.stderr )
+        print( 'Error: sample names must begin with an alphanumeric character', file=sys.stderr )
         sys.exit( -1 )
+      # Convert invalid characters to periods.
       row_elements[i] = re.sub( r'[^a-zA-Z0-9.]', '.', element_string )
       sample_name_out_dict.setdefault( element_string, True )
   errorFlag = False
@@ -862,18 +925,24 @@ def check_genome_names( column_name_list, samplesheet_row_list ):
   Check genome names and warn if not in our list.
   """
   missing_genome_names_dict = {}
-  for row_elements in samplesheet_row_list:
+  errorFlag = False
+  for irow, row_elements in enumerate(samplesheet_row_list):
     for i in range( len( row_elements ) ):
       column_name_dict = column_name_list[i]
       element_string = row_elements[i]
       if( column_name_dict['type'] != 'genome' ):
         continue
+      if( has_space(element_string) ):
+        print( 'Error: genome name \'%s\' in row %d has one or more spaces' % ( element_string, irow ) )
+        errorFlag = 1
       if( not row_elements[i] in genome_name_list ):
         missing_genome_names_dict.setdefault( row_elements[i], True )
   if( len( missing_genome_names_dict.keys() ) > 0 ):
     print( 'The following genomes are not in my list of known genomes (they may be mis-spelled or not in my list).', file=sys.stderr )
     for missing_genome_name in missing_genome_names_dict.keys():
       print( '  \'%s\'' % ( missing_genome_name ), file=sys.stderr )
+  if( errorFlag ):
+    sys.exit( -1 )
   return( 0 )
 
 
@@ -909,10 +978,10 @@ def check_peak_files( column_name_list, samplesheet_row_list ):
       element_string = row_elements[i]
       if( column_name_dict['type'] != 'peak_file' ):
         continue
-      if( ( len( element_string ) > 0 ) and ( re.search(r'[\0]+', element_string ) or re.match(r'[^/]', element_string ) ) ):
+      if( ( len( element_string ) > 0 ) and ( re.match(r'[^/]', element_string ) or has_space( element_string ) ) ):
         bad_peak_files_dict.setdefault( element_string, True )
   if( len( bad_peak_files_dict.keys() ) > 0 ):
-    print('Unacceptable peak file names (must start with \'/\' and must not contain null characters):')
+    print('Unacceptable peak file names (must start with \'/\' and must not contain spaces):')
     for bad_peak_file in bad_peak_files_dict.keys():
       print( '  \'%s\'' % ( bad_peak_file ) )
     sys.exit( -1 )
@@ -946,9 +1015,68 @@ def check_peak_spec( column_name_list, samplesheet_row_list ):
   return( 0 )
 
 
+def check_external_sample_name( column_name_list, samplesheet_row_list ):
+  """
+  Check that each external_sample_name is valid.
+  """
+  errorFlag = False
+  sample_name_in_dict = {}
+  sample_name_out_dict = {}
+  for irow, row_elements in enumerate(samplesheet_row_list):
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'external_sample_name' ):
+        continue
+      # Allow empty external sample name cell.
+      if( len( element_string ) == 0 ):
+        continue
+      sample_name_in_dict.setdefault( element_string, 0 )
+      sample_name_in_dict[element_string] += 1
+      mobj = re.match( r'[a-zA-Z0-9]', element_string )
+      if( not mobj ):
+        print( 'Error: bad external sample name in row %d (must begin with an alphanumeric character)' % ( irow ), file=sys.stderr )
+        errorFlag = True
+      sample_name_out_dict.setdefault( element_string, True )
+  for sample_name in sample_name_in_dict.keys():
+    if( sample_name_in_dict[sample_name] > 1 ):
+      print( 'Warning: external sample name \'%s\' not unique. It is used %d times.' % ( sample_name, sample_name_in_dict[sample_name] ), file=sys.stderr )
+  if( len( sample_name_out_dict ) != len( sample_name_in_dict ) ):
+    print( 'Error: unacceptable names are not distinct after editing', file=sys.stderr )
+    errorFlag = True
+  if( errorFlag ):
+    sys.exit( -1 )
+  return( samplesheet_row_list )
+
+
+def check_tissue( column_name_list, samplesheet_row_list ):
+  """
+  Check that sample tissue strings are valid.
+  There are no additional restrictions on tissue
+  names at this time so this function has no
+  function.
+  """
+  bad_tissue_dict = {}
+  for row_elements in samplesheet_row_list:
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] != 'tissue' ):
+        continue
+      # Allow empty external sample name cell.
+      if( len( element_string ) == 0 ):
+        continue
+  if( len( bad_tissue_dict.keys() ) > 0 ):
+    print('Error: invalid tissue names:')
+    for bad_tissue in bad_tissue_dict.keys():
+      print( '  \'%s\'' % ( bad_tissue ) )
+    sys.exit( -1 )
+  return( samplesheet_row_list )
+
+
 def check_wrap_group( column_name_list, samplesheet_row_list ):
   """
-  Check that each sample has a wrap_group and that the values are valid.
+  Check that wrap_group values are valid.
   """
   bad_wrap_group_dict = {}
   for row_elements in samplesheet_row_list:
@@ -961,11 +1089,10 @@ def check_wrap_group( column_name_list, samplesheet_row_list ):
       sample_name = element_string
       if( len( element_string ) > 0 and re.search(r'[^-_.a-zA-Z0-9]', element_string ) ):
         bad_wrap_group_dict.setdefault( element_string, True )
-
   if( len( bad_wrap_group_dict.keys() ) > 0 ):
-    print('Samples have no wrap_group values or the values' )
-    print('have unacceptable characters. Acceptable characters' )
-    print('are alphabetic, positive integers, and ".", "_", and "-".')
+    print('Sample wrap_group values have invalid characters.' )
+    print('Valid characters are alphabetic, positive integers,')
+    print('and ".", "_", and "-".')
     for bad_wrap_group in bad_wrap_group_dict.keys():
       print( '  \'%s\'' % ( bad_wrap_group ) )
     sys.exit( -1 )
@@ -1112,9 +1239,12 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
       print( 'Error: missing cells in row %d: %s' % ( irow + 1, ', '.join('"{0}"'.format(e) for e in row_elements ) ), file=sys.stderr )
       sys.exit( -1 )
     icol = 0
+    # Initialize optional column values.
+    wrap_group = None
+    tissue = None
     for element_string, column_name_dict in zip( row_elements, column_name_list ):
       icol += 1
-      wrap_group = None
+
       element_coordinates = [ str( irow + 2 ), chr( icol + ord( 'A' ) - 1 ) ]
       if( column_name_dict['type'] == 'n7' ):
         max_index = 384
@@ -1164,6 +1294,10 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
           peak_group = element_string
       elif( column_name_dict['type'] == 'peak_file' ):
           peak_file = element_string
+      elif( column_name_dict['type'] == 'external_sample_name' ):
+          external_sample_name = element_string
+      elif( column_name_dict['type'] == 'tissue' ):
+          tissue = element_string
       elif( column_name_dict['type'] == 'wrap_group' ):
           wrap_group = element_string
     #
@@ -1175,6 +1309,8 @@ def make_samplesheet_indexes( column_name_list, samplesheet_row_list ):
                            'genome': genome,
                            'peak_group': peak_group,
                            'peak_file': peak_file,
+                           'external_sample_name': external_sample_name,
+                           'tissue': tissue,
                            'wrap_group': wrap_group } )
   return( row_out_list )
 
@@ -1397,7 +1533,7 @@ def get_pcr_wells( column_name_list, samplesheet_row_list ):
   return( p5_well_list, p7_well_list )
 
 
-def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list, row_out_list, wrap_groups_dict, level = 3, number_wells = 384, tn5_barcodes = False, use_all_barcodes = False, illumina_run_directory = 'NA' ):
+def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list, row_out_list, wrap_groups_dict, level = 3, number_wells = 384, tn5_barcodes = False, use_all_barcodes = False, illumina_run_directory = 'NA', hash_file = None ):
   """
   Write an output samplesheet file in JSON format.
   """
@@ -1444,6 +1580,32 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
   if( pcr_format == 'wells' ):
     p5_well_list, p7_well_list = get_pcr_wells( column_name_list, samplesheet_row_list ) 
 
+  # Tissue dict.
+  tissue_dict = {}
+  for row_out in row_out_list:
+    tissue_dict[row_out['sample_name']] = row_out.get('tissue', '')
+    
+  # external_sample_name dict.
+  external_sample_name_dict = {}
+  for row_out in row_out_list:
+    external_sample_name_dict[row_out['sample_name']] = row_out.get('external_sample_name', '')
+
+#  # Make input column name list.
+#  input_column_name_list = []
+#  for column_name_dict in column_name_list:
+#    if(column_name_dict.get('format', None) == None):
+#      input_column_name_list.append(column_name_dict['type'])
+#    else:
+#      input_column_name_list.append(column_name_dict['type'] + '_' + column_name_dict['format'])
+#  input_column_names = ','.join(input_column_name_list)
+
+  # Make input column name list.
+  input_column_name_list = []
+  for column_name_dict in column_name_list:
+    input_column_name_list.append(column_name_dict)
+ 
+
+
   # JSON structure.
   sample_data = { 'json_file_version' : json_file_version,
                   'illumina_run_directory' : illumina_run_directory,
@@ -1451,6 +1613,8 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
                   'number_wells' : number_wells,
                   'tn5_barcodes' : tn5_barcodes,
                   'use_all_barcodes' : use_all_barcodes,
+                  'hash_file' : hash_file,
+                  'input_samplesheet_column_names' : input_column_name_list,
                   'input_samplesheet_rows' : input_samplesheet_rows,
                   'pcr_format': pcr_format,
                   'p5_col_list' : p5_col_list,
@@ -1458,8 +1622,13 @@ def write_samplesheet_json_format( file, column_name_list, samplesheet_row_list,
                   'p5_well_list' : p5_well_list,
                   'p7_well_list' : p7_well_list,
                   'sample_index_list' : sample_index_list,
+                  'external_sample_name_dict': external_sample_name_dict,
+                  'tissue_dict': tissue_dict,
                   'wrap_groups_dict': wrap_groups_dict,
                 }
+# add tissue list
+# sample_name to external_sample_name dict
+
   file.write(json.dumps(sample_data, indent=4))
 
   return( 0 )
@@ -1502,11 +1671,13 @@ def samplesheet_report( samplesheet_row_list, row_out_list, wrap_groups_dict, ar
   print( '  Sample identifier: %s' % ( args.sample_identifier ) )
   print( '  Use all barcodes:  %r' % ( args.use_all_barcodes ) )
 
+  string_list = []
   print( '  Sample names after converting unacceptable characters to \'.\':' )
   for irow, row_out in enumerate(row_out_list):
-    if(irow > 0 and row_out_list[irow]['sample_name'] == row_out_list[irow-1]['sample_name']):
+    if( row_out_list[irow]['sample_name'] in string_list):
       continue
     print( '    %s' % ( row_out['sample_name'] ) )
+    string_list.append(row_out_list[irow]['sample_name'])
 
   print( '  Sample well counts:' )
   max_len_samplename = 0
@@ -1516,7 +1687,6 @@ def samplesheet_report( samplesheet_row_list, row_out_list, wrap_groups_dict, ar
   if( len( 'name' ) > max_len_samplename ):
     max_len_samplename = len( 'name' )
   print( '    name%s    N7    P7    P5    N5' % ( ' ' * ( max_len_samplename - len( 'name' ) ) ) )
-
   for irow, row_out in enumerate(row_out_list):
     if(irow > 0
        and row_out_list[irow]['sample_name'] == row_out_list[irow-1]['sample_name']
@@ -1561,6 +1731,18 @@ def samplesheet_report( samplesheet_row_list, row_out_list, wrap_groups_dict, ar
                                           ' ' * ( max_len_peak_group - len( row_out['peak_group'] ) ),
                                           row_out['peak_file'] ) )
 
+  # Report external sample names.
+  print( '  External sample names with tabs converted to spaces:' )
+  for irow, row_out in enumerate(row_out_list):
+    if(irow == 0 or row_out['sample_name'] != row_out_list[irow-1]['sample_name']):
+      print('    %s\t%s' % ( row_out['sample_name'], row_out.get('external_sample_name', '')))
+
+  # Report tissue names.
+  print( '  Tissue assignments with tabs converted to spaces:' )
+  for irow, row_out in enumerate(row_out_list):
+    if(irow == 0 or row_out['sample_name'] != row_out_list[irow-1]['sample_name']):
+      print('    %s\t%s' % ( row_out['sample_name'], row_out.get('tissue', '')))
+
   # Report information about wrap groups for the wrapping,
   # if it exists in the input samplesheet file.
   if( len( wrap_groups_dict.keys() ) > 0 ):
@@ -1579,8 +1761,8 @@ def samplesheet_report( samplesheet_row_list, row_out_list, wrap_groups_dict, ar
 def write_samplesheet_template():
   filename = 'samplesheet.template.csv'
   with open( filename, 'wt' ) as fp:
-    print( 'n7_wells,p7_rows,p5_columns,n5_wells,sample_name,genome', file=fp )
-    print( 'p1:A01-p1:H12,a-d,5-8,p1:a01-p1:h01,sample1,barnyard', file=fp )
+    print( 'n7_wells,p7_rows,p5_columns,n5_wells,sample_name,genome,peak_group,peak_file,external_sample_name,tissue,wrap_group', file=fp )
+    print( 'p1:A01-p1:H12,a-d,5-8,p1:a01-p1:h01,sample1,barnyard,group_1,,,,None', file=fp )
   return( 0 )
 
 
@@ -1596,6 +1778,7 @@ if __name__ == '__main__':
   parser.add_argument('-s', '--sample_identifier', required=False, choices=[ 'n5', 'n7' ], default='n5', help='Ligation barcode that identifies the sample (default: \'%(default)s\') used to check for duplicates (optional string).')
   parser.add_argument('--use_all_barcodes', required=False, action='store_true', help='Use all barcodes to demultiplex fastq files. By default, uninformative barcodes are not used to identify samples when demultiplexing fastq files (optional flag).')
   parser.add_argument('--no_expand_pcr_rows_columns', required=False, action='store_true', help='Without --no_expand_pcr_rows_columns, this program pairs the i-th P7 row with the i-th P5 column for each sample. With --no_expand_pcr_rows_columns, all combinations of P7 rows and P5 columns are used for each sample.')
+  parser.add_argument('--hash_file', required=False, default=None, help='Name of hash index file. Setting hash_file to a file name enables hash index analysis.')
   parser.add_argument('-e', '--template', required=False, action='store_true', help='Write template samplesheet file (\'samplesheet.template.csv\') with standard column formats and exit (optional flag).')
   parser.add_argument('-d', '--documentation', required=False, action='store_true', help='Display documentation and exit (optional flag).')
   parser.add_argument('-v', '--version', required=False, action='store_true', help='Give program and JSON output file versions and exit (optional flag).')
@@ -1638,10 +1821,15 @@ if __name__ == '__main__':
   filename_out = args.output
 
   column_name_list, samplesheet_row_list = read_samplesheet( open( filename_in, newline='' ) )
+
+  clean_samplesheet_data( column_name_list, samplesheet_row_list )
   samplesheet_row_list = check_sample_names( column_name_list, samplesheet_row_list )
   check_genome_names( column_name_list, samplesheet_row_list )
   check_peak_groups( column_name_list, samplesheet_row_list )
   check_peak_files( column_name_list, samplesheet_row_list )
+  check_external_sample_name( column_name_list, samplesheet_row_list )
+  check_tissue( column_name_list, samplesheet_row_list )
+
   check_peak_spec( column_name_list, samplesheet_row_list )
   check_wrap_group( column_name_list, samplesheet_row_list )
 
@@ -1652,7 +1840,7 @@ if __name__ == '__main__':
   check_sample_identifier( row_out_list, args.sample_identifier )
   wrap_groups_dict = get_wrap_groups( row_out_list )
   if( args.format == 'json' ):
-    write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, wrap_groups_dict, level = args.level, number_wells = args.number_wells, tn5_barcodes = args.tn5_barcodes, use_all_barcodes = args.use_all_barcodes, illumina_run_directory = args.run_dir )
+    write_samplesheet_json_format( open( filename_out, 'w' ), column_name_list, samplesheet_row_list, row_out_list, wrap_groups_dict, level = args.level, number_wells = args.number_wells, tn5_barcodes = args.tn5_barcodes, use_all_barcodes = args.use_all_barcodes, illumina_run_directory = args.run_dir, hash_file = args.hash_file )
   else:
     write_samplesheet_index_format( open( filename_out, 'w' ), row_out_list )
   samplesheet_report( samplesheet_row_list, row_out_list, wrap_groups_dict, args )

@@ -1,0 +1,2 @@
+N7_wells,N5_wells,P7_rows,P5_columns,sample_name,genome,peak_group,peak_file,external_sample_name
+"P1-B01:P1-B12,P1-A01:P1-A12","P1-A03:P1-H03,P1-A01:P1-H01","G,F,E","3,2,1",BAT99.1,mouse,g1,,ex1

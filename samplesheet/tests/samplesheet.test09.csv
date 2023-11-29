@@ -1,0 +1,3 @@
+n7_wells,p7_rows,p5_columns,n5_indexes,sample_name,genome,peak_group,peak_file,external_sample_name
+"p1:a01","a-b","1-2","1",ATAC_DS1,human,g1,,ext
+"p1:h01-p1:h3","c-d","3-4","2",ATAC_DS1,human,g1,,ext
