@@ -1,0 +1,1690 @@
+{
+    "json_file_version": "3.2.0",
+    "illumina_run_directory": null,
+    "level": 3,
+    "number_wells": 384,
+    "tn5_barcodes": false,
+    "use_all_barcodes": false,
+    "hash_file": null,
+    "input_samplesheet_column_names": [
+        {
+            "type": "n7",
+            "format": "wells"
+        },
+        {
+            "type": "n5",
+            "format": "wells"
+        },
+        {
+            "type": "p7",
+            "format": "rows"
+        },
+        {
+            "type": "p5",
+            "format": "columns"
+        },
+        {
+            "type": "sample_name",
+            "format": null
+        },
+        {
+            "type": "genome",
+            "format": null
+        },
+        {
+            "type": "peak_group",
+            "format": null
+        },
+        {
+            "type": "peak_file",
+            "format": null
+        },
+        {
+            "type": "wrap_group",
+            "format": null
+        },
+        {
+            "type": "external_sample_name",
+            "format": null
+        }
+    ],
+    "input_samplesheet_rows": [
+        "\"P1-A01:P4-H12\",\"P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01\",\"H\",\"1\",\"W97.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01\",\"G\",\"2\",\"W97.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01\",\"F\",\"3\",\"W97.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01\",\"E\",\"4\",\"W97.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01\",\"H\",\"1\",\"W97.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01\",\"G\",\"2\",\"W97.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01\",\"F\",\"3\",\"W97.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01\",\"E\",\"4\",\"W97.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01\",\"H\",\"1\",\"W97.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01\",\"G\",\"2\",\"W97.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01\",\"F\",\"3\",\"W97.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01\",\"E\",\"4\",\"W97.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01\",\"H\",\"1\",\"W97.Aorta.ascending\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01\",\"G\",\"2\",\"W97.Aorta.ascending\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01\",\"F\",\"3\",\"W97.Aorta.ascending\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01\",\"E\",\"4\",\"W97.Aorta.ascending\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02\",\"H\",\"1\",\"W98.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02\",\"G\",\"2\",\"W98.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02\",\"F\",\"3\",\"W98.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02\",\"E\",\"4\",\"W98.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02\",\"H\",\"1\",\"W98.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02\",\"G\",\"2\",\"W98.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02\",\"F\",\"3\",\"W98.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02\",\"E\",\"4\",\"W98.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02\",\"H\",\"1\",\"W98.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02\",\"G\",\"2\",\"W98.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02\",\"F\",\"3\",\"W98.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02\",\"E\",\"4\",\"W98.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02\",\"H\",\"1\",\"W98.Colon\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02\",\"G\",\"2\",\"W98.Colon\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02\",\"F\",\"3\",\"W98.Colon\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02\",\"E\",\"4\",\"W98.Colon\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03\",\"H\",\"1\",\"W99.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03\",\"G\",\"2\",\"W99.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03\",\"F\",\"3\",\"W99.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03\",\"E\",\"4\",\"W99.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03\",\"H\",\"1\",\"W99.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03\",\"G\",\"2\",\"W99.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03\",\"F\",\"3\",\"W99.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03\",\"E\",\"4\",\"W99.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03\",\"H\",\"1\",\"W99.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03\",\"G\",\"2\",\"W99.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03\",\"F\",\"3\",\"W99.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03\",\"E\",\"4\",\"W99.Aorta\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03\",\"H\",\"1\",\"W99.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03\",\"G\",\"2\",\"W99.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03\",\"F\",\"3\",\"W99.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03\",\"E\",\"4\",\"W99.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04\",\"H\",\"1\",\"W100.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04\",\"G\",\"2\",\"W100.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04\",\"F\",\"3\",\"W100.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04\",\"E\",\"4\",\"W100.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04\",\"H\",\"1\",\"W100.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04\",\"G\",\"2\",\"W100.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04\",\"F\",\"3\",\"W100.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04\",\"E\",\"4\",\"W100.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04\",\"H\",\"1\",\"W100.Heart.septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04\",\"G\",\"2\",\"W100.Heart.septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04\",\"F\",\"3\",\"W100.Heart.septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04\",\"E\",\"4\",\"W100.Heart.septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04\",\"H\",\"1\",\"W100.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04\",\"G\",\"2\",\"W100.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04\",\"F\",\"3\",\"W100.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04\",\"E\",\"4\",\"W100.Heart.apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05\",\"H\",\"1\",\"W100.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05\",\"G\",\"2\",\"W100.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05\",\"F\",\"3\",\"W100.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05\",\"E\",\"4\",\"W100.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05\",\"H\",\"1\",\"W100.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05\",\"G\",\"2\",\"W100.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05\",\"F\",\"3\",\"W100.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05\",\"E\",\"4\",\"W100.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05\",\"H\",\"1\",\"W100.Liver\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05\",\"G\",\"2\",\"W100.Liver\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05\",\"F\",\"3\",\"W100.Liver\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05\",\"E\",\"4\",\"W100.Liver\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05\",\"H\",\"1\",\"W101.Spleen.anter\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05\",\"G\",\"2\",\"W101.Spleen.anter\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05\",\"F\",\"3\",\"W101.Spleen.anter\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05\",\"E\",\"4\",\"W101.Spleen.anter\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06\",\"H\",\"1\",\"W101.Spleen.center\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06\",\"G\",\"2\",\"W101.Spleen.center\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06\",\"F\",\"3\",\"W101.Spleen.center\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06\",\"E\",\"4\",\"W101.Spleen.center\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06\",\"H\",\"1\",\"W101.Spleen.post\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06\",\"G\",\"2\",\"W101.Spleen.post\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06\",\"F\",\"3\",\"W101.Spleen.post\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06\",\"E\",\"4\",\"W101.Spleen.post\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06\",\"H\",\"1\",\"W102.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06\",\"G\",\"2\",\"W102.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06\",\"F\",\"3\",\"W102.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06\",\"E\",\"4\",\"W102.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06\",\"H\",\"1\",\"W102.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06\",\"G\",\"2\",\"W102.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06\",\"F\",\"3\",\"W102.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06\",\"E\",\"4\",\"W102.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07\",\"H\",\"1\",\"W102.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07\",\"G\",\"2\",\"W102.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07\",\"F\",\"3\",\"W102.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07\",\"E\",\"4\",\"W102.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07\",\"H\",\"1\",\"W102.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07\",\"G\",\"2\",\"W102.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07\",\"F\",\"3\",\"W102.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07\",\"E\",\"4\",\"W102.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07\",\"H\",\"1\",\"W103.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07\",\"G\",\"2\",\"W103.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07\",\"F\",\"3\",\"W103.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07\",\"E\",\"4\",\"W103.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07\",\"H\",\"1\",\"W103.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07\",\"G\",\"2\",\"W103.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07\",\"F\",\"3\",\"W103.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07\",\"E\",\"4\",\"W103.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08\",\"H\",\"1\",\"W103.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08\",\"G\",\"2\",\"W103.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08\",\"F\",\"3\",\"W103.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08\",\"E\",\"4\",\"W103.Heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08\",\"H\",\"1\",\"W103.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08\",\"G\",\"2\",\"W103.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08\",\"F\",\"3\",\"W103.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08\",\"E\",\"4\",\"W103.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08\",\"H\",\"1\",\"W103.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08\",\"G\",\"2\",\"W103.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08\",\"F\",\"3\",\"W103.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08\",\"E\",\"4\",\"W103.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08\",\"H\",\"1\",\"W103.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08\",\"G\",\"2\",\"W103.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08\",\"F\",\"3\",\"W103.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08\",\"E\",\"4\",\"W103.Pancreas\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09\",\"H\",\"1\",\"W104.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09\",\"G\",\"2\",\"W104.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09\",\"F\",\"3\",\"W104.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09\",\"E\",\"4\",\"W104.Spleen\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09\",\"H\",\"1\",\"W106.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09\",\"G\",\"2\",\"W106.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09\",\"F\",\"3\",\"W106.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09\",\"E\",\"4\",\"W106.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09\",\"H\",\"1\",\"W106.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09\",\"G\",\"2\",\"W106.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09\",\"F\",\"3\",\"W106.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09\",\"E\",\"4\",\"W106.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09\",\"H\",\"1\",\"W106.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09\",\"G\",\"2\",\"W106.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09\",\"F\",\"3\",\"W106.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09\",\"E\",\"4\",\"W106.Lung.LLL\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10\",\"H\",\"1\",\"W106.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10\",\"G\",\"2\",\"W106.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10\",\"F\",\"3\",\"W106.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10\",\"E\",\"4\",\"W106.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10\",\"H\",\"1\",\"W106.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10\",\"G\",\"2\",\"W106.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10\",\"F\",\"3\",\"W106.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10\",\"E\",\"4\",\"W106.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10\",\"H\",\"1\",\"W107.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10\",\"G\",\"2\",\"W107.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10\",\"F\",\"3\",\"W107.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10\",\"E\",\"4\",\"W107.Heart.LV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10\",\"H\",\"1\",\"W107.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10\",\"G\",\"2\",\"W107.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10\",\"F\",\"3\",\"W107.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10\",\"E\",\"4\",\"W107.Heart.RV\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11\",\"H\",\"1\",\"W107.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11\",\"G\",\"2\",\"W107.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11\",\"F\",\"3\",\"W107.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11\",\"E\",\"4\",\"W107.heart.Septum\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11\",\"H\",\"1\",\"W107.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11\",\"G\",\"2\",\"W107.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11\",\"F\",\"3\",\"W107.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11\",\"E\",\"4\",\"W107.Heart.Apex\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11\",\"H\",\"1\",\"BAT199\",\"human\",\"1\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11\",\"G\",\"2\",\"BAT199\",\"human\",\"1\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11\",\"F\",\"3\",\"BAT199\",\"human\",\"1\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11\",\"E\",\"4\",\"BAT199\",\"human\",\"1\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11\",\"H\",\"1\",\"BAT200\",\"mouse\",\"2\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11\",\"G\",\"2\",\"BAT200\",\"mouse\",\"2\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11\",\"F\",\"3\",\"BAT200\",\"mouse\",\"2\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11\",\"E\",\"4\",\"BAT200\",\"mouse\",\"2\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12\",\"H\",\"1\",\"W93.Lung\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12\",\"G\",\"2\",\"W93.Lung\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12\",\"F\",\"3\",\"W93.Lung\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12\",\"E\",\"4\",\"W93.Lung\",\"human\",\"1\",\"\",\"Trapnell_CZI\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12\",\"H\",\"1\",\"Barnyard\",\"barnyard\",\"3\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12\",\"G\",\"2\",\"Barnyard\",\"barnyard\",\"3\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12\",\"F\",\"3\",\"Barnyard\",\"barnyard\",\"3\",\"\",\"BAT\",\"\"",
+        "\"P1-A01:P4-H12\",\"P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12\",\"E\",\"4\",\"Barnyard\",\"barnyard\",\"3\",\"\",\"BAT\",\"\""
+    ],
+    "pcr_format": "row_col",
+    "p5_col_list": [
+        "1",
+        "2",
+        "3",
+        "4"
+    ],
+    "p7_row_list": [
+        "H",
+        "G",
+        "F",
+        "E"
+    ],
+    "p5_well_list": null,
+    "p7_well_list": null,
+    "sample_index_list": [
+        {
+            "sample_id": "W97.Heart.apex",
+            "ranges": "1-384:85-96:1-8:1-2,97-98,193-194,289-290",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Heart.apex",
+            "ranges": "1-384:73-84:9-16:1-2,97-98,193-194,289-290",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Heart.apex",
+            "ranges": "1-384:61-72:17-24:1-2,97-98,193-194,289-290",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Heart.apex",
+            "ranges": "1-384:49-60:25-32:1-2,97-98,193-194,289-290",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Lung.LLL",
+            "ranges": "1-384:85-96:1-8:3-4,99-100,195-196,291-292",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Lung.LLL",
+            "ranges": "1-384:73-84:9-16:3-4,99-100,195-196,291-292",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Lung.LLL",
+            "ranges": "1-384:61-72:17-24:3-4,99-100,195-196,291-292",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Lung.LLL",
+            "ranges": "1-384:49-60:25-32:3-4,99-100,195-196,291-292",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Pancreas",
+            "ranges": "1-384:85-96:1-8:5-6,101-102,197-198,293-294",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Pancreas",
+            "ranges": "1-384:73-84:9-16:5-6,101-102,197-198,293-294",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Pancreas",
+            "ranges": "1-384:61-72:17-24:5-6,101-102,197-198,293-294",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Pancreas",
+            "ranges": "1-384:49-60:25-32:5-6,101-102,197-198,293-294",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Aorta.ascending",
+            "ranges": "1-384:85-96:1-8:7-8,103-104,199-200,295-296",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Aorta.ascending",
+            "ranges": "1-384:73-84:9-16:7-8,103-104,199-200,295-296",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Aorta.ascending",
+            "ranges": "1-384:61-72:17-24:7-8,103-104,199-200,295-296",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W97.Aorta.ascending",
+            "ranges": "1-384:49-60:25-32:7-8,103-104,199-200,295-296",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Lung.LLL",
+            "ranges": "1-384:85-96:1-8:9-10,105-106,201-202,297-298",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Lung.LLL",
+            "ranges": "1-384:73-84:9-16:9-10,105-106,201-202,297-298",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Lung.LLL",
+            "ranges": "1-384:61-72:17-24:9-10,105-106,201-202,297-298",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Lung.LLL",
+            "ranges": "1-384:49-60:25-32:9-10,105-106,201-202,297-298",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Pancreas",
+            "ranges": "1-384:85-96:1-8:11-12,107-108,203-204,299-300",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Pancreas",
+            "ranges": "1-384:73-84:9-16:11-12,107-108,203-204,299-300",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Pancreas",
+            "ranges": "1-384:61-72:17-24:11-12,107-108,203-204,299-300",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Pancreas",
+            "ranges": "1-384:49-60:25-32:11-12,107-108,203-204,299-300",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Aorta",
+            "ranges": "1-384:85-96:1-8:13-14,109-110,205-206,301-302",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Aorta",
+            "ranges": "1-384:73-84:9-16:13-14,109-110,205-206,301-302",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Aorta",
+            "ranges": "1-384:61-72:17-24:13-14,109-110,205-206,301-302",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Aorta",
+            "ranges": "1-384:49-60:25-32:13-14,109-110,205-206,301-302",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Colon",
+            "ranges": "1-384:85-96:1-8:15-16,111-112,207-208,303-304",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Colon",
+            "ranges": "1-384:73-84:9-16:15-16,111-112,207-208,303-304",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Colon",
+            "ranges": "1-384:61-72:17-24:15-16,111-112,207-208,303-304",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W98.Colon",
+            "ranges": "1-384:49-60:25-32:15-16,111-112,207-208,303-304",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Pancreas",
+            "ranges": "1-384:85-96:1-8:17-18,113-114,209-210,305-306",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Pancreas",
+            "ranges": "1-384:73-84:9-16:17-18,113-114,209-210,305-306",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Pancreas",
+            "ranges": "1-384:61-72:17-24:17-18,113-114,209-210,305-306",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Pancreas",
+            "ranges": "1-384:49-60:25-32:17-18,113-114,209-210,305-306",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Lung.LLL",
+            "ranges": "1-384:85-96:1-8:19-20,115-116,211-212,307-308",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Lung.LLL",
+            "ranges": "1-384:73-84:9-16:19-20,115-116,211-212,307-308",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Lung.LLL",
+            "ranges": "1-384:61-72:17-24:19-20,115-116,211-212,307-308",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Lung.LLL",
+            "ranges": "1-384:49-60:25-32:19-20,115-116,211-212,307-308",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Aorta",
+            "ranges": "1-384:85-96:1-8:21-22,117-118,213-214,309-310",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Aorta",
+            "ranges": "1-384:73-84:9-16:21-22,117-118,213-214,309-310",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Aorta",
+            "ranges": "1-384:61-72:17-24:21-22,117-118,213-214,309-310",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Aorta",
+            "ranges": "1-384:49-60:25-32:21-22,117-118,213-214,309-310",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Heart.apex",
+            "ranges": "1-384:85-96:1-8:23-24,119-120,215-216,311-312",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Heart.apex",
+            "ranges": "1-384:73-84:9-16:23-24,119-120,215-216,311-312",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Heart.apex",
+            "ranges": "1-384:61-72:17-24:23-24,119-120,215-216,311-312",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W99.Heart.apex",
+            "ranges": "1-384:49-60:25-32:23-24,119-120,215-216,311-312",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.LV",
+            "ranges": "1-384:85-96:1-8:25-26,121-122,217-218,313-314",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.LV",
+            "ranges": "1-384:73-84:9-16:25-26,121-122,217-218,313-314",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.LV",
+            "ranges": "1-384:61-72:17-24:25-26,121-122,217-218,313-314",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.LV",
+            "ranges": "1-384:49-60:25-32:25-26,121-122,217-218,313-314",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.RV",
+            "ranges": "1-384:85-96:1-8:27-28,123-124,219-220,315-316",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.RV",
+            "ranges": "1-384:73-84:9-16:27-28,123-124,219-220,315-316",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.RV",
+            "ranges": "1-384:61-72:17-24:27-28,123-124,219-220,315-316",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.RV",
+            "ranges": "1-384:49-60:25-32:27-28,123-124,219-220,315-316",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.septum",
+            "ranges": "1-384:85-96:1-8:29-30,125-126,221-222,317-318",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.septum",
+            "ranges": "1-384:73-84:9-16:29-30,125-126,221-222,317-318",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.septum",
+            "ranges": "1-384:61-72:17-24:29-30,125-126,221-222,317-318",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.septum",
+            "ranges": "1-384:49-60:25-32:29-30,125-126,221-222,317-318",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.apex",
+            "ranges": "1-384:85-96:1-8:31-32,127-128,223-224,319-320",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.apex",
+            "ranges": "1-384:73-84:9-16:31-32,127-128,223-224,319-320",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.apex",
+            "ranges": "1-384:61-72:17-24:31-32,127-128,223-224,319-320",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Heart.apex",
+            "ranges": "1-384:49-60:25-32:31-32,127-128,223-224,319-320",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Pancreas",
+            "ranges": "1-384:85-96:1-8:33-34,129-130,225-226,321-322",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Pancreas",
+            "ranges": "1-384:73-84:9-16:33-34,129-130,225-226,321-322",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Pancreas",
+            "ranges": "1-384:61-72:17-24:33-34,129-130,225-226,321-322",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Pancreas",
+            "ranges": "1-384:49-60:25-32:33-34,129-130,225-226,321-322",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Lung.LLL",
+            "ranges": "1-384:85-96:1-8:35-36,131-132,227-228,323-324",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Lung.LLL",
+            "ranges": "1-384:73-84:9-16:35-36,131-132,227-228,323-324",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Lung.LLL",
+            "ranges": "1-384:61-72:17-24:35-36,131-132,227-228,323-324",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Lung.LLL",
+            "ranges": "1-384:49-60:25-32:35-36,131-132,227-228,323-324",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Liver",
+            "ranges": "1-384:85-96:1-8:37-38,133-134,229-230,325-326",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Liver",
+            "ranges": "1-384:73-84:9-16:37-38,133-134,229-230,325-326",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Liver",
+            "ranges": "1-384:61-72:17-24:37-38,133-134,229-230,325-326",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W100.Liver",
+            "ranges": "1-384:49-60:25-32:37-38,133-134,229-230,325-326",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.anter",
+            "ranges": "1-384:85-96:1-8:39-40,135-136,231-232,327-328",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.anter",
+            "ranges": "1-384:73-84:9-16:39-40,135-136,231-232,327-328",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.anter",
+            "ranges": "1-384:61-72:17-24:39-40,135-136,231-232,327-328",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.anter",
+            "ranges": "1-384:49-60:25-32:39-40,135-136,231-232,327-328",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.center",
+            "ranges": "1-384:85-96:1-8:41-42,137-138,233-234,329-330",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.center",
+            "ranges": "1-384:73-84:9-16:41-42,137-138,233-234,329-330",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.center",
+            "ranges": "1-384:61-72:17-24:41-42,137-138,233-234,329-330",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.center",
+            "ranges": "1-384:49-60:25-32:41-42,137-138,233-234,329-330",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.post",
+            "ranges": "1-384:85-96:1-8:43-44,139-140,235-236,331-332",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.post",
+            "ranges": "1-384:73-84:9-16:43-44,139-140,235-236,331-332",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.post",
+            "ranges": "1-384:61-72:17-24:43-44,139-140,235-236,331-332",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W101.Spleen.post",
+            "ranges": "1-384:49-60:25-32:43-44,139-140,235-236,331-332",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.LV",
+            "ranges": "1-384:85-96:1-8:45-46,141-142,237-238,333-334",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.LV",
+            "ranges": "1-384:73-84:9-16:45-46,141-142,237-238,333-334",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.LV",
+            "ranges": "1-384:61-72:17-24:45-46,141-142,237-238,333-334",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.LV",
+            "ranges": "1-384:49-60:25-32:45-46,141-142,237-238,333-334",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.RV",
+            "ranges": "1-384:85-96:1-8:47-48,143-144,239-240,335-336",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.RV",
+            "ranges": "1-384:73-84:9-16:47-48,143-144,239-240,335-336",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.RV",
+            "ranges": "1-384:61-72:17-24:47-48,143-144,239-240,335-336",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.RV",
+            "ranges": "1-384:49-60:25-32:47-48,143-144,239-240,335-336",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.Septum",
+            "ranges": "1-384:85-96:1-8:49-50,145-146,241-242,337-338",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.Septum",
+            "ranges": "1-384:73-84:9-16:49-50,145-146,241-242,337-338",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.Septum",
+            "ranges": "1-384:61-72:17-24:49-50,145-146,241-242,337-338",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Heart.Septum",
+            "ranges": "1-384:49-60:25-32:49-50,145-146,241-242,337-338",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Spleen",
+            "ranges": "1-384:85-96:1-8:51-52,147-148,243-244,339-340",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Spleen",
+            "ranges": "1-384:73-84:9-16:51-52,147-148,243-244,339-340",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Spleen",
+            "ranges": "1-384:61-72:17-24:51-52,147-148,243-244,339-340",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W102.Spleen",
+            "ranges": "1-384:49-60:25-32:51-52,147-148,243-244,339-340",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.LV",
+            "ranges": "1-384:85-96:1-8:53-54,149-150,245-246,341-342",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.LV",
+            "ranges": "1-384:73-84:9-16:53-54,149-150,245-246,341-342",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.LV",
+            "ranges": "1-384:61-72:17-24:53-54,149-150,245-246,341-342",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.LV",
+            "ranges": "1-384:49-60:25-32:53-54,149-150,245-246,341-342",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.RV",
+            "ranges": "1-384:85-96:1-8:55-56,151-152,247-248,343-344",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.RV",
+            "ranges": "1-384:73-84:9-16:55-56,151-152,247-248,343-344",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.RV",
+            "ranges": "1-384:61-72:17-24:55-56,151-152,247-248,343-344",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.RV",
+            "ranges": "1-384:49-60:25-32:55-56,151-152,247-248,343-344",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Septum",
+            "ranges": "1-384:85-96:1-8:57-58,153-154,249-250,345-346",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Septum",
+            "ranges": "1-384:73-84:9-16:57-58,153-154,249-250,345-346",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Septum",
+            "ranges": "1-384:61-72:17-24:57-58,153-154,249-250,345-346",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Septum",
+            "ranges": "1-384:49-60:25-32:57-58,153-154,249-250,345-346",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Apex",
+            "ranges": "1-384:85-96:1-8:59-60,155-156,251-252,347-348",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Apex",
+            "ranges": "1-384:73-84:9-16:59-60,155-156,251-252,347-348",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Apex",
+            "ranges": "1-384:61-72:17-24:59-60,155-156,251-252,347-348",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Heart.Apex",
+            "ranges": "1-384:49-60:25-32:59-60,155-156,251-252,347-348",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Lung.LLL",
+            "ranges": "1-384:85-96:1-8:61-62,157-158,253-254,349-350",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Lung.LLL",
+            "ranges": "1-384:73-84:9-16:61-62,157-158,253-254,349-350",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Lung.LLL",
+            "ranges": "1-384:61-72:17-24:61-62,157-158,253-254,349-350",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Lung.LLL",
+            "ranges": "1-384:49-60:25-32:61-62,157-158,253-254,349-350",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Pancreas",
+            "ranges": "1-384:85-96:1-8:63-64,159-160,255-256,351-352",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Pancreas",
+            "ranges": "1-384:73-84:9-16:63-64,159-160,255-256,351-352",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Pancreas",
+            "ranges": "1-384:61-72:17-24:63-64,159-160,255-256,351-352",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W103.Pancreas",
+            "ranges": "1-384:49-60:25-32:63-64,159-160,255-256,351-352",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W104.Spleen",
+            "ranges": "1-384:85-96:1-8:65-66,161-162,257-258,353-354",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W104.Spleen",
+            "ranges": "1-384:73-84:9-16:65-66,161-162,257-258,353-354",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W104.Spleen",
+            "ranges": "1-384:61-72:17-24:65-66,161-162,257-258,353-354",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W104.Spleen",
+            "ranges": "1-384:49-60:25-32:65-66,161-162,257-258,353-354",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.LV",
+            "ranges": "1-384:85-96:1-8:67-68,163-164,259-260,355-356",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.LV",
+            "ranges": "1-384:73-84:9-16:67-68,163-164,259-260,355-356",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.LV",
+            "ranges": "1-384:61-72:17-24:67-68,163-164,259-260,355-356",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.LV",
+            "ranges": "1-384:49-60:25-32:67-68,163-164,259-260,355-356",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.RV",
+            "ranges": "1-384:85-96:1-8:69-70,165-166,261-262,357-358",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.RV",
+            "ranges": "1-384:73-84:9-16:69-70,165-166,261-262,357-358",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.RV",
+            "ranges": "1-384:61-72:17-24:69-70,165-166,261-262,357-358",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.RV",
+            "ranges": "1-384:49-60:25-32:69-70,165-166,261-262,357-358",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Lung.LLL",
+            "ranges": "1-384:85-96:1-8:71-72,167-168,263-264,359-360",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Lung.LLL",
+            "ranges": "1-384:73-84:9-16:71-72,167-168,263-264,359-360",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Lung.LLL",
+            "ranges": "1-384:61-72:17-24:71-72,167-168,263-264,359-360",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Lung.LLL",
+            "ranges": "1-384:49-60:25-32:71-72,167-168,263-264,359-360",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.heart.Septum",
+            "ranges": "1-384:85-96:1-8:73-74,169-170,265-266,361-362",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.heart.Septum",
+            "ranges": "1-384:73-84:9-16:73-74,169-170,265-266,361-362",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.heart.Septum",
+            "ranges": "1-384:61-72:17-24:73-74,169-170,265-266,361-362",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.heart.Septum",
+            "ranges": "1-384:49-60:25-32:73-74,169-170,265-266,361-362",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.Apex",
+            "ranges": "1-384:85-96:1-8:75-76,171-172,267-268,363-364",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.Apex",
+            "ranges": "1-384:73-84:9-16:75-76,171-172,267-268,363-364",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.Apex",
+            "ranges": "1-384:61-72:17-24:75-76,171-172,267-268,363-364",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W106.Heart.Apex",
+            "ranges": "1-384:49-60:25-32:75-76,171-172,267-268,363-364",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.LV",
+            "ranges": "1-384:85-96:1-8:77-78,173-174,269-270,365-366",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.LV",
+            "ranges": "1-384:73-84:9-16:77-78,173-174,269-270,365-366",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.LV",
+            "ranges": "1-384:61-72:17-24:77-78,173-174,269-270,365-366",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.LV",
+            "ranges": "1-384:49-60:25-32:77-78,173-174,269-270,365-366",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.RV",
+            "ranges": "1-384:85-96:1-8:79-80,175-176,271-272,367-368",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.RV",
+            "ranges": "1-384:73-84:9-16:79-80,175-176,271-272,367-368",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.RV",
+            "ranges": "1-384:61-72:17-24:79-80,175-176,271-272,367-368",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.RV",
+            "ranges": "1-384:49-60:25-32:79-80,175-176,271-272,367-368",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.heart.Septum",
+            "ranges": "1-384:85-96:1-8:81-82,177-178,273-274,369-370",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.heart.Septum",
+            "ranges": "1-384:73-84:9-16:81-82,177-178,273-274,369-370",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.heart.Septum",
+            "ranges": "1-384:61-72:17-24:81-82,177-178,273-274,369-370",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.heart.Septum",
+            "ranges": "1-384:49-60:25-32:81-82,177-178,273-274,369-370",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.Apex",
+            "ranges": "1-384:85-96:1-8:83-84,179-180,275-276,371-372",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.Apex",
+            "ranges": "1-384:73-84:9-16:83-84,179-180,275-276,371-372",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.Apex",
+            "ranges": "1-384:61-72:17-24:83-84,179-180,275-276,371-372",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W107.Heart.Apex",
+            "ranges": "1-384:49-60:25-32:83-84,179-180,275-276,371-372",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT199",
+            "ranges": "1-384:85-96:1-8:85-86,181-182,277-278,373-374",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT199",
+            "ranges": "1-384:73-84:9-16:85-86,181-182,277-278,373-374",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT199",
+            "ranges": "1-384:61-72:17-24:85-86,181-182,277-278,373-374",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT199",
+            "ranges": "1-384:49-60:25-32:85-86,181-182,277-278,373-374",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT200",
+            "ranges": "1-384:85-96:1-8:87-88,183-184,279-280,375-376",
+            "genome": "mouse",
+            "peak_group": "2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT200",
+            "ranges": "1-384:73-84:9-16:87-88,183-184,279-280,375-376",
+            "genome": "mouse",
+            "peak_group": "2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT200",
+            "ranges": "1-384:61-72:17-24:87-88,183-184,279-280,375-376",
+            "genome": "mouse",
+            "peak_group": "2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "BAT200",
+            "ranges": "1-384:49-60:25-32:87-88,183-184,279-280,375-376",
+            "genome": "mouse",
+            "peak_group": "2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W93.Lung",
+            "ranges": "1-384:85-96:1-8:89-92,185-188,281-284,377-380",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W93.Lung",
+            "ranges": "1-384:73-84:9-16:89-92,185-188,281-284,377-380",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W93.Lung",
+            "ranges": "1-384:61-72:17-24:89-92,185-188,281-284,377-380",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "W93.Lung",
+            "ranges": "1-384:49-60:25-32:89-92,185-188,281-284,377-380",
+            "genome": "human",
+            "peak_group": "1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "Barnyard",
+            "ranges": "1-384:85-96:1-8:93-96,189-192,285-288,381-384",
+            "genome": "barnyard",
+            "peak_group": "3",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "Barnyard",
+            "ranges": "1-384:73-84:9-16:93-96,189-192,285-288,381-384",
+            "genome": "barnyard",
+            "peak_group": "3",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "Barnyard",
+            "ranges": "1-384:61-72:17-24:93-96,189-192,285-288,381-384",
+            "genome": "barnyard",
+            "peak_group": "3",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "Barnyard",
+            "ranges": "1-384:49-60:25-32:93-96,189-192,285-288,381-384",
+            "genome": "barnyard",
+            "peak_group": "3",
+            "peak_file": ""
+        }
+    ],
+    "external_sample_name_dict": {
+        "W97.Heart.apex": "",
+        "W97.Lung.LLL": "",
+        "W97.Pancreas": "",
+        "W97.Aorta.ascending": "",
+        "W98.Lung.LLL": "",
+        "W98.Pancreas": "",
+        "W98.Aorta": "",
+        "W98.Colon": "",
+        "W99.Pancreas": "",
+        "W99.Lung.LLL": "",
+        "W99.Aorta": "",
+        "W99.Heart.apex": "",
+        "W100.Heart.LV": "",
+        "W100.Heart.RV": "",
+        "W100.Heart.septum": "",
+        "W100.Heart.apex": "",
+        "W100.Pancreas": "",
+        "W100.Lung.LLL": "",
+        "W100.Liver": "",
+        "W101.Spleen.anter": "",
+        "W101.Spleen.center": "",
+        "W101.Spleen.post": "",
+        "W102.Heart.LV": "",
+        "W102.Heart.RV": "",
+        "W102.Heart.Septum": "",
+        "W102.Spleen": "",
+        "W103.Heart.LV": "",
+        "W103.Heart.RV": "",
+        "W103.Heart.Septum": "",
+        "W103.Heart.Apex": "",
+        "W103.Lung.LLL": "",
+        "W103.Pancreas": "",
+        "W104.Spleen": "",
+        "W106.Heart.LV": "",
+        "W106.Heart.RV": "",
+        "W106.Lung.LLL": "",
+        "W106.heart.Septum": "",
+        "W106.Heart.Apex": "",
+        "W107.Heart.LV": "",
+        "W107.Heart.RV": "",
+        "W107.heart.Septum": "",
+        "W107.Heart.Apex": "",
+        "BAT199": "",
+        "BAT200": "",
+        "W93.Lung": "",
+        "Barnyard": ""
+    },
+    "tissue_dict": {
+        "W97.Heart.apex": null,
+        "W97.Lung.LLL": null,
+        "W97.Pancreas": null,
+        "W97.Aorta.ascending": null,
+        "W98.Lung.LLL": null,
+        "W98.Pancreas": null,
+        "W98.Aorta": null,
+        "W98.Colon": null,
+        "W99.Pancreas": null,
+        "W99.Lung.LLL": null,
+        "W99.Aorta": null,
+        "W99.Heart.apex": null,
+        "W100.Heart.LV": null,
+        "W100.Heart.RV": null,
+        "W100.Heart.septum": null,
+        "W100.Heart.apex": null,
+        "W100.Pancreas": null,
+        "W100.Lung.LLL": null,
+        "W100.Liver": null,
+        "W101.Spleen.anter": null,
+        "W101.Spleen.center": null,
+        "W101.Spleen.post": null,
+        "W102.Heart.LV": null,
+        "W102.Heart.RV": null,
+        "W102.Heart.Septum": null,
+        "W102.Spleen": null,
+        "W103.Heart.LV": null,
+        "W103.Heart.RV": null,
+        "W103.Heart.Septum": null,
+        "W103.Heart.Apex": null,
+        "W103.Lung.LLL": null,
+        "W103.Pancreas": null,
+        "W104.Spleen": null,
+        "W106.Heart.LV": null,
+        "W106.Heart.RV": null,
+        "W106.Lung.LLL": null,
+        "W106.heart.Septum": null,
+        "W106.Heart.Apex": null,
+        "W107.Heart.LV": null,
+        "W107.Heart.RV": null,
+        "W107.heart.Septum": null,
+        "W107.Heart.Apex": null,
+        "BAT199": null,
+        "BAT200": null,
+        "W93.Lung": null,
+        "Barnyard": null
+    },
+    "wrap_groups_dict": {
+        "Trapnell_CZI": [
+            "W97.Heart.apex",
+            "W97.Lung.LLL",
+            "W97.Pancreas",
+            "W97.Aorta.ascending",
+            "W98.Lung.LLL",
+            "W98.Pancreas",
+            "W98.Aorta",
+            "W98.Colon",
+            "W99.Pancreas",
+            "W99.Lung.LLL",
+            "W99.Aorta",
+            "W99.Heart.apex",
+            "W100.Heart.LV",
+            "W100.Heart.RV",
+            "W100.Heart.septum",
+            "W100.Heart.apex",
+            "W100.Pancreas",
+            "W100.Lung.LLL",
+            "W100.Liver",
+            "W101.Spleen.anter",
+            "W101.Spleen.center",
+            "W101.Spleen.post",
+            "W102.Heart.LV",
+            "W102.Heart.RV",
+            "W102.Heart.Septum",
+            "W102.Spleen",
+            "W103.Heart.LV",
+            "W103.Heart.RV",
+            "W103.Heart.Septum",
+            "W103.Heart.Apex",
+            "W103.Lung.LLL",
+            "W103.Pancreas",
+            "W104.Spleen",
+            "W106.Heart.LV",
+            "W106.Heart.RV",
+            "W106.Lung.LLL",
+            "W106.heart.Septum",
+            "W106.Heart.Apex",
+            "W107.Heart.LV",
+            "W107.Heart.RV",
+            "W107.heart.Septum",
+            "W107.Heart.Apex",
+            "W93.Lung"
+        ],
+        "BAT": [
+            "BAT199",
+            "BAT200",
+            "Barnyard"
+        ]
+    }
+}

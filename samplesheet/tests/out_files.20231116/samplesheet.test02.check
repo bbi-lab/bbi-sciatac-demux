@@ -1,0 +1,60 @@
+input column name dicts (len: 9):  [{'type': 'n7', 'format': 'wells'}, {'type': 'n5', 'format': 'wells'}, {'type': 'p7', 'format': 'rows'}, {'type': 'p5', 'format': 'columns'}, {'type': 'sample_name', 'format': None}, {'type': 'genome', 'format': None}, {'type': 'peak_group', 'format': None}, {'type': 'peak_file', 'format': None}, {'type': 'external_sample_name', 'format': None}]
+n5 1  n7 0  p5 3  p7 2
+number rows: 3
+input row:  "P1-B01:P1-B12,P1-A01:P1-A12","P1-A03:P1-H03,P1-A01:P1-H01","G","3","BAT99.1","mouse","g1","","ex1"
+sample: BAT99.1
+n7:
+  csv:  P1-B01:P1-B12,P1-A01:P1-A12
+  json: P1-A01:P1-B12
+  json: 1-24
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A03:P1-H03,P1-A01:P1-H01
+  json: P1-A01:P1-H01,P1-A03:P1-H03
+  json: 1-8,17-24
+
+input row:  "P1-B01:P1-B12,P1-A01:P1-A12","P1-A03:P1-H03,P1-A01:P1-H01","F","2","BAT99.1","mouse","g1","","ex1"
+sample: BAT99.1
+n7:
+  csv:  P1-B01:P1-B12,P1-A01:P1-A12
+  json: P1-A01:P1-B12
+  json: 1-24
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A03:P1-H03,P1-A01:P1-H01
+  json: P1-A01:P1-H01,P1-A03:P1-H03
+  json: 1-8,17-24
+
+input row:  "P1-B01:P1-B12,P1-A01:P1-A12","P1-A03:P1-H03,P1-A01:P1-H01","E","1","BAT99.1","mouse","g1","","ex1"
+sample: BAT99.1
+n7:
+  csv:  P1-B01:P1-B12,P1-A01:P1-A12
+  json: P1-A01:P1-B12
+  json: 1-24
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A03:P1-H03,P1-A01:P1-H01
+  json: P1-A01:P1-H01,P1-A03:P1-H03
+  json: 1-8,17-24
+

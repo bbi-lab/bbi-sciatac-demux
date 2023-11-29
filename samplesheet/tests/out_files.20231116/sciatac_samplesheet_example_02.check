@@ -1,0 +1,231 @@
+input column name dicts (len: 9):  [{'type': 'n7', 'format': 'indexes'}, {'type': 'n5', 'format': 'wells'}, {'type': 'p7', 'format': 'wells'}, {'type': 'p5', 'format': 'wells'}, {'type': 'sample_name', 'format': None}, {'type': 'genome', 'format': None}, {'type': 'peak_group', 'format': None}, {'type': 'peak_file', 'format': None}, {'type': 'external_sample_name', 'format': None}]
+n5 1  n7 0  p5 3  p7 2
+number rows: 12
+input row:  "1:96","P1-A01:P1-H01","E01-G12","A01-H03","sample.1","mouse","group_1","",""
+sample: sample.1
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A01:P1-H01
+  json: P1-A01:P1-H01
+  json: 1-8
+
+input row:  "1:96","P1-A02:P1-H02","E01-G12","A01-H03","sample.2","mouse","group_1","",""
+sample: sample.2
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A02:P1-H02
+  json: P1-A02:P1-H02
+  json: 9-16
+
+input row:  "1:96","P1-A03:P1-H03","E01-G12","A01-H03","sample.3","mouse","group_1","",""
+sample: sample.3
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A03:P1-H03
+  json: P1-A03:P1-H03
+  json: 17-24
+
+input row:  "1:96","P1-A04:P1-H04","E01-G12","A01-H03","sample.4","human","group_2","",""
+sample: sample.4
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A04:P1-H04
+  json: P1-A04:P1-H04
+  json: 25-32
+
+input row:  "1:96","P1-A05:P1-H05","E01-G12","A01-H03","sample.5","macaque","group_3","",""
+sample: sample.5
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A05:P1-H05
+  json: P1-A05:P1-H05
+  json: 33-40
+
+input row:  "1:96","P1-A06:P1-H06","E01-G12","A01-H03","sample.6","mouse","group_1","",""
+sample: sample.6
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A06:P1-H06
+  json: P1-A06:P1-H06
+  json: 41-48
+
+input row:  "1:96","P1-A07:P1-H07","E01-G12","A01-H03","sample.7","mouse","group_1","",""
+sample: sample.7
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A07:P1-H07
+  json: P1-A07:P1-H07
+  json: 49-56
+
+input row:  "1:96","P1-A08:P1-H08","E01-G12","A01-H03","sample.8","mouse","group_1","",""
+sample: sample.8
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A08:P1-H08
+  json: P1-A08:P1-H08
+  json: 57-64
+
+input row:  "1:96","P1-A09:P1-H09","E01-G12","A01-H03","sample.9","human","group_2","",""
+sample: sample.9
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A09:P1-H09
+  json: P1-A09:P1-H09
+  json: 65-72
+
+input row:  "1:96","P1-A10:P1-A10","E01-G12","A01-H03","sample.10","macaque","group_3","",""
+sample: sample.10
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A10:P1-A10
+  json: P1-A10
+  json: 73
+
+input row:  "1:96","P1-A11:P1-H11","E01-G12","A01-H03","sample.11","macaque","group_3","",""
+sample: sample.11
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A11:P1-H11
+  json: P1-A11:P1-H11
+  json: 81-88
+
+input row:  "1:96","P1-A12:P1-H12","E01-G12","A01-H03","sample.12","barnyard","group_4","",""
+sample: sample.12
+n7:
+  csv:  1:96
+  json: 1-96
+  json: 1-96
+p7:
+  csv:  E01-G12
+  json: P1-E01:P1-G12
+  json: 49-84
+p5:
+  csv:  A01-H03
+  json: P1-A01:P1-H03
+  json: 1-24
+n5:
+  csv:  P1-A12:P1-H12
+  json: P1-A12:P1-H12
+  json: 89-96
+

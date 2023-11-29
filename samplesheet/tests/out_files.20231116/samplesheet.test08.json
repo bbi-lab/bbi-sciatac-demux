@@ -1,0 +1,105 @@
+{
+    "json_file_version": "3.2.0",
+    "illumina_run_directory": null,
+    "level": 3,
+    "number_wells": 384,
+    "tn5_barcodes": false,
+    "use_all_barcodes": false,
+    "hash_file": null,
+    "input_samplesheet_column_names": [
+        {
+            "type": "n7",
+            "format": "wells"
+        },
+        {
+            "type": "p7",
+            "format": "rows"
+        },
+        {
+            "type": "p5",
+            "format": "columns"
+        },
+        {
+            "type": "n5",
+            "format": "indexes"
+        },
+        {
+            "type": "sample_name",
+            "format": null
+        },
+        {
+            "type": "genome",
+            "format": null
+        },
+        {
+            "type": "peak_group",
+            "format": null
+        },
+        {
+            "type": "peak_file",
+            "format": null
+        },
+        {
+            "type": "external_sample_name",
+            "format": null
+        }
+    ],
+    "input_samplesheet_rows": [
+        "\"p1:a01\",\"a\",\"1\",\"1\",\"ATAC.DS1\",\"human\",\"g1\",\"\",\"ex1\"",
+        "\"p1:a01\",\"b\",\"2\",\"1\",\"ATAC.DS1\",\"human\",\"g1\",\"\",\"ex1\"",
+        "\"p1:a02\",\"c\",\"3\",\"2\",\"ATAC.DS1\",\"human\",\"g1\",\"\",\"ex1\"",
+        "\"p1:a02\",\"d\",\"4\",\"2\",\"ATAC.DS1\",\"human\",\"g1\",\"\",\"ex1\""
+    ],
+    "pcr_format": "row_col",
+    "p5_col_list": [
+        "1",
+        "2",
+        "3",
+        "4"
+    ],
+    "p7_row_list": [
+        "a",
+        "b",
+        "c",
+        "d"
+    ],
+    "p5_well_list": null,
+    "p7_well_list": null,
+    "sample_index_list": [
+        {
+            "sample_id": "ATAC.DS1",
+            "ranges": "1:1-12:1-8:1",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "ATAC.DS1",
+            "ranges": "1:13-24:9-16:1",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "ATAC.DS1",
+            "ranges": "2:25-36:17-24:2",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "ATAC.DS1",
+            "ranges": "2:37-48:25-32:2",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        }
+    ],
+    "external_sample_name_dict": {
+        "ATAC.DS1": "ex1"
+    },
+    "tissue_dict": {
+        "ATAC.DS1": null
+    },
+    "wrap_groups_dict": {}
+}

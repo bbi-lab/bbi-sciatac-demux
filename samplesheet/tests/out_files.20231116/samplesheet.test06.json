@@ -1,0 +1,103 @@
+{
+    "json_file_version": "3.2.0",
+    "illumina_run_directory": null,
+    "level": 3,
+    "number_wells": 384,
+    "tn5_barcodes": false,
+    "use_all_barcodes": false,
+    "hash_file": null,
+    "input_samplesheet_column_names": [
+        {
+            "type": "n7",
+            "format": "wells"
+        },
+        {
+            "type": "p7",
+            "format": "rows"
+        },
+        {
+            "type": "p5",
+            "format": "columns"
+        },
+        {
+            "type": "n5",
+            "format": "indexes"
+        },
+        {
+            "type": "sample_name",
+            "format": null
+        },
+        {
+            "type": "genome",
+            "format": null
+        },
+        {
+            "type": "peak_group",
+            "format": null
+        },
+        {
+            "type": "peak_file",
+            "format": null
+        },
+        {
+            "type": "external_sample_name",
+            "format": null
+        }
+    ],
+    "input_samplesheet_rows": [
+        "\"p1:a01-p1:a12,p2:a01-p2:a12\",\"a\",\"1\",\"1,9,17,25,33,41,49,57,65,73,81,89,97,105,113,121,129,137,145,153,161,169,177,185\",\"ATAC.DS1\",\"human\",\"g1\",\"\",\"ex1\"",
+        "\"p1:a01-p1:a12,p2:a01-p2:a12\",\"b\",\"2\",\"1,9,17,25,33,41,49,57,65,73,81,89,97,105,113,121,129,137,145,153,161,169,177,185\",\"ATAC.DS1\",\"human\",\"g1\",\"\",\"ex1\"",
+        "\"p1:b01-p1:b12,p2:b01-p2:b12\",\"a\",\"1\",\"2,10,18,26,34,42,50,58,66,74,82,90,98,106,114,122,130,138,146,154,162,170,178,186\",\"ATAC.DS2\",\"human\",\"g1\",\"\",\"ex1\"",
+        "\"p1:b01-p1:b12,p2:b01-p2:b12\",\"b\",\"2\",\"2,10,18,26,34,42,50,58,66,74,82,90,98,106,114,122,130,138,146,154,162,170,178,186\",\"ATAC.DS2\",\"human\",\"g1\",\"\",\"ex1\""
+    ],
+    "pcr_format": "row_col",
+    "p5_col_list": [
+        "1",
+        "2"
+    ],
+    "p7_row_list": [
+        "a",
+        "b"
+    ],
+    "p5_well_list": null,
+    "p7_well_list": null,
+    "sample_index_list": [
+        {
+            "sample_id": "ATAC.DS1",
+            "ranges": "1-12,97-108:1-12:1-8:1,9,17,25,33,41,49,57,65,73,81,89,97,105,113,121,129,137,145,153,161,169,177,185",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "ATAC.DS1",
+            "ranges": "1-12,97-108:13-24:9-16:1,9,17,25,33,41,49,57,65,73,81,89,97,105,113,121,129,137,145,153,161,169,177,185",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "ATAC.DS2",
+            "ranges": "13-24,109-120:1-12:1-8:2,10,18,26,34,42,50,58,66,74,82,90,98,106,114,122,130,138,146,154,162,170,178,186",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "ATAC.DS2",
+            "ranges": "13-24,109-120:13-24:9-16:2,10,18,26,34,42,50,58,66,74,82,90,98,106,114,122,130,138,146,154,162,170,178,186",
+            "genome": "human",
+            "peak_group": "g1",
+            "peak_file": ""
+        }
+    ],
+    "external_sample_name_dict": {
+        "ATAC.DS1": "ex1",
+        "ATAC.DS2": "ex1"
+    },
+    "tissue_dict": {
+        "ATAC.DS1": null,
+        "ATAC.DS2": null
+    },
+    "wrap_groups_dict": {}
+}

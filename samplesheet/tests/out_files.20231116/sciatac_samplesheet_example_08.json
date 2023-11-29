@@ -1,0 +1,405 @@
+{
+    "json_file_version": "3.2.0",
+    "illumina_run_directory": null,
+    "level": 3,
+    "number_wells": 384,
+    "tn5_barcodes": false,
+    "use_all_barcodes": false,
+    "hash_file": null,
+    "input_samplesheet_column_names": [
+        {
+            "type": "n7",
+            "format": "indexes"
+        },
+        {
+            "type": "n5",
+            "format": "wells"
+        },
+        {
+            "type": "p7",
+            "format": "rows"
+        },
+        {
+            "type": "p5",
+            "format": "columns"
+        },
+        {
+            "type": "sample_name",
+            "format": null
+        },
+        {
+            "type": "genome",
+            "format": null
+        },
+        {
+            "type": "peak_group",
+            "format": null
+        },
+        {
+            "type": "peak_file",
+            "format": null
+        },
+        {
+            "type": "external_sample_name",
+            "format": null
+        },
+        {
+            "type": "tissue",
+            "format": null
+        },
+        {
+            "type": "wrap_group",
+            "format": null
+        }
+    ],
+    "input_samplesheet_rows": [
+        "\"1:96\",\"P1-A01:P1-H01\",\"E\",\"1\",\"sample.1\",\"mouse\",\"group_1\",\"\",\"exsample.1\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A01:P1-H01\",\"F\",\"2\",\"sample.1\",\"mouse\",\"group_1\",\"\",\"exsample.1\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A01:P1-H01\",\"G\",\"3\",\"sample.1\",\"mouse\",\"group_1\",\"\",\"exsample.1\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A02:P1-H02\",\"E\",\"1\",\"sample.2\",\"human\",\"group_2\",\"\",\"exsample.2\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A02:P1-H02\",\"F\",\"2\",\"sample.2\",\"human\",\"group_2\",\"\",\"exsample.2\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A02:P1-H02\",\"G\",\"3\",\"sample.2\",\"human\",\"group_2\",\"\",\"exsample.2\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A03:P1-H03\",\"E\",\"1\",\"sample.3\",\"mouse\",\"group_1\",\"\",\"exsample.3\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A03:P1-H03\",\"F\",\"2\",\"sample.3\",\"mouse\",\"group_1\",\"\",\"exsample.3\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A03:P1-H03\",\"G\",\"3\",\"sample.3\",\"mouse\",\"group_1\",\"\",\"exsample.3\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A04:P1-H04\",\"E\",\"1\",\"sample.4\",\"human\",\"group_2\",\"/home/me/my_peaks.bed\",\"exsample.4\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A04:P1-H04\",\"F\",\"2\",\"sample.4\",\"human\",\"group_2\",\"/home/me/my_peaks.bed\",\"exsample.4\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A04:P1-H04\",\"G\",\"3\",\"sample.4\",\"human\",\"group_2\",\"/home/me/my_peaks.bed\",\"exsample.4\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A05:P1-H05\",\"E\",\"1\",\"sample.5\",\"human\",\"group_2\",\"\",\"exsample.5\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A05:P1-H05\",\"F\",\"2\",\"sample.5\",\"human\",\"group_2\",\"\",\"exsample.5\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A05:P1-H05\",\"G\",\"3\",\"sample.5\",\"human\",\"group_2\",\"\",\"exsample.5\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A06:P1-H06\",\"E\",\"1\",\"sample.6\",\"mouse\",\"group_1\",\"\",\"exsample.6\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A06:P1-H06\",\"F\",\"2\",\"sample.6\",\"mouse\",\"group_1\",\"\",\"exsample.6\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A06:P1-H06\",\"G\",\"3\",\"sample.6\",\"mouse\",\"group_1\",\"\",\"exsample.6\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A07:P1-H07\",\"E\",\"1\",\"sample.7\",\"mouse\",\"group_1\",\"\",\"exsample.7\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A07:P1-H07\",\"F\",\"2\",\"sample.7\",\"mouse\",\"group_1\",\"\",\"exsample.7\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A07:P1-H07\",\"G\",\"3\",\"sample.7\",\"mouse\",\"group_1\",\"\",\"exsample.7\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A08:P1-H08\",\"E\",\"1\",\"sample.8\",\"mouse\",\"group_1\",\"\",\"exsample.8\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A08:P1-H08\",\"F\",\"2\",\"sample.8\",\"mouse\",\"group_1\",\"\",\"exsample.8\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A08:P1-H08\",\"G\",\"3\",\"sample.8\",\"mouse\",\"group_1\",\"\",\"exsample.8\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A09:P1-H09\",\"E\",\"1\",\"sample.9\",\"mouse\",\"group_1\",\"\",\"exsample.9\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A09:P1-H09\",\"F\",\"2\",\"sample.9\",\"mouse\",\"group_1\",\"\",\"exsample.9\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A09:P1-H09\",\"G\",\"3\",\"sample.9\",\"mouse\",\"group_1\",\"\",\"exsample.9\",\"\",\"Smith\"",
+        "\"1:96\",\"P1-A10:P1-A10\",\"E\",\"1\",\"sample.10\",\"human\",\"group_2\",\"\",\"exsample.10\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A10:P1-A10\",\"F\",\"2\",\"sample.10\",\"human\",\"group_2\",\"\",\"exsample.10\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A10:P1-A10\",\"G\",\"3\",\"sample.10\",\"human\",\"group_2\",\"\",\"exsample.10\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A11:P1-H11\",\"E\",\"1\",\"sample.11\",\"human\",\"group_2\",\"\",\"exsample.11\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A11:P1-H11\",\"F\",\"2\",\"sample.11\",\"human\",\"group_2\",\"\",\"exsample.11\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A11:P1-H11\",\"G\",\"3\",\"sample.11\",\"human\",\"group_2\",\"\",\"exsample.11\",\"\",\"Jones\"",
+        "\"1:96\",\"P1-A12:P1-H12\",\"E\",\"1\",\"sample.12\",\"barnyard\",\"group_3\",\"\",\"exsample.12\",\"\",\"\"",
+        "\"1:96\",\"P1-A12:P1-H12\",\"F\",\"2\",\"sample.12\",\"barnyard\",\"group_3\",\"\",\"exsample.12\",\"\",\"\"",
+        "\"1:96\",\"P1-A12:P1-H12\",\"G\",\"3\",\"sample.12\",\"barnyard\",\"group_3\",\"\",\"exsample.12\",\"\",\"\""
+    ],
+    "pcr_format": "row_col",
+    "p5_col_list": [
+        "1",
+        "2",
+        "3"
+    ],
+    "p7_row_list": [
+        "E",
+        "F",
+        "G"
+    ],
+    "p5_well_list": null,
+    "p7_well_list": null,
+    "sample_index_list": [
+        {
+            "sample_id": "sample.1",
+            "ranges": "1-96:49-60:1-8:1-8",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.1",
+            "ranges": "1-96:61-72:9-16:1-8",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.1",
+            "ranges": "1-96:73-84:17-24:1-8",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.2",
+            "ranges": "1-96:49-60:1-8:9-16",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.2",
+            "ranges": "1-96:61-72:9-16:9-16",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.2",
+            "ranges": "1-96:73-84:17-24:9-16",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.3",
+            "ranges": "1-96:49-60:1-8:17-24",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.3",
+            "ranges": "1-96:61-72:9-16:17-24",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.3",
+            "ranges": "1-96:73-84:17-24:17-24",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.4",
+            "ranges": "1-96:49-60:1-8:25-32",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": "/home/me/my_peaks.bed"
+        },
+        {
+            "sample_id": "sample.4",
+            "ranges": "1-96:61-72:9-16:25-32",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": "/home/me/my_peaks.bed"
+        },
+        {
+            "sample_id": "sample.4",
+            "ranges": "1-96:73-84:17-24:25-32",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": "/home/me/my_peaks.bed"
+        },
+        {
+            "sample_id": "sample.5",
+            "ranges": "1-96:49-60:1-8:33-40",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.5",
+            "ranges": "1-96:61-72:9-16:33-40",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.5",
+            "ranges": "1-96:73-84:17-24:33-40",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.6",
+            "ranges": "1-96:49-60:1-8:41-48",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.6",
+            "ranges": "1-96:61-72:9-16:41-48",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.6",
+            "ranges": "1-96:73-84:17-24:41-48",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.7",
+            "ranges": "1-96:49-60:1-8:49-56",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.7",
+            "ranges": "1-96:61-72:9-16:49-56",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.7",
+            "ranges": "1-96:73-84:17-24:49-56",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.8",
+            "ranges": "1-96:49-60:1-8:57-64",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.8",
+            "ranges": "1-96:61-72:9-16:57-64",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.8",
+            "ranges": "1-96:73-84:17-24:57-64",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.9",
+            "ranges": "1-96:49-60:1-8:65-72",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.9",
+            "ranges": "1-96:61-72:9-16:65-72",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.9",
+            "ranges": "1-96:73-84:17-24:65-72",
+            "genome": "mouse",
+            "peak_group": "group_1",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.10",
+            "ranges": "1-96:49-60:1-8:73",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.10",
+            "ranges": "1-96:61-72:9-16:73",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.10",
+            "ranges": "1-96:73-84:17-24:73",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.11",
+            "ranges": "1-96:49-60:1-8:81-88",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.11",
+            "ranges": "1-96:61-72:9-16:81-88",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.11",
+            "ranges": "1-96:73-84:17-24:81-88",
+            "genome": "human",
+            "peak_group": "group_2",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.12",
+            "ranges": "1-96:49-60:1-8:89-96",
+            "genome": "barnyard",
+            "peak_group": "group_3",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.12",
+            "ranges": "1-96:61-72:9-16:89-96",
+            "genome": "barnyard",
+            "peak_group": "group_3",
+            "peak_file": ""
+        },
+        {
+            "sample_id": "sample.12",
+            "ranges": "1-96:73-84:17-24:89-96",
+            "genome": "barnyard",
+            "peak_group": "group_3",
+            "peak_file": ""
+        }
+    ],
+    "external_sample_name_dict": {
+        "sample.1": "exsample.1",
+        "sample.2": "exsample.2",
+        "sample.3": "exsample.3",
+        "sample.4": "exsample.4",
+        "sample.5": "exsample.5",
+        "sample.6": "exsample.6",
+        "sample.7": "exsample.7",
+        "sample.8": "exsample.8",
+        "sample.9": "exsample.9",
+        "sample.10": "exsample.10",
+        "sample.11": "exsample.11",
+        "sample.12": "exsample.12"
+    },
+    "tissue_dict": {
+        "sample.1": "",
+        "sample.2": "",
+        "sample.3": "",
+        "sample.4": "",
+        "sample.5": "",
+        "sample.6": "",
+        "sample.7": "",
+        "sample.8": "",
+        "sample.9": "",
+        "sample.10": "",
+        "sample.11": "",
+        "sample.12": ""
+    },
+    "wrap_groups_dict": {
+        "Smith": [
+            "sample.1",
+            "sample.3",
+            "sample.6",
+            "sample.7",
+            "sample.8",
+            "sample.9"
+        ],
+        "Jones": [
+            "sample.2",
+            "sample.4",
+            "sample.5",
+            "sample.10",
+            "sample.11"
+        ]
+    }
+}

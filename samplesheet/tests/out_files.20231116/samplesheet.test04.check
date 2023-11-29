@@ -1,0 +1,22 @@
+input column name dicts (len: 9):  [{'type': 'n7', 'format': 'indexes'}, {'type': 'n5', 'format': 'indexes'}, {'type': 'p7', 'format': 'indexes'}, {'type': 'p5', 'format': 'indexes'}, {'type': 'sample_name', 'format': None}, {'type': 'genome', 'format': None}, {'type': 'peak_group', 'format': None}, {'type': 'peak_file', 'format': None}, {'type': 'external_sample_name', 'format': None}]
+n5 1  n7 0  p5 3  p7 2
+number rows: 1
+input row:  "80,13,17","105,122,180","45,37,77","41,70,86","BAT99.1","mouse","g1","","ex1"
+sample: BAT99.1
+n7:
+  csv:  80,13,17
+  json: 13,17,80
+  json: 13,17,80
+p7:
+  csv:  45,37,77
+  json: 37,45,77
+  json: 37,45,77
+p5:
+  csv:  41,70,86
+  json: 41,70,86
+  json: 41,70,86
+n5:
+  csv:  105,122,180
+  json: 105,122,180
+  json: 105,122,180
+

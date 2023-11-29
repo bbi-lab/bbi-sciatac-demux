@@ -1,0 +1,79 @@
+input column name dicts (len: 9):  [{'type': 'n7', 'format': 'wells'}, {'type': 'p7', 'format': 'rows'}, {'type': 'p5', 'format': 'columns'}, {'type': 'n5', 'format': 'indexes'}, {'type': 'sample_name', 'format': None}, {'type': 'genome', 'format': None}, {'type': 'peak_group', 'format': None}, {'type': 'peak_file', 'format': None}, {'type': 'external_sample_name', 'format': None}]
+n5 3  n7 0  p5 2  p7 1
+number rows: 4
+input row:  "p1:a01","a","1","1","ATAC.DS1","human","g1","","ex1"
+sample: ATAC.DS1
+n7:
+  csv:  p1:a01
+  json: P1-A01
+  json: 1
+p7:
+  csv:  a
+  json: P1-A01:P1-A12
+  json: 1-12
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  1
+  json: 1
+  json: 1
+
+input row:  "p1:a01","b","2","1","ATAC.DS1","human","g1","","ex1"
+sample: ATAC.DS1
+n7:
+  csv:  p1:a01
+  json: P1-A01
+  json: 1
+p7:
+  csv:  b
+  json: P1-B01:P1-B12
+  json: 13-24
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  1
+  json: 1
+  json: 1
+
+input row:  "p1:a02","c","3","2","ATAC.DS1","human","g1","","ex1"
+sample: ATAC.DS1
+n7:
+  csv:  p1:a02
+  json: P1-A02
+  json: 2
+p7:
+  csv:  c
+  json: P1-C01:P1-C12
+  json: 25-36
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  2
+  json: 2
+  json: 2
+
+input row:  "p1:a02","d","4","2","ATAC.DS1","human","g1","","ex1"
+sample: ATAC.DS1
+n7:
+  csv:  p1:a02
+  json: P1-A02
+  json: 2
+p7:
+  csv:  d
+  json: P1-D01:P1-D12
+  json: 37-48
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  2
+  json: 2
+  json: 2
+

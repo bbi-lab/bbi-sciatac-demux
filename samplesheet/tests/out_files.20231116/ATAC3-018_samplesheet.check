@@ -1,0 +1,3499 @@
+input column name dicts (len: 10):  [{'type': 'n7', 'format': 'wells'}, {'type': 'n5', 'format': 'wells'}, {'type': 'p7', 'format': 'rows'}, {'type': 'p5', 'format': 'columns'}, {'type': 'sample_name', 'format': None}, {'type': 'genome', 'format': None}, {'type': 'peak_group', 'format': None}, {'type': 'peak_file', 'format': None}, {'type': 'wrap_group', 'format': None}, {'type': 'external_sample_name', 'format': None}]
+n5 1  n7 0  p5 3  p7 2
+number rows: 184
+input row:  "P1-A01:P4-H12","P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01","H","1","W97.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W97.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: 1-2,97-98,193-194,289-290
+
+input row:  "P1-A01:P4-H12","P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01","G","2","W97.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W97.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: 1-2,97-98,193-194,289-290
+
+input row:  "P1-A01:P4-H12","P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01","F","3","W97.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W97.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: 1-2,97-98,193-194,289-290
+
+input row:  "P1-A01:P4-H12","P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01","E","4","W97.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W97.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: P1-A01:P1-B01,P2-A01:P2-B01,P3-A01:P3-B01,P4-A01:P4-B01
+  json: 1-2,97-98,193-194,289-290
+
+input row:  "P1-A01:P4-H12","P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01","H","1","W97.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W97.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: 3-4,99-100,195-196,291-292
+
+input row:  "P1-A01:P4-H12","P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01","G","2","W97.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W97.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: 3-4,99-100,195-196,291-292
+
+input row:  "P1-A01:P4-H12","P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01","F","3","W97.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W97.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: 3-4,99-100,195-196,291-292
+
+input row:  "P1-A01:P4-H12","P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01","E","4","W97.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W97.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: P1-C01:P1-D01,P2-C01:P2-D01,P3-C01:P3-D01,P4-C01:P4-D01
+  json: 3-4,99-100,195-196,291-292
+
+input row:  "P1-A01:P4-H12","P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01","H","1","W97.Pancreas","human","1","","Trapnell_CZI",""
+sample: W97.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: 5-6,101-102,197-198,293-294
+
+input row:  "P1-A01:P4-H12","P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01","G","2","W97.Pancreas","human","1","","Trapnell_CZI",""
+sample: W97.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: 5-6,101-102,197-198,293-294
+
+input row:  "P1-A01:P4-H12","P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01","F","3","W97.Pancreas","human","1","","Trapnell_CZI",""
+sample: W97.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: 5-6,101-102,197-198,293-294
+
+input row:  "P1-A01:P4-H12","P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01","E","4","W97.Pancreas","human","1","","Trapnell_CZI",""
+sample: W97.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: P1-E01:P1-F01,P2-E01:P2-F01,P3-E01:P3-F01,P4-E01:P4-F01
+  json: 5-6,101-102,197-198,293-294
+
+input row:  "P1-A01:P4-H12","P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01","H","1","W97.Aorta.ascending","human","1","","Trapnell_CZI",""
+sample: W97.Aorta.ascending
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: 7-8,103-104,199-200,295-296
+
+input row:  "P1-A01:P4-H12","P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01","G","2","W97.Aorta.ascending","human","1","","Trapnell_CZI",""
+sample: W97.Aorta.ascending
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: 7-8,103-104,199-200,295-296
+
+input row:  "P1-A01:P4-H12","P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01","F","3","W97.Aorta.ascending","human","1","","Trapnell_CZI",""
+sample: W97.Aorta.ascending
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: 7-8,103-104,199-200,295-296
+
+input row:  "P1-A01:P4-H12","P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01","E","4","W97.Aorta.ascending","human","1","","Trapnell_CZI",""
+sample: W97.Aorta.ascending
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: P1-G01:P1-H01,P2-G01:P2-H01,P3-G01:P3-H01,P4-G01:P4-H01
+  json: 7-8,103-104,199-200,295-296
+
+input row:  "P1-A01:P4-H12","P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02","H","1","W98.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W98.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: 9-10,105-106,201-202,297-298
+
+input row:  "P1-A01:P4-H12","P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02","G","2","W98.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W98.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: 9-10,105-106,201-202,297-298
+
+input row:  "P1-A01:P4-H12","P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02","F","3","W98.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W98.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: 9-10,105-106,201-202,297-298
+
+input row:  "P1-A01:P4-H12","P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02","E","4","W98.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W98.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: P1-A02:P1-B02,P2-A02:P2-B02,P3-A02:P3-B02,P4-A02:P4-B02
+  json: 9-10,105-106,201-202,297-298
+
+input row:  "P1-A01:P4-H12","P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02","H","1","W98.Pancreas","human","1","","Trapnell_CZI",""
+sample: W98.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: 11-12,107-108,203-204,299-300
+
+input row:  "P1-A01:P4-H12","P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02","G","2","W98.Pancreas","human","1","","Trapnell_CZI",""
+sample: W98.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: 11-12,107-108,203-204,299-300
+
+input row:  "P1-A01:P4-H12","P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02","F","3","W98.Pancreas","human","1","","Trapnell_CZI",""
+sample: W98.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: 11-12,107-108,203-204,299-300
+
+input row:  "P1-A01:P4-H12","P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02","E","4","W98.Pancreas","human","1","","Trapnell_CZI",""
+sample: W98.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: P1-C02:P1-D02,P2-C02:P2-D02,P3-C02:P3-D02,P4-C02:P4-D02
+  json: 11-12,107-108,203-204,299-300
+
+input row:  "P1-A01:P4-H12","P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02","H","1","W98.Aorta","human","1","","Trapnell_CZI",""
+sample: W98.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: 13-14,109-110,205-206,301-302
+
+input row:  "P1-A01:P4-H12","P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02","G","2","W98.Aorta","human","1","","Trapnell_CZI",""
+sample: W98.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: 13-14,109-110,205-206,301-302
+
+input row:  "P1-A01:P4-H12","P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02","F","3","W98.Aorta","human","1","","Trapnell_CZI",""
+sample: W98.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: 13-14,109-110,205-206,301-302
+
+input row:  "P1-A01:P4-H12","P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02","E","4","W98.Aorta","human","1","","Trapnell_CZI",""
+sample: W98.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: P1-E02:P1-F02,P2-E02:P2-F02,P3-E02:P3-F02,P4-E02:P4-F02
+  json: 13-14,109-110,205-206,301-302
+
+input row:  "P1-A01:P4-H12","P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02","H","1","W98.Colon","human","1","","Trapnell_CZI",""
+sample: W98.Colon
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: 15-16,111-112,207-208,303-304
+
+input row:  "P1-A01:P4-H12","P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02","G","2","W98.Colon","human","1","","Trapnell_CZI",""
+sample: W98.Colon
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: 15-16,111-112,207-208,303-304
+
+input row:  "P1-A01:P4-H12","P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02","F","3","W98.Colon","human","1","","Trapnell_CZI",""
+sample: W98.Colon
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: 15-16,111-112,207-208,303-304
+
+input row:  "P1-A01:P4-H12","P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02","E","4","W98.Colon","human","1","","Trapnell_CZI",""
+sample: W98.Colon
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: P1-G02:P1-H02,P2-G02:P2-H02,P3-G02:P3-H02,P4-G02:P4-H02
+  json: 15-16,111-112,207-208,303-304
+
+input row:  "P1-A01:P4-H12","P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03","H","1","W99.Pancreas","human","1","","Trapnell_CZI",""
+sample: W99.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: 17-18,113-114,209-210,305-306
+
+input row:  "P1-A01:P4-H12","P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03","G","2","W99.Pancreas","human","1","","Trapnell_CZI",""
+sample: W99.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: 17-18,113-114,209-210,305-306
+
+input row:  "P1-A01:P4-H12","P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03","F","3","W99.Pancreas","human","1","","Trapnell_CZI",""
+sample: W99.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: 17-18,113-114,209-210,305-306
+
+input row:  "P1-A01:P4-H12","P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03","E","4","W99.Pancreas","human","1","","Trapnell_CZI",""
+sample: W99.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: P1-A03:P1-B03,P2-A03:P2-B03,P3-A03:P3-B03,P4-A03:P4-B03
+  json: 17-18,113-114,209-210,305-306
+
+input row:  "P1-A01:P4-H12","P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03","H","1","W99.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W99.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: 19-20,115-116,211-212,307-308
+
+input row:  "P1-A01:P4-H12","P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03","G","2","W99.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W99.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: 19-20,115-116,211-212,307-308
+
+input row:  "P1-A01:P4-H12","P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03","F","3","W99.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W99.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: 19-20,115-116,211-212,307-308
+
+input row:  "P1-A01:P4-H12","P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03","E","4","W99.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W99.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: P1-C03:P1-D03,P2-C03:P2-D03,P3-C03:P3-D03,P4-C03:P4-D03
+  json: 19-20,115-116,211-212,307-308
+
+input row:  "P1-A01:P4-H12","P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03","H","1","W99.Aorta","human","1","","Trapnell_CZI",""
+sample: W99.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: 21-22,117-118,213-214,309-310
+
+input row:  "P1-A01:P4-H12","P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03","G","2","W99.Aorta","human","1","","Trapnell_CZI",""
+sample: W99.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: 21-22,117-118,213-214,309-310
+
+input row:  "P1-A01:P4-H12","P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03","F","3","W99.Aorta","human","1","","Trapnell_CZI",""
+sample: W99.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: 21-22,117-118,213-214,309-310
+
+input row:  "P1-A01:P4-H12","P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03","E","4","W99.Aorta","human","1","","Trapnell_CZI",""
+sample: W99.Aorta
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: P1-E03:P1-F03,P2-E03:P2-F03,P3-E03:P3-F03,P4-E03:P4-F03
+  json: 21-22,117-118,213-214,309-310
+
+input row:  "P1-A01:P4-H12","P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03","H","1","W99.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W99.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: 23-24,119-120,215-216,311-312
+
+input row:  "P1-A01:P4-H12","P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03","G","2","W99.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W99.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: 23-24,119-120,215-216,311-312
+
+input row:  "P1-A01:P4-H12","P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03","F","3","W99.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W99.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: 23-24,119-120,215-216,311-312
+
+input row:  "P1-A01:P4-H12","P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03","E","4","W99.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W99.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: P1-G03:P1-H03,P2-G03:P2-H03,P3-G03:P3-H03,P4-G03:P4-H03
+  json: 23-24,119-120,215-216,311-312
+
+input row:  "P1-A01:P4-H12","P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04","H","1","W100.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: 25-26,121-122,217-218,313-314
+
+input row:  "P1-A01:P4-H12","P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04","G","2","W100.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: 25-26,121-122,217-218,313-314
+
+input row:  "P1-A01:P4-H12","P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04","F","3","W100.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: 25-26,121-122,217-218,313-314
+
+input row:  "P1-A01:P4-H12","P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04","E","4","W100.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: P1-A04:P1-B04,P2-A04:P2-B04,P3-A04:P3-B04,P4-A04:P4-B04
+  json: 25-26,121-122,217-218,313-314
+
+input row:  "P1-A01:P4-H12","P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04","H","1","W100.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: 27-28,123-124,219-220,315-316
+
+input row:  "P1-A01:P4-H12","P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04","G","2","W100.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: 27-28,123-124,219-220,315-316
+
+input row:  "P1-A01:P4-H12","P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04","F","3","W100.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: 27-28,123-124,219-220,315-316
+
+input row:  "P1-A01:P4-H12","P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04","E","4","W100.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W100.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: P1-C04:P1-D04,P2-C04:P2-D04,P3-C04:P3-D04,P4-C04:P4-D04
+  json: 27-28,123-124,219-220,315-316
+
+input row:  "P1-A01:P4-H12","P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04","H","1","W100.Heart.septum","human","1","","Trapnell_CZI",""
+sample: W100.Heart.septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: 29-30,125-126,221-222,317-318
+
+input row:  "P1-A01:P4-H12","P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04","G","2","W100.Heart.septum","human","1","","Trapnell_CZI",""
+sample: W100.Heart.septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: 29-30,125-126,221-222,317-318
+
+input row:  "P1-A01:P4-H12","P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04","F","3","W100.Heart.septum","human","1","","Trapnell_CZI",""
+sample: W100.Heart.septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: 29-30,125-126,221-222,317-318
+
+input row:  "P1-A01:P4-H12","P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04","E","4","W100.Heart.septum","human","1","","Trapnell_CZI",""
+sample: W100.Heart.septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: P1-E04:P1-F04,P2-E04:P2-F04,P3-E04:P3-F04,P4-E04:P4-F04
+  json: 29-30,125-126,221-222,317-318
+
+input row:  "P1-A01:P4-H12","P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04","H","1","W100.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W100.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: 31-32,127-128,223-224,319-320
+
+input row:  "P1-A01:P4-H12","P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04","G","2","W100.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W100.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: 31-32,127-128,223-224,319-320
+
+input row:  "P1-A01:P4-H12","P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04","F","3","W100.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W100.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: 31-32,127-128,223-224,319-320
+
+input row:  "P1-A01:P4-H12","P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04","E","4","W100.Heart.apex","human","1","","Trapnell_CZI",""
+sample: W100.Heart.apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: P1-G04:P1-H04,P2-G04:P2-H04,P3-G04:P3-H04,P4-G04:P4-H04
+  json: 31-32,127-128,223-224,319-320
+
+input row:  "P1-A01:P4-H12","P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05","H","1","W100.Pancreas","human","1","","Trapnell_CZI",""
+sample: W100.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: 33-34,129-130,225-226,321-322
+
+input row:  "P1-A01:P4-H12","P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05","G","2","W100.Pancreas","human","1","","Trapnell_CZI",""
+sample: W100.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: 33-34,129-130,225-226,321-322
+
+input row:  "P1-A01:P4-H12","P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05","F","3","W100.Pancreas","human","1","","Trapnell_CZI",""
+sample: W100.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: 33-34,129-130,225-226,321-322
+
+input row:  "P1-A01:P4-H12","P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05","E","4","W100.Pancreas","human","1","","Trapnell_CZI",""
+sample: W100.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: P1-A05:P1-B05,P2-A05:P2-B05,P3-A05:P3-B05,P4-A05:P4-B05
+  json: 33-34,129-130,225-226,321-322
+
+input row:  "P1-A01:P4-H12","P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05","H","1","W100.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W100.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: 35-36,131-132,227-228,323-324
+
+input row:  "P1-A01:P4-H12","P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05","G","2","W100.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W100.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: 35-36,131-132,227-228,323-324
+
+input row:  "P1-A01:P4-H12","P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05","F","3","W100.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W100.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: 35-36,131-132,227-228,323-324
+
+input row:  "P1-A01:P4-H12","P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05","E","4","W100.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W100.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: P1-C05:P1-D05,P2-C05:P2-D05,P3-C05:P3-D05,P4-C05:P4-D05
+  json: 35-36,131-132,227-228,323-324
+
+input row:  "P1-A01:P4-H12","P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05","H","1","W100.Liver","human","1","","Trapnell_CZI",""
+sample: W100.Liver
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: 37-38,133-134,229-230,325-326
+
+input row:  "P1-A01:P4-H12","P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05","G","2","W100.Liver","human","1","","Trapnell_CZI",""
+sample: W100.Liver
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: 37-38,133-134,229-230,325-326
+
+input row:  "P1-A01:P4-H12","P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05","F","3","W100.Liver","human","1","","Trapnell_CZI",""
+sample: W100.Liver
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: 37-38,133-134,229-230,325-326
+
+input row:  "P1-A01:P4-H12","P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05","E","4","W100.Liver","human","1","","Trapnell_CZI",""
+sample: W100.Liver
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: P1-E05:P1-F05,P2-E05:P2-F05,P3-E05:P3-F05,P4-E05:P4-F05
+  json: 37-38,133-134,229-230,325-326
+
+input row:  "P1-A01:P4-H12","P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05","H","1","W101.Spleen.anter","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.anter
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: 39-40,135-136,231-232,327-328
+
+input row:  "P1-A01:P4-H12","P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05","G","2","W101.Spleen.anter","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.anter
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: 39-40,135-136,231-232,327-328
+
+input row:  "P1-A01:P4-H12","P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05","F","3","W101.Spleen.anter","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.anter
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: 39-40,135-136,231-232,327-328
+
+input row:  "P1-A01:P4-H12","P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05","E","4","W101.Spleen.anter","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.anter
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: P1-G05:P1-H05,P2-G05:P2-H05,P3-G05:P3-H05,P4-G05:P4-H05
+  json: 39-40,135-136,231-232,327-328
+
+input row:  "P1-A01:P4-H12","P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06","H","1","W101.Spleen.center","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.center
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: 41-42,137-138,233-234,329-330
+
+input row:  "P1-A01:P4-H12","P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06","G","2","W101.Spleen.center","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.center
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: 41-42,137-138,233-234,329-330
+
+input row:  "P1-A01:P4-H12","P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06","F","3","W101.Spleen.center","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.center
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: 41-42,137-138,233-234,329-330
+
+input row:  "P1-A01:P4-H12","P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06","E","4","W101.Spleen.center","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.center
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: P1-A06:P1-B06,P2-A06:P2-B06,P3-A06:P3-B06,P4-A06:P4-B06
+  json: 41-42,137-138,233-234,329-330
+
+input row:  "P1-A01:P4-H12","P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06","H","1","W101.Spleen.post","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.post
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: 43-44,139-140,235-236,331-332
+
+input row:  "P1-A01:P4-H12","P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06","G","2","W101.Spleen.post","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.post
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: 43-44,139-140,235-236,331-332
+
+input row:  "P1-A01:P4-H12","P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06","F","3","W101.Spleen.post","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.post
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: 43-44,139-140,235-236,331-332
+
+input row:  "P1-A01:P4-H12","P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06","E","4","W101.Spleen.post","human","1","","Trapnell_CZI",""
+sample: W101.Spleen.post
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: P1-C06:P1-D06,P2-C06:P2-D06,P3-C06:P3-D06,P4-C06:P4-D06
+  json: 43-44,139-140,235-236,331-332
+
+input row:  "P1-A01:P4-H12","P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06","H","1","W102.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: 45-46,141-142,237-238,333-334
+
+input row:  "P1-A01:P4-H12","P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06","G","2","W102.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: 45-46,141-142,237-238,333-334
+
+input row:  "P1-A01:P4-H12","P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06","F","3","W102.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: 45-46,141-142,237-238,333-334
+
+input row:  "P1-A01:P4-H12","P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06","E","4","W102.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: P1-E06:P1-F06,P2-E06:P2-F06,P3-E06:P3-F06,P4-E06:P4-F06
+  json: 45-46,141-142,237-238,333-334
+
+input row:  "P1-A01:P4-H12","P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06","H","1","W102.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: 47-48,143-144,239-240,335-336
+
+input row:  "P1-A01:P4-H12","P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06","G","2","W102.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: 47-48,143-144,239-240,335-336
+
+input row:  "P1-A01:P4-H12","P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06","F","3","W102.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: 47-48,143-144,239-240,335-336
+
+input row:  "P1-A01:P4-H12","P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06","E","4","W102.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W102.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: P1-G06:P1-H06,P2-G06:P2-H06,P3-G06:P3-H06,P4-G06:P4-H06
+  json: 47-48,143-144,239-240,335-336
+
+input row:  "P1-A01:P4-H12","P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07","H","1","W102.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W102.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: 49-50,145-146,241-242,337-338
+
+input row:  "P1-A01:P4-H12","P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07","G","2","W102.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W102.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: 49-50,145-146,241-242,337-338
+
+input row:  "P1-A01:P4-H12","P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07","F","3","W102.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W102.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: 49-50,145-146,241-242,337-338
+
+input row:  "P1-A01:P4-H12","P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07","E","4","W102.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W102.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: P1-A07:P1-B07,P2-A07:P2-B07,P3-A07:P3-B07,P4-A07:P4-B07
+  json: 49-50,145-146,241-242,337-338
+
+input row:  "P1-A01:P4-H12","P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07","H","1","W102.Spleen","human","1","","Trapnell_CZI",""
+sample: W102.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: 51-52,147-148,243-244,339-340
+
+input row:  "P1-A01:P4-H12","P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07","G","2","W102.Spleen","human","1","","Trapnell_CZI",""
+sample: W102.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: 51-52,147-148,243-244,339-340
+
+input row:  "P1-A01:P4-H12","P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07","F","3","W102.Spleen","human","1","","Trapnell_CZI",""
+sample: W102.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: 51-52,147-148,243-244,339-340
+
+input row:  "P1-A01:P4-H12","P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07","E","4","W102.Spleen","human","1","","Trapnell_CZI",""
+sample: W102.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: P1-C07:P1-D07,P2-C07:P2-D07,P3-C07:P3-D07,P4-C07:P4-D07
+  json: 51-52,147-148,243-244,339-340
+
+input row:  "P1-A01:P4-H12","P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07","H","1","W103.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: 53-54,149-150,245-246,341-342
+
+input row:  "P1-A01:P4-H12","P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07","G","2","W103.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: 53-54,149-150,245-246,341-342
+
+input row:  "P1-A01:P4-H12","P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07","F","3","W103.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: 53-54,149-150,245-246,341-342
+
+input row:  "P1-A01:P4-H12","P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07","E","4","W103.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: P1-E07:P1-F07,P2-E07:P2-F07,P3-E07:P3-F07,P4-E07:P4-F07
+  json: 53-54,149-150,245-246,341-342
+
+input row:  "P1-A01:P4-H12","P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07","H","1","W103.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: 55-56,151-152,247-248,343-344
+
+input row:  "P1-A01:P4-H12","P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07","G","2","W103.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: 55-56,151-152,247-248,343-344
+
+input row:  "P1-A01:P4-H12","P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07","F","3","W103.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: 55-56,151-152,247-248,343-344
+
+input row:  "P1-A01:P4-H12","P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07","E","4","W103.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W103.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: P1-G07:P1-H07,P2-G07:P2-H07,P3-G07:P3-H07,P4-G07:P4-H07
+  json: 55-56,151-152,247-248,343-344
+
+input row:  "P1-A01:P4-H12","P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08","H","1","W103.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: 57-58,153-154,249-250,345-346
+
+input row:  "P1-A01:P4-H12","P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08","G","2","W103.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: 57-58,153-154,249-250,345-346
+
+input row:  "P1-A01:P4-H12","P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08","F","3","W103.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: 57-58,153-154,249-250,345-346
+
+input row:  "P1-A01:P4-H12","P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08","E","4","W103.Heart.Septum","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: P1-A08:P1-B08,P2-A08:P2-B08,P3-A08:P3-B08,P4-A08:P4-B08
+  json: 57-58,153-154,249-250,345-346
+
+input row:  "P1-A01:P4-H12","P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08","H","1","W103.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: 59-60,155-156,251-252,347-348
+
+input row:  "P1-A01:P4-H12","P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08","G","2","W103.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: 59-60,155-156,251-252,347-348
+
+input row:  "P1-A01:P4-H12","P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08","F","3","W103.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: 59-60,155-156,251-252,347-348
+
+input row:  "P1-A01:P4-H12","P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08","E","4","W103.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W103.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: P1-C08:P1-D08,P2-C08:P2-D08,P3-C08:P3-D08,P4-C08:P4-D08
+  json: 59-60,155-156,251-252,347-348
+
+input row:  "P1-A01:P4-H12","P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08","H","1","W103.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W103.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: 61-62,157-158,253-254,349-350
+
+input row:  "P1-A01:P4-H12","P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08","G","2","W103.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W103.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: 61-62,157-158,253-254,349-350
+
+input row:  "P1-A01:P4-H12","P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08","F","3","W103.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W103.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: 61-62,157-158,253-254,349-350
+
+input row:  "P1-A01:P4-H12","P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08","E","4","W103.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W103.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: P1-E08:P1-F08,P2-E08:P2-F08,P3-E08:P3-F08,P4-E08:P4-F08
+  json: 61-62,157-158,253-254,349-350
+
+input row:  "P1-A01:P4-H12","P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08","H","1","W103.Pancreas","human","1","","Trapnell_CZI",""
+sample: W103.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: 63-64,159-160,255-256,351-352
+
+input row:  "P1-A01:P4-H12","P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08","G","2","W103.Pancreas","human","1","","Trapnell_CZI",""
+sample: W103.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: 63-64,159-160,255-256,351-352
+
+input row:  "P1-A01:P4-H12","P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08","F","3","W103.Pancreas","human","1","","Trapnell_CZI",""
+sample: W103.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: 63-64,159-160,255-256,351-352
+
+input row:  "P1-A01:P4-H12","P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08","E","4","W103.Pancreas","human","1","","Trapnell_CZI",""
+sample: W103.Pancreas
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: P1-G08:P1-H08,P2-G08:P2-H08,P3-G08:P3-H08,P4-G08:P4-H08
+  json: 63-64,159-160,255-256,351-352
+
+input row:  "P1-A01:P4-H12","P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09","H","1","W104.Spleen","human","1","","Trapnell_CZI",""
+sample: W104.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: 65-66,161-162,257-258,353-354
+
+input row:  "P1-A01:P4-H12","P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09","G","2","W104.Spleen","human","1","","Trapnell_CZI",""
+sample: W104.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: 65-66,161-162,257-258,353-354
+
+input row:  "P1-A01:P4-H12","P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09","F","3","W104.Spleen","human","1","","Trapnell_CZI",""
+sample: W104.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: 65-66,161-162,257-258,353-354
+
+input row:  "P1-A01:P4-H12","P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09","E","4","W104.Spleen","human","1","","Trapnell_CZI",""
+sample: W104.Spleen
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: P1-A09:P1-B09,P2-A09:P2-B09,P3-A09:P3-B09,P4-A09:P4-B09
+  json: 65-66,161-162,257-258,353-354
+
+input row:  "P1-A01:P4-H12","P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09","H","1","W106.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: 67-68,163-164,259-260,355-356
+
+input row:  "P1-A01:P4-H12","P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09","G","2","W106.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: 67-68,163-164,259-260,355-356
+
+input row:  "P1-A01:P4-H12","P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09","F","3","W106.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: 67-68,163-164,259-260,355-356
+
+input row:  "P1-A01:P4-H12","P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09","E","4","W106.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: P1-C09:P1-D09,P2-C09:P2-D09,P3-C09:P3-D09,P4-C09:P4-D09
+  json: 67-68,163-164,259-260,355-356
+
+input row:  "P1-A01:P4-H12","P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09","H","1","W106.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: 69-70,165-166,261-262,357-358
+
+input row:  "P1-A01:P4-H12","P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09","G","2","W106.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: 69-70,165-166,261-262,357-358
+
+input row:  "P1-A01:P4-H12","P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09","F","3","W106.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: 69-70,165-166,261-262,357-358
+
+input row:  "P1-A01:P4-H12","P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09","E","4","W106.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W106.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: P1-E09:P1-F09,P2-E09:P2-F09,P3-E09:P3-F09,P4-E09:P4-F09
+  json: 69-70,165-166,261-262,357-358
+
+input row:  "P1-A01:P4-H12","P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09","H","1","W106.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W106.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: 71-72,167-168,263-264,359-360
+
+input row:  "P1-A01:P4-H12","P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09","G","2","W106.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W106.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: 71-72,167-168,263-264,359-360
+
+input row:  "P1-A01:P4-H12","P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09","F","3","W106.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W106.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: 71-72,167-168,263-264,359-360
+
+input row:  "P1-A01:P4-H12","P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09","E","4","W106.Lung.LLL","human","1","","Trapnell_CZI",""
+sample: W106.Lung.LLL
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: P1-G09:P1-H09,P2-G09:P2-H09,P3-G09:P3-H09,P4-G09:P4-H09
+  json: 71-72,167-168,263-264,359-360
+
+input row:  "P1-A01:P4-H12","P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10","H","1","W106.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W106.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: 73-74,169-170,265-266,361-362
+
+input row:  "P1-A01:P4-H12","P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10","G","2","W106.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W106.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: 73-74,169-170,265-266,361-362
+
+input row:  "P1-A01:P4-H12","P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10","F","3","W106.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W106.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: 73-74,169-170,265-266,361-362
+
+input row:  "P1-A01:P4-H12","P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10","E","4","W106.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W106.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: P1-A10:P1-B10,P2-A10:P2-B10,P3-A10:P3-B10,P4-A10:P4-B10
+  json: 73-74,169-170,265-266,361-362
+
+input row:  "P1-A01:P4-H12","P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10","H","1","W106.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W106.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: 75-76,171-172,267-268,363-364
+
+input row:  "P1-A01:P4-H12","P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10","G","2","W106.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W106.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: 75-76,171-172,267-268,363-364
+
+input row:  "P1-A01:P4-H12","P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10","F","3","W106.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W106.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: 75-76,171-172,267-268,363-364
+
+input row:  "P1-A01:P4-H12","P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10","E","4","W106.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W106.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: P1-C10:P1-D10,P2-C10:P2-D10,P3-C10:P3-D10,P4-C10:P4-D10
+  json: 75-76,171-172,267-268,363-364
+
+input row:  "P1-A01:P4-H12","P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10","H","1","W107.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: 77-78,173-174,269-270,365-366
+
+input row:  "P1-A01:P4-H12","P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10","G","2","W107.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: 77-78,173-174,269-270,365-366
+
+input row:  "P1-A01:P4-H12","P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10","F","3","W107.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: 77-78,173-174,269-270,365-366
+
+input row:  "P1-A01:P4-H12","P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10","E","4","W107.Heart.LV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.LV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: P1-E10:P1-F10,P2-E10:P2-F10,P3-E10:P3-F10,P4-E10:P4-F10
+  json: 77-78,173-174,269-270,365-366
+
+input row:  "P1-A01:P4-H12","P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10","H","1","W107.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: 79-80,175-176,271-272,367-368
+
+input row:  "P1-A01:P4-H12","P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10","G","2","W107.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: 79-80,175-176,271-272,367-368
+
+input row:  "P1-A01:P4-H12","P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10","F","3","W107.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: 79-80,175-176,271-272,367-368
+
+input row:  "P1-A01:P4-H12","P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10","E","4","W107.Heart.RV","human","1","","Trapnell_CZI",""
+sample: W107.Heart.RV
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: P1-G10:P1-H10,P2-G10:P2-H10,P3-G10:P3-H10,P4-G10:P4-H10
+  json: 79-80,175-176,271-272,367-368
+
+input row:  "P1-A01:P4-H12","P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11","H","1","W107.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W107.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: 81-82,177-178,273-274,369-370
+
+input row:  "P1-A01:P4-H12","P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11","G","2","W107.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W107.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: 81-82,177-178,273-274,369-370
+
+input row:  "P1-A01:P4-H12","P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11","F","3","W107.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W107.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: 81-82,177-178,273-274,369-370
+
+input row:  "P1-A01:P4-H12","P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11","E","4","W107.heart.Septum","human","1","","Trapnell_CZI",""
+sample: W107.heart.Septum
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: P1-A11:P1-B11,P2-A11:P2-B11,P3-A11:P3-B11,P4-A11:P4-B11
+  json: 81-82,177-178,273-274,369-370
+
+input row:  "P1-A01:P4-H12","P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11","H","1","W107.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W107.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: 83-84,179-180,275-276,371-372
+
+input row:  "P1-A01:P4-H12","P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11","G","2","W107.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W107.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: 83-84,179-180,275-276,371-372
+
+input row:  "P1-A01:P4-H12","P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11","F","3","W107.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W107.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: 83-84,179-180,275-276,371-372
+
+input row:  "P1-A01:P4-H12","P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11","E","4","W107.Heart.Apex","human","1","","Trapnell_CZI",""
+sample: W107.Heart.Apex
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: P1-C11:P1-D11,P2-C11:P2-D11,P3-C11:P3-D11,P4-C11:P4-D11
+  json: 83-84,179-180,275-276,371-372
+
+input row:  "P1-A01:P4-H12","P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11","H","1","BAT199","human","1","","BAT",""
+sample: BAT199
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: 85-86,181-182,277-278,373-374
+
+input row:  "P1-A01:P4-H12","P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11","G","2","BAT199","human","1","","BAT",""
+sample: BAT199
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: 85-86,181-182,277-278,373-374
+
+input row:  "P1-A01:P4-H12","P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11","F","3","BAT199","human","1","","BAT",""
+sample: BAT199
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: 85-86,181-182,277-278,373-374
+
+input row:  "P1-A01:P4-H12","P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11","E","4","BAT199","human","1","","BAT",""
+sample: BAT199
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: P1-E11:P1-F11,P2-E11:P2-F11,P3-E11:P3-F11,P4-E11:P4-F11
+  json: 85-86,181-182,277-278,373-374
+
+input row:  "P1-A01:P4-H12","P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11","H","1","BAT200","mouse","2","","BAT",""
+sample: BAT200
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: 87-88,183-184,279-280,375-376
+
+input row:  "P1-A01:P4-H12","P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11","G","2","BAT200","mouse","2","","BAT",""
+sample: BAT200
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: 87-88,183-184,279-280,375-376
+
+input row:  "P1-A01:P4-H12","P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11","F","3","BAT200","mouse","2","","BAT",""
+sample: BAT200
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: 87-88,183-184,279-280,375-376
+
+input row:  "P1-A01:P4-H12","P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11","E","4","BAT200","mouse","2","","BAT",""
+sample: BAT200
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: P1-G11:P1-H11,P2-G11:P2-H11,P3-G11:P3-H11,P4-G11:P4-H11
+  json: 87-88,183-184,279-280,375-376
+
+input row:  "P1-A01:P4-H12","P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12","H","1","W93.Lung","human","1","","Trapnell_CZI",""
+sample: W93.Lung
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: 89-92,185-188,281-284,377-380
+
+input row:  "P1-A01:P4-H12","P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12","G","2","W93.Lung","human","1","","Trapnell_CZI",""
+sample: W93.Lung
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: 89-92,185-188,281-284,377-380
+
+input row:  "P1-A01:P4-H12","P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12","F","3","W93.Lung","human","1","","Trapnell_CZI",""
+sample: W93.Lung
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: 89-92,185-188,281-284,377-380
+
+input row:  "P1-A01:P4-H12","P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12","E","4","W93.Lung","human","1","","Trapnell_CZI",""
+sample: W93.Lung
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: P1-A12:P1-D12,P2-A12:P2-D12,P3-A12:P3-D12,P4-A12:P4-D12
+  json: 89-92,185-188,281-284,377-380
+
+input row:  "P1-A01:P4-H12","P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12","H","1","Barnyard","barnyard","3","","BAT",""
+sample: Barnyard
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  H
+  json: P1-H01:P1-H12
+  json: 85-96
+p5:
+  csv:  1
+  json: P1-A01:P1-H01
+  json: 1-8
+n5:
+  csv:  P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: 93-96,189-192,285-288,381-384
+
+input row:  "P1-A01:P4-H12","P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12","G","2","Barnyard","barnyard","3","","BAT",""
+sample: Barnyard
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  G
+  json: P1-G01:P1-G12
+  json: 73-84
+p5:
+  csv:  2
+  json: P1-A02:P1-H02
+  json: 9-16
+n5:
+  csv:  P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: 93-96,189-192,285-288,381-384
+
+input row:  "P1-A01:P4-H12","P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12","F","3","Barnyard","barnyard","3","","BAT",""
+sample: Barnyard
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  F
+  json: P1-F01:P1-F12
+  json: 61-72
+p5:
+  csv:  3
+  json: P1-A03:P1-H03
+  json: 17-24
+n5:
+  csv:  P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: 93-96,189-192,285-288,381-384
+
+input row:  "P1-A01:P4-H12","P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12","E","4","Barnyard","barnyard","3","","BAT",""
+sample: Barnyard
+n7:
+  csv:  P1-A01:P4-H12
+  json: P1-A01:P4-H12
+  json: 1-384
+p7:
+  csv:  E
+  json: P1-E01:P1-E12
+  json: 49-60
+p5:
+  csv:  4
+  json: P1-A04:P1-H04
+  json: 25-32
+n5:
+  csv:  P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: P1-E12:P1-H12,P2-E12:P2-H12,P3-E12:P3-H12,P4-E12:P4-H12
+  json: 93-96,189-192,285-288,381-384
+

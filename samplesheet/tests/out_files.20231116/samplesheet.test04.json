@@ -1,0 +1,71 @@
+{
+    "json_file_version": "3.2.0",
+    "illumina_run_directory": null,
+    "level": 3,
+    "number_wells": 384,
+    "tn5_barcodes": false,
+    "use_all_barcodes": false,
+    "hash_file": null,
+    "input_samplesheet_column_names": [
+        {
+            "type": "n7",
+            "format": "indexes"
+        },
+        {
+            "type": "n5",
+            "format": "indexes"
+        },
+        {
+            "type": "p7",
+            "format": "indexes"
+        },
+        {
+            "type": "p5",
+            "format": "indexes"
+        },
+        {
+            "type": "sample_name",
+            "format": null
+        },
+        {
+            "type": "genome",
+            "format": null
+        },
+        {
+            "type": "peak_group",
+            "format": null
+        },
+        {
+            "type": "peak_file",
+            "format": null
+        },
+        {
+            "type": "external_sample_name",
+            "format": null
+        }
+    ],
+    "input_samplesheet_rows": [
+        "\"80,13,17\",\"105,122,180\",\"45,37,77\",\"41,70,86\",\"BAT99.1\",\"mouse\",\"g1\",\"\",\"ex1\""
+    ],
+    "pcr_format": "indexes",
+    "p5_col_list": null,
+    "p7_row_list": null,
+    "p5_well_list": null,
+    "p7_well_list": null,
+    "sample_index_list": [
+        {
+            "sample_id": "BAT99.1",
+            "ranges": "13,17,80:37,45,77:41,70,86:105,122,180",
+            "genome": "mouse",
+            "peak_group": "g1",
+            "peak_file": ""
+        }
+    ],
+    "external_sample_name_dict": {
+        "BAT99.1": "ex1"
+    },
+    "tissue_dict": {
+        "BAT99.1": null
+    },
+    "wrap_groups_dict": {}
+}
