@@ -235,7 +235,7 @@ if( sampleSheetMap['use_all_barcodes'] ) {
   options_barcode_correct += ' --no_mask'
 }
 if( params.index_recipe > 0 ) {
-  options_barcode_correct += sprintf("  --index_recipe %d", params.index_recipe)
+  options_barcode_correct += sprintf(" --index_recipe %d", params.index_recipe)
 }
 
 /*
