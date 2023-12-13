@@ -90,11 +90,15 @@ def onError = { return( "retry" ) }
 
 /*
 ** Initial pre-defined, required parameter values.
+** Notes:
+**   o  params.index_recipe uses the implicit index recipes when set to 0.
+**      Use the default unless you know what you are doing.
 */
 params.help = false
 params.bcl2fastq_cpus = 6
 params.max_mem_bcl2fastq = 40
 params.demux_buffer_blocks = 8192
+params.index_recipe = 0
 
 /*
 ** Initialize optional parameters to null.
@@ -229,6 +233,9 @@ if( sampleSheetMap['number_wells'] == 384 ) {
 }
 if( sampleSheetMap['use_all_barcodes'] ) {
   options_barcode_correct += ' --no_mask'
+}
+if( params.index_recipe > 0 ) {
+  options_barcode_correct += sprintf("  --index_recipe %d", params.index_recipe)
 }
 
 /*
@@ -790,6 +797,7 @@ def writeHelp() {
     log.info 'Optional parameters (specify in your experiment.config file):'
     log.info '    params.bcl2fastq_cpus = 16                 The number of cores to use for the bcl2fastq run.'
     log.info '    params.max_mem_bcl2fastq = 40              The maximum number of GB of RAM to allocate for bcl2fastq run'
+    log.info '    params.index_recipe = 0                    Set explicitly the index recipe. Default is 0 for implicit selection'
     log.info '    params.demux_buffer_blocks = 16            The number of 8K blocks to use for demux output buffer.'
     log.info '    process.maxForks = 20                      The maximum number of processes to run at the same time on the cluster.'
     log.info '    process.queue = "trapnell-short.q"         The queue on the cluster where the jobs should be submitted. '
@@ -817,6 +825,7 @@ def reportRunParams( params, sampleSheetMap ) {
     s += String.format( "Number of wells:               %d\n", sampleSheetMap['number_wells'] )
     s += String.format( "TN5 barcodes:                  %b\n", sampleSheetMap['tn5_barcodes'] )
     s += String.format( "Use all barcodes               %b\n", sampleSheetMap['use_all_barcodes'] )
+    s += String.format( "Specify index recipe:          %d\n", params.index_recipe )
     s += String.format( "Maximum bcl2fastq cpus:        %d\n", params.bcl2fastq_cpus )
     s += String.format( "Maximum memory for bcl2fastq:  %d\n", params.max_mem_bcl2fastq )
     s += String.format( "Demux buffer blocks:           %d\n", params.demux_buffer_blocks )

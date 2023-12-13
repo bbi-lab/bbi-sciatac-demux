@@ -120,6 +120,146 @@ def reverse_complement(x):
     xrevcomp = ''.join([complements[z] for z in xrev])
     return xrevcomp
 
+
+#
+# Extract index sequences for
+#   not two level indexed tn5
+#   not nextseq (it is for novaseq)
+#
+def header_parser_01(r1_name):
+    barcodes = r1_name[-41:]
+
+    tagmentation_i7_seq = barcodes[0:10]
+    pcr_i7_seq = barcodes[10:20]
+
+    pcr_i5_seq = barcodes[21:31]
+    tagmentation_i5_seq = barcodes[31:41]
+
+    return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
+
+
+#
+# Extract index sequences for
+#   not two level indexed tn5
+#   nextseq
+#
+def header_parser_02(r1_name):
+    barcodes = r1_name[-41:]
+
+    tagmentation_i7_seq = barcodes[0:10]
+    pcr_i7_seq = barcodes[10:20]
+
+    pcr_i5_seq = barcodes[31:41]
+    tagmentation_i5_seq = barcodes[21:31]
+
+    return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
+
+
+#
+# Extract index sequences for
+#   two level indexed tn5
+#   not nextseq
+#
+def header_parser_03(r1_name):
+    barcodes = r1_name[-37:]
+ 
+    tagmentation_i7_seq = barcodes[0:8]
+    pcr_i7_seq = barcodes[8:18]
+ 
+    pcr_i5_seq = barcodes[19:29]
+    tagmentation_i5_seq = barcodes[29:37]
+ 
+    return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
+ 
+
+#
+# Extract index sequences for
+#   two level indexed tn5 
+#   nextseq
+#
+def header_parser_04(r1_name):
+    barcodes = r1_name[-37:]
+ 
+    tagmentation_i7_seq = barcodes[0:8]
+    pcr_i7_seq = barcodes[8:18]
+ 
+    pcr_i5_seq = barcodes[27:37]
+    tagmentation_i5_seq = barcodes[19:27]
+ 
+    return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
+
+
+#
+# Extract index sequences for
+#   not two level indexed tn5
+#   Trapnell lab recipe
+#
+# I might need to change this to 0:10 and then 20:35
+# I believe that I have corrected to the correct indicies but I am unsure about machine differences and if I have to do a reverse complement on the i5 reads.
+# Mapping is much higher for i7 than for i5, it might be due to sequencer differences on how indicies are used.
+# TODO but a flag in for identifying if we did not have light/dark cycles and need to adjust the values
+# r1_name[-41:] ---- > r1_name[-71:]
+# pcr_i7_seq =barcodes[10:20] -- > barcodes[25:35]
+def header_parser_05(r1_name):
+    barcodes = r1_name[-71:]
+ 
+    tagmentation_i7_seq = barcodes[0:10]
+    pcr_i7_seq = barcodes[25:35]
+ 
+    pcr_i5_seq = barcodes[61:71]
+    tagmentation_i5_seq = barcodes[36:46]
+ 
+    return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
+
+
+#
+# Note: add new maps to the header_parser_dict below,
+#       modify range test, and the error message.
+#
+def choose_header_parser(args):
+    index_map = 0
+    if(args.index_recipe != None and args.index_recipe != 0):
+      try:
+        index_map = int(args.index_recipe)
+      except ValueError:
+        print('Error: --index_recipe value is not an integer')
+        sys.exit(-1)
+      if(index_map < 1 or index_map > 5):
+        print('Error: --index_map value must be between 1 and 5 inclusive')
+        sys.exit(-1)
+      index_map = int(args.index_recipe)
+    elif(not args.two_level_indexed_tn5 and not args.nextseq):
+      index_map = 1
+    elif(not args.two_level_indexed_tn5 and args.nextseq):
+      index_map = 2
+    elif(args.two_level_indexed_tn5 and not args.nextseq):
+      index_map = 3
+    elif(args.two_level_indexed_tn5 and args.nextseq):
+      index_map = 4
+    else:
+      print('Error: inconsistent values for arguments --two_level_indexed_tn5, --nextseq.')
+
+    header_parser_dict = {
+      1: header_parser_01,
+      2: header_parser_02,
+      3: header_parser_03,
+      4: header_parser_04,
+      5: header_parser_05
+    }
+
+    try:
+      header_parser = header_parser_dict[index_map]
+    except key_error:
+      print('Error: barcode_correct_sciatac.py: choose_header_parser: dict key out-of-range.')
+      sys.exit(-1)
+
+    return(header_parser)
+
+
+#
+# get_barcode_seqs is superseded by the header_parser functions
+# defined above.
+#
 def get_barcode_seqs(r1_name, nextseq, two_level_indexed_tn5):
     """
     Extract the correct sequences from the R1 name.
@@ -153,6 +293,7 @@ def get_barcode_seqs(r1_name, nextseq, two_level_indexed_tn5):
             tagmentation_i5_seq = barcodes[29:37]
 
     return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
+
 
 def indexsplitter(indexrange):
     if len(indexrange) < 3:
@@ -297,7 +438,7 @@ def get_sample_lookup(samplesheet, no_mask, pcri7, tagi7, tagi5, pcri5):
     for sample_i, tagi5_list in enumerate(tagi5_indices):
         for tagi5_i in tagi5_list:
             tagi5_sample_list[tagi5_i] = samples[sample_i]
-    
+   
     tag_pairs_counts = {}
     for (tagi7_list, tagi5_list) in zip( tagi7_indices, tagi5_indices):
         for combination in itertools.product(tagi7_list, tagi5_list):
@@ -307,7 +448,7 @@ def get_sample_lookup(samplesheet, no_mask, pcri7, tagi7, tagi5, pcri5):
     for (pcri7_list, pcri5_list) in zip( pcri7_indices, pcri5_indices):
         for combination in itertools.product(pcri7_list, pcri5_list):
             pcr_pairs_counts.setdefault( (combination[0], combination[1]), 0 )
-
+ 
     return index_mask, sample_lookup_table, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags
 
 
@@ -335,6 +476,7 @@ if __name__ == '__main__':
     parser.add_argument('-X', '--nextseq', help='NextSeq run indicator', dest='nextseq', action="store_true")
     parser.add_argument('--no_mask', action='store_true', help='Use all four barcodes. By default, do not use (mask out) a barcode(s) when all samples have the same index set (flag).')
     parser.add_argument('--write_buffer_blocks', type=int, default=16, help='Number of 8K blocks for fastq write buffers. Default is 16.')
+    parser.add_argument('--index_recipe', required=False, default=None, help='Select index map. The index_recipes are numbered from 1 to 5. Specifying a index_recipe overrides the recipe selected implicitly by the -two_level_indexed_tn5 and -nextseq arguments. Default is None, in which case the index_recipe is selected using the -two_level_indexed_tn5 and -nextseq arguments.')
 
     args = parser.parse_args()
 
@@ -394,6 +536,9 @@ if __name__ == '__main__':
     if not args.two_level_indexed_tn5:
 
         if args.nextseq:
+            # Note: the set() function changes the order of the elements so take
+            #       the reverse complement twice, once taking the set() for the
+            #       whitelists.
             p5_pcr_rc_map = {reverse_complement(k):k for k in pcri5}
             p5_tagmentation_rc_map = {reverse_complement(k):k for k in tagi5}
 
@@ -408,6 +553,9 @@ if __name__ == '__main__':
         pcr_i7_whitelist = bc.pcr_i7_two_level_indexed_tn5
 
         if args.nextseq:
+            # Note: the set() function changes the order of the elements so take
+            #       the reverse complement twice, once taking the set() for the
+            #       whitelists.
             p5_pcr_rc_map = {reverse_complement(k):k for k in bc.pcr_i5_two_level_indexed_tn5}
             p5_tagmentation_rc_map = {reverse_complement(k):k for k in bc.nex_i5_two_level_indexed_tn5}
 
@@ -417,10 +565,21 @@ if __name__ == '__main__':
             pcr_i5_whitelist = bc.pcr_i5_two_level_indexed_tn5
             tagmentation_i5_whitelist = bc.nex_i5_two_level_indexed_tn5
 
+    # Notes:
+    #   o  for -X run, i5 *_to_index dictionaries have RC index sequence keys.
+    #   o  barcode_index_dict makes a dictionary where the index sequences
+    #      are the keys and the sequence list index is the value. We assume
+    #      that the whitelists include all of the sequences in the index
+    #      tables.
     tagi7_to_index = barcode_to_well.barcode_index_dict( tagmentation_i7_whitelist )
     pcri7_to_index = barcode_to_well.barcode_index_dict( pcr_i7_whitelist )
-    pcri5_to_index = barcode_to_well.barcode_index_dict( pcr_i5_whitelist )
-    tagi5_to_index = barcode_to_well.barcode_index_dict( tagmentation_i5_whitelist )
+    # The set() function above does not preserve the index order.
+    if(not args.nextseq):
+        pcri5_to_index = barcode_to_well.barcode_index_dict( pcr_i5_whitelist )
+        tagi5_to_index = barcode_to_well.barcode_index_dict( tagmentation_i5_whitelist )
+    else:
+        pcri5_to_index = barcode_to_well.barcode_index_dict( p5_pcr_rc_map )
+        tagi5_to_index = barcode_to_well.barcode_index_dict( p5_tagmentation_rc_map )
 
     tagmentation_i7_correction_map = construct_mismatch_to_whitelist_map(tagmentation_i7_whitelist, 2)
     pcr_i7_correction_map = construct_mismatch_to_whitelist_map(pcr_i7_whitelist, 2)
@@ -474,13 +633,17 @@ if __name__ == '__main__':
 
     # demux run time
     start_time = timeit.default_timer()
- 
+
+    header_parser = choose_header_parser(args)
+
+    # Process reads from fastq file.
     for (r1_name, r1_seq, r1_qual),(r2_name, r2_seq, r2_qual) in zip(if1, if2):
 
         totreads += 1
 
         # Get barcodes and correct
-        tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq = get_barcode_seqs(r1_name, args.nextseq, args.two_level_indexed_tn5)
+#        tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq = get_barcode_seqs(r1_name, args.nextseq, args.two_level_indexed_tn5)
+        tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq = header_parser(r1_name)
         tagmentation_i7_seq = correct_barcode(tagmentation_i7_seq, tagmentation_i7_correction_map)
         pcr_i7_seq = correct_barcode(pcr_i7_seq, pcr_i7_correction_map)
         pcr_i5_seq = correct_barcode(pcr_i5_seq, pcr_i5_correction_map)

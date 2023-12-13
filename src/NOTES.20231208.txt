@@ -1,0 +1,169 @@
+== barcode_correct_sciatac.py
+
+** index sequence setup
+
+1.
+o  in variables (file: these would be read in from a file)
+     o  indexed tn5 run (only here)
+           bc.nex_i7_two_level_indexed_tn5_list (only here)
+           bc.pcr_i7_two_level_indexed_tn5_list (only here)
+           bc.pcr_i5_two_level_indexed_tn5_list (only here)
+           bc.nex_i5_two_level_indexed_tn5_list (only here)
+     o  non-indexed tn5 run with 96 wells
+           bc.lig_i7_list (only here)
+           bc.pcr_i7_list (only here)
+           bc.pcr_i5_list (only here)
+           bc.lig_i5_list (only here)
+
+           bc.lig_i7_to_well (only here)
+           bc.lig_i5_to_well (only here)
+           bc.pcr_to_well (only here)
+     o  non-indexed tn5 run with 384 wells
+           bc.lig_i7_list_384 (only here)
+           bc.pcr_i7_list_384 (only here)
+           bc.pcr_i5_list_384 (only here)
+           bc.lig_i5_list_384 (only here)
+
+           bc.lig_i7_to_well_384 (only here)
+           bc.lig_i5_to_well_384 (only here)
+           bc.pcr_to_well_384 (only here)
+
+2.
+o  defined in setup
+     o  all
+          tagi7 (used in 3)
+          pcri7 (used in 3)
+          pcri5 (used in 3)
+          tagi5 (used in 3)
+
+     o  non-indexed tn5 only
+          lig_i7_to_well
+          lig_i5_to_well
+          pcr_to_well
+
+     o  all
+          tagmentation_i7_whitelist   (from tagi7 in 2.)
+          pcr_i7_whitelist            (from pcri7 in 2.)
+
+# bge 1
+
+3.
+          
+     o  non-indexed tn5 and nextseq (reverse complements)
+          p5_pcr_rc_map                (from pcri5 in 2.)
+          p5_tagmentation_rc_map       (from tagi5 in 2.)
+          pcr_i5_whitelist             (from pcri5 in 2.)
+          tagmentation_i5_whitelist    (from tagi5 in 2.)
+
+     o  non-indexed tn5 and not nextseq
+          pcr_i5_whitelist (also above)  (from pcri5 in 2.)
+          tagmentation_i5_whitelist      (from tagi5 in 2.)
+
+     o  indexed tn5 and nextseq
+          tagmentation_i7_whitelist  (from bc.nex_i7_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+          pcr_i7_whitelist           (from bc.pcr_i7_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+          pcr_i5_whitelist           (from bc.pcr_i5_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+          tagmentation_i5_whitelist  (from bc.nex_i5_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+
+          p5_pcr_rc_map              (from bc.pcr_i5_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+          p5_tagmentation_rc_map     (from bc.nex_i5_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+
+     o  indexed tn5 and not nextseq
+          tagmentation_i7_whitelist  (from bc.nex_i7_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+          pcr_i7_whitelist           (from bc.pcr_i7_two_level_indexed_tn5)  (Note: move bc. to 1. above)
+          pcr_i5_whitelist           (bc.pcr_i5_two_level_indexed_tn5)       (Note: move bc. to 1. above)
+          tagmentation_i5_whitelist  (bc.nex_i5_two_level_indexed_tn5)       (Note: move bc. to 1. above)
+
+     o  all
+          tagi7_to_index    (from tagmentation_i7_whitelist)
+          pcri7_to_index    (from pcr_i7_whitelist)
+          pcri5_to_index    (from pcr_i5_whitelist)
+          tagi5_to_index    (from tagmentation_i5_whitelist)
+
+          tagmentation_i7_correction_map  (from tagmentation_i7_whitelist)
+          pcr_i7_correction_map           (from pcr_i7_whitelist)
+          pcr_i5_correction_map           (from pcr_i5_whitelist)
+          tagmentation_i5_correction_map  (from tagmentation_i5_whitelist)
+
+# bge 2
+
+4.
+o  defined and/or used in process fastq reads loop
+     o  get barcodes
+          o  used
+               none
+          o  defined
+               o  tagmentation_i7_seq  (from fastq header)
+               o  pcr_i7_seq           (from fastq header)
+               o  pcr_i5_seq           (from fastq header)
+               o  tagmentation_i5_seq  (from fastq header)
+
+     o  correct barcodes
+          o  used
+               tagmentation_i7_correction_map (from bge 1)
+               pcr_i7_correction_map (from bge 1)
+               pcr_i5_correction_map (from bge 1)
+               tagmentation_i5_correction_map (from bge 1)
+          o  (re-)defined
+               tagmentation_i7_seq  (from fastq file; after barcode correction)
+               pcr_i7_seq           (from fastq file; after barcode correction)
+               pcr_i5_seq           (from fastq file; after barcode correction)
+               tagmentation_i5_seq  (from fastq file; after barcode correction)
+
+     o  count reads
+          o  used
+               tagi7_to_index (from bge 1)
+               tagi5_to_index (from bge 1)
+               pcri7_to_index (from bge 1)
+               pcri5_to_index (from bge 1)
+          o  (re-)defined
+               tagmentation_i7_index  (initial definition; used only for counting in bge 2)
+               tagmentation_i5_index  (initial definition; used only for counting in bge 2)
+               pcr_i7_index           (initial definition; used only for counting in bge 2)
+               pcr_i5_index           (initial definition; used only for counting in bge 2)
+
+    o  map back to original whitelist (nextseq rc)
+          o  used
+               p5_pcr_rc_map           (from bge 1)
+               p5_tagmentation_rc_map  (from bge 1)
+          o  (re-)defined
+               pcr_i5_seq           (from fastq file; after barcode correction)
+               tagmentation_i5_seq  (from fastq file; after barcode correction)
+    o  make barcode string indexed tn5
+          o  used
+               barcode_to_well      (from barcode utilities)
+               tagmentation_i7_seq  (from fastq file; after barcode correction)
+               pcr_i7_seq           (from fastq file; after barcode correction)
+               pcr_i5_seq           (from fastq file; after barcode correction)
+               tagmentation_i5_seq  (from fastq file; after barcode correction)
+               bc.nex_two_level_indexed_tn5_to_well  (from barcode file)   (Note: move bc. to 1. above)
+               bc.pcr_two_level_indexed_tn5_to_well  (from barcode file)   (Note: move bc. to 1. above)
+    o  make barcode string not-indexed tn5
+          o  used
+               tagmentation_i7_seq  (from fastq file; after barcode correction)
+               pcr_i7_seq           (from fastq file; after barcode correction)
+               pcr_i5_seq           (from fastq file; after barcode correction)
+               tagmentation_i5_seq  (from fastq file; after barcode correction)
+               lig_i7_to_well        (from 1. above)
+               lig_i5_to_well        (from 1. above)
+               pcr_to_well           (from 1. above)
+
+    o  make sample index
+         o  used
+              pcr_i7_seq           (from bge 2; fastq file))
+              tagmentation_i7_seq  (from bge 2; fastq file))
+              tagmentation_i5_seq  (from bge 2; fastq file))
+              pcr_i5_seq           (from bge 2; fastq file))
+
+    o  write tag and pcr counts by tag/pcr well
+         o  used
+              barcode_to_well
+
+    o  write tag pair counts by tag well
+         o  used
+              barcode_to_well
+
+    o  write pcr pair counts by pcr well
+         o  used
+              barcode_to_well                            
+              

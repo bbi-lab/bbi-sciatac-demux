@@ -1365,14 +1365,12 @@ def write_samplesheet_index_format( file, row_out_list ):
   """
   print( 'sample_id\tranges\tgenome', file=file )
   for row_out in row_out_list:
-    print( '%s\t%s:%s:%s:%s\t%s\t%s' % ( row_out['sample_name'],
+    print( '%s\t%s:%s:%s:%s\t%s' % ( row_out['sample_name'],
                                      make_index_string( row_out['n7_index_list'] ),
                                      make_index_string( row_out['p7_index_list'] ),
                                      make_index_string( row_out['p5_index_list'] ),
                                      make_index_string( row_out['n5_index_list'] ),
-                                     row_out['genome'],
-                                     row_out['peak_group'],
-                                     row_out['peak_file'] ), file=file )
+                                     row_out['genome']), file=file )
 
   return( 0 )
 
