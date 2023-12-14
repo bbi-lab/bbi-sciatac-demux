@@ -1,0 +1,15 @@
+[package]
+name = "sciatac_find_hash_reads"
+version = "0.1.1"
+authors = ["bge@uw.edu"]
+license = "MIT"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+argparse = "0.2.2"
+bio = "1.4.0"
+flate2 = "1.0.28"
+substring = "1.4.5"
+bv = "0.11.1"

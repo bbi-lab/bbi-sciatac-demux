@@ -1,0 +1,22 @@
+Program: sciatac_find_hash_reads
+Description: Find sciplex hash reads in fastq file pair.
+Usage: sciatac_find_hash_reads -1 <fastq_r1_filename> -2 <fastq_r2_filename> -h <hash sequence filename> -o <output filename>
+
+Install:
+  o  install Rust environment
+       o  General instructions: https://www.rust-lang.org/tools/install
+       o  Linux: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+  o  untar sciatac_find_hash_reads 'crate'
+       o  cd to build directory and copy sciatac_find_hash_reads 'crate'
+          file into this directory
+       o  untar 'crate'
+            tar xvf sciatac_find_hash_reads-0.1.0.crate
+       o  cd sciatac_find_hash_reads
+       o  build sciatac_find_hash_reads executable
+            cargo build --release
+          Note: the --release engages optimizations, which reduce the
+                program run time by about a factor of ten.
+       o  copy executable to $HOME/bin or some other useful place
+            cd target/release
+            cp sciatac_find_hash_reads $HOME/bin
