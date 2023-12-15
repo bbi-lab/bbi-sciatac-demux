@@ -38,6 +38,29 @@ def load_std_index_lists(args):
     return tagi7, pcri7, pcri5, tagi5
 
 
+def load_std_index_to_well_dicts(args):
+    if args.wells_384:
+        lig_i7_to_well = bc.lig_i7_to_well_384
+        lig_i5_to_well = bc.lig_i5_to_well_384
+        pcr_to_well = bc.pcr_to_well_384
+    else:
+        lig_i7_to_well = bc.lig_i7_to_well
+        lig_i5_to_well = bc.lig_i5_to_well
+        pcr_to_well = bc.pcr_to_well
+
+    return lig_i7_to_well, lig_i5_to_well, pcr_to_well
+
+
+def load_std_index_to_well_indexed_tn5_dicts(args):
+    if(args.two_level_indexed_tn5):
+        nex_two_level_indexed_tn5_to_well = bc.nex_two_level_indexed_tn5_to_well
+        pcr_two_level_indexed_tn5_to_well = bc.pcr_two_level_indexed_tn5_to_well
+    else:
+        nex_two_level_indexed_tn5_to_well = None
+        pcr_two_level_indexed_tn5_to_well = None
+    return nex_two_level_indexed_tn5_to_well, pcr_two_level_indexed_tn5_to_well
+
+
 def set_index_flags(args):
     if args.two_level_indexed_tn5:
         for i in range( 12, 384 ):
@@ -529,15 +552,14 @@ if __name__ == '__main__':
         raise ValueError('There is no 384 well barcode set for indexed Tn5, may not specify both --two_level_indexed_tn5 and --wells_384.')
 
     # Load index sequence sets.
-    # This will need to be replaced if reading index
-    # sequences from a file. The choose_header_parser() may
-    # need to be expanded as well if the index locations
-    # change.
+    # Note: replace this in order to read index sequences
+    # from a file. The choose_header_parser() may need to
+    # be expanded as well if the index locations change.
     tagi7, pcri7, pcri5, tagi5 = load_std_index_lists(args)
 
     # Load index to well dictionaries.
-    # This will need to be replaced if reading index
-    # sequences from a file.
+    # Note: replace this in order to read index sequences
+    # from a file.
     if(not args.two_level_indexed_tn5):
       lig_i7_to_well, lig_i5_to_well, pcr_to_well = load_std_index_to_well_dicts(args)
     else:
@@ -548,10 +570,12 @@ if __name__ == '__main__':
 
 
     # Set index flags.
-    # Note: this will need to be modified if the
-    #       numbers of index sequences change.
+    # Note: modify this if the numbers of index sequences
+    # change.
     index_flag = set_index_flags(args)
 
+    # Set up index whitelist lists, and reverse complement
+    # lists, if necessary.
     tagmentation_i7_whitelist = tagi7
     pcr_i7_whitelist = pcri7
 
