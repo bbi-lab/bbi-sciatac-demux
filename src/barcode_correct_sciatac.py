@@ -17,6 +17,45 @@ import barcode_to_well
 import barcode_constants as bc
 
 
+def load_std_index_lists(args):
+    if args.two_level_indexed_tn5:
+        tagi7 = bc.nex_i7_two_level_indexed_tn5_list
+        pcri7 = bc.pcr_i7_two_level_indexed_tn5_list
+        pcri5 = bc.pcr_i5_two_level_indexed_tn5_list
+        tagi5 = bc.nex_i5_two_level_indexed_tn5_list
+    else:
+        if args.wells_384:
+            tagi7 = bc.lig_i7_list_384
+            pcri7 = bc.pcr_i7_list_384
+            pcri5 = bc.pcr_i5_list_384
+            tagi5 = bc.lig_i5_list_384
+        else:
+            tagi7 = bc.lig_i7_list
+            pcri7 = bc.pcr_i7_list
+            pcri5 = bc.pcr_i5_list
+            tagi5 = bc.lig_i5_list
+
+    return tagi7, pcri7, pcri5, tagi5
+
+
+def set_index_flags(args):
+    if args.two_level_indexed_tn5:
+        for i in range( 12, 384 ):
+            index_flags[1][i] = -1
+            index_flags[2][i] = -1
+    else:
+        if not args.wells_384:
+            for i in range( 96, 384 ):
+                index_flags[1][i] = -1
+                index_flags[2][i] = -1
+
+    for i in range( 96, 384 ):
+        index_flags[0][i] = -1
+        index_flags[3][i] = -1
+
+    return index_flags
+
+
 def correct_barcode(barcode, mismatch_map):
     """
     Correct an observed raw barcode to one of a list of whitelists of mismatches.
@@ -489,81 +528,46 @@ if __name__ == '__main__':
     if args.two_level_indexed_tn5 and args.wells_384:
         raise ValueError('There is no 384 well barcode set for indexed Tn5, may not specify both --two_level_indexed_tn5 and --wells_384.')
 
-    # Set up the right index set depending on the indices
-    if args.two_level_indexed_tn5:
-        tagi7 = bc.nex_i7_two_level_indexed_tn5_list
-        pcri7 = bc.pcr_i7_two_level_indexed_tn5_list
-        pcri5 = bc.pcr_i5_two_level_indexed_tn5_list
-        tagi5 = bc.nex_i5_two_level_indexed_tn5_list
+    # Load index sequence sets.
+    # This will need to be replaced if reading index
+    # sequences from a file. The choose_header_parser() may
+    # need to be expanded as well if the index locations
+    # change.
+    tagi7, pcri7, pcri5, tagi5 = load_std_index_lists(args)
+
+    # Load index to well dictionaries.
+    # This will need to be replaced if reading index
+    # sequences from a file.
+    if(not args.two_level_indexed_tn5):
+      lig_i7_to_well, lig_i5_to_well, pcr_to_well = load_std_index_to_well_dicts(args)
     else:
-        if args.wells_384:
-            tagi7 = bc.lig_i7_list_384
-            pcri7 = bc.pcr_i7_list_384
-            pcri5 = bc.pcr_i5_list_384
-            tagi5 = bc.lig_i5_list_384
-            lig_i7_to_well = bc.lig_i7_to_well_384
-            lig_i5_to_well = bc.lig_i5_to_well_384
-            pcr_to_well = bc.pcr_to_well_384
-        else:
-            tagi7 = bc.lig_i7_list
-            pcri7 = bc.pcr_i7_list
-            pcri5 = bc.pcr_i5_list
-            tagi5 = bc.lig_i5_list
-            lig_i7_to_well = bc.lig_i7_to_well
-            lig_i5_to_well = bc.lig_i5_to_well
-            pcr_to_well = bc.pcr_to_well
+      nex_two_level_indexed_tn5_to_well, pcr_two_level_indexed_tn5_to_well = load_std_index_to_well_indexed_tn5_dicts(args)
 
     # Build up sample mapping from indices to samples
     index_mask, sample_lookup, tagi5_sample_list, tag_pairs_counts, pcr_pairs_counts, index_flags = get_sample_lookup(open(args.samplesheet), args.no_mask, pcri7, tagi7, tagi5, pcri5)
 
-    if args.two_level_indexed_tn5:
-        for i in range( 12, 384 ):
-            index_flags[1][i] = -1
-            index_flags[2][i] = -1
-    else:
-        if not args.wells_384:
-            for i in range( 96, 384 ):
-                index_flags[1][i] = -1
-                index_flags[2][i] = -1
 
-    for i in range( 96, 384 ):
-        index_flags[0][i] = -1
-        index_flags[3][i] = -1
-    
+    # Set index flags.
+    # Note: this will need to be modified if the
+    #       numbers of index sequences change.
+    index_flag = set_index_flags(args)
+
     tagmentation_i7_whitelist = tagi7
     pcr_i7_whitelist = pcri7
 
-    if not args.two_level_indexed_tn5:
+    if args.nextseq:
+        # Note: the set() function changes the order of the elements so take
+        #       the reverse complement twice, once taking the set() for the
+        #       whitelists.
+        p5_pcr_rc_map = {reverse_complement(k):k for k in pcri5}
+        p5_tagmentation_rc_map = {reverse_complement(k):k for k in tagi5}
 
-        if args.nextseq:
-            # Note: the set() function changes the order of the elements so take
-            #       the reverse complement twice, once taking the set() for the
-            #       whitelists.
-            p5_pcr_rc_map = {reverse_complement(k):k for k in pcri5}
-            p5_tagmentation_rc_map = {reverse_complement(k):k for k in tagi5}
-
-            pcr_i5_whitelist = set([reverse_complement(x) for x in pcri5])
-            tagmentation_i5_whitelist = set([reverse_complement(x) for x in tagi5])
-        else:
-            pcr_i5_whitelist = pcri5
-            tagmentation_i5_whitelist = tagi5
-
+        pcr_i5_whitelist = set([reverse_complement(x) for x in pcri5])
+        tagmentation_i5_whitelist = set([reverse_complement(x) for x in tagi5])
     else:
-        tagmentation_i7_whitelist = bc.nex_i7_two_level_indexed_tn5
-        pcr_i7_whitelist = bc.pcr_i7_two_level_indexed_tn5
+        pcr_i5_whitelist = pcri5
+        tagmentation_i5_whitelist = tagi5
 
-        if args.nextseq:
-            # Note: the set() function changes the order of the elements so take
-            #       the reverse complement twice, once taking the set() for the
-            #       whitelists.
-            p5_pcr_rc_map = {reverse_complement(k):k for k in bc.pcr_i5_two_level_indexed_tn5}
-            p5_tagmentation_rc_map = {reverse_complement(k):k for k in bc.nex_i5_two_level_indexed_tn5}
-
-            pcr_i5_whitelist = set([reverse_complement(x) for x in bc.pcr_i5_two_level_indexed_tn5])
-            tagmentation_i5_whitelist = set([reverse_complement(x) for x in bc.nex_i5_two_level_indexed_tn5])
-        else:
-            pcr_i5_whitelist = bc.pcr_i5_two_level_indexed_tn5
-            tagmentation_i5_whitelist = bc.nex_i5_two_level_indexed_tn5
 
     # Notes:
     #   o  for -X run, i5 *_to_index dictionaries have RC index sequence keys.
@@ -642,8 +646,8 @@ if __name__ == '__main__':
         totreads += 1
 
         # Get barcodes and correct
-#        tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq = get_barcode_seqs(r1_name, args.nextseq, args.two_level_indexed_tn5)
         tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq = header_parser(r1_name)
+
         tagmentation_i7_seq = correct_barcode(tagmentation_i7_seq, tagmentation_i7_correction_map)
         pcr_i7_seq = correct_barcode(pcr_i7_seq, pcr_i7_correction_map)
         pcr_i5_seq = correct_barcode(pcr_i5_seq, pcr_i5_correction_map)
@@ -693,7 +697,7 @@ if __name__ == '__main__':
         # Note that for two level Tn5 barcode well comes first then PCR,
         # for three-level will be Tn5 N7, Tn5 N5, PCR WELL ID
         if args.two_level_indexed_tn5:
-            barcodes_string = barcode_to_well.get_two_level_barcode_string(tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq, bc.nex_two_level_indexed_tn5_to_well, bc.pcr_two_level_indexed_tn5_to_well, args.well_ids)
+            barcodes_string = barcode_to_well.get_two_level_barcode_string(tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq, nex_two_level_indexed_tn5_to_well, pcr_two_level_indexed_tn5_to_well, args.well_ids)
         else:
             barcodes_string = barcode_to_well.get_barcode_string(tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq, lig_i7_to_well, lig_i5_to_well, pcr_to_well, args.well_ids)
 
