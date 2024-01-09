@@ -220,8 +220,8 @@ Command line options:
                            such additional samples in the sequencing run.
 
 Notes:
-  o  the command line arguments -r, -l, -w, -t, -s, and --use_all_barcodes
-     are used only with the JSON samplesheet format.
+  o  the command line arguments -r, -l, -w, -t, -s, --use_all_barcodes, and
+     --hash_file are used only with the JSON samplesheet format.
 
 
 For help with command line parameters, run
@@ -257,6 +257,9 @@ optional arguments:
   -s {n5,n7}, --sample_identifier {n5,n7}
                         Ligation barcode that identifies the sample (default:
                         'n5') used to check for duplicates (optional string).
+  --hash_file {path}    Gives the full path to the sciPlex hash read index file
+                        and enables hash read processing in the
+                        bbi-sciatac-analyze pipeline.
   --use_all_barcodes    Use all barcodes to demultiplex fastq files. By
                         default, uninformative barcodes are not used to
                         identify samples when demultiplexing fastq files

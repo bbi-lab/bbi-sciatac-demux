@@ -32,6 +32,12 @@ cd ..
 
 The above is a one-time installation setup, or may be required if you need to update the environment.
 
+The bbi-sciatac-analyze pipeline uses two compiled programs to find a process hash reads for sciPlex experiments. These programs require a Rust compiler, which is installed using the information at
+
+https://www.rust-lang.org/tools/install
+
+After installing the Rust compiler, build and install the programs by running the script bbi-sciatac-analyze/install_rust_programs.sh.
+
 In addition, a python 3 interpreter is required.
 
 
@@ -62,6 +68,8 @@ The user-generated samplesheet file (front-end samplesheet) is in CSV format. Th
 ```
 sciatac_samplesheet.py -d
 ```
+
+In order to process a sciPlex experiment, run the samplesheet conversion program, *bbi-sciatac-demux/samplesheet/sciatac_samplesheet.py* with the *--hash_file* command line option. The *--hash_file* option takes the full path to the hash index file, and enables hash read processing in the *bbi-sciatac-analyze* pipeline.
 
 #### Genome files
 
