@@ -32,11 +32,11 @@ cd ..
 
 The above is a one-time installation setup, or may be required if you need to update the environment.
 
-The bbi-sciatac-analyze pipeline uses two compiled programs to find a process hash reads for sciPlex experiments. These programs require a Rust compiler, which is installed using the information at
+The bbi-sciatac-analyze pipeline uses two compiled programs to find and process hash reads for sciPlex experiments. These programs require a Rust compiler, which is installed using the information at
 
 https://www.rust-lang.org/tools/install
 
-After installing the Rust compiler, build and install the programs by running the script bbi-sciatac-analyze/install_rust_programs.sh.
+After installing the Rust compiler, build and install the programs by running the script *bbi-sciatac-analyze/install_rust_programs.sh*.
 
 In addition, a python 3 interpreter is required.
 
