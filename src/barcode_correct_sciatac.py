@@ -16,6 +16,22 @@ from Bio.SeqIO.QualityIO import FastqGeneralIterator
 import barcode_to_well
 import barcode_constants as bc
 
+#
+# Notes:
+#   o  to add new index sequence 'recipes', do the
+#      following
+#        o  add a function that finds the index sequences.
+#           There are existing functions with names such
+#           as header_parser_01(). See below.
+#        o  modify the function choose_header_parser() to
+#           select the new header_parser_<n> function
+#             o  add the new function to header_parser_dict
+#             o  increase the range in
+#                  if(index_map < 1 or index_map > 5)
+#        o  use --index_recipe command line parameter to
+#           run barcode_correct_sciatac.py using the new
+#           recipe.
+#
 
 def load_std_index_lists(args):
     if args.two_level_indexed_tn5:
@@ -322,39 +338,39 @@ def choose_header_parser(args):
 # get_barcode_seqs is superseded by the header_parser functions
 # defined above.
 #
-def get_barcode_seqs(r1_name, nextseq, two_level_indexed_tn5):
-    """
-    Extract the correct sequences from the R1 name.
-    """
-    # In 3LV runs, this is the the P5 + P7 index seq with a + in between
-    # which is 20 + 1 + 20 (so have to skip "+" position)
-    # Similar for two-level indexed Tn5, but Tn5 barcodes are 8bp
-    if not two_level_indexed_tn5:
-        barcodes = r1_name[-41:]
-
-        tagmentation_i7_seq = barcodes[0:10]
-        pcr_i7_seq = barcodes[10:20]
-
-        if nextseq:
-            pcr_i5_seq = barcodes[31:41]
-            tagmentation_i5_seq = barcodes[21:31]
-        else:
-            pcr_i5_seq = barcodes[21:31]
-            tagmentation_i5_seq = barcodes[31:41]
-    else:
-        barcodes = r1_name[-37:]
-
-        tagmentation_i7_seq = barcodes[0:8]
-        pcr_i7_seq = barcodes[8:18]
-
-        if nextseq:
-            pcr_i5_seq = barcodes[27:37]
-            tagmentation_i5_seq = barcodes[19:27]
-        else:
-            pcr_i5_seq = barcodes[19:29]
-            tagmentation_i5_seq = barcodes[29:37]
-
-    return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
+# def get_barcode_seqs(r1_name, nextseq, two_level_indexed_tn5):
+#     """
+#     Extract the correct sequences from the R1 name.
+#     """
+#     # In 3LV runs, this is the the P5 + P7 index seq with a + in between
+#     # which is 20 + 1 + 20 (so have to skip "+" position)
+#     # Similar for two-level indexed Tn5, but Tn5 barcodes are 8bp
+#     if not two_level_indexed_tn5:
+#         barcodes = r1_name[-41:]
+# 
+#         tagmentation_i7_seq = barcodes[0:10]
+#         pcr_i7_seq = barcodes[10:20]
+# 
+#         if nextseq:
+#             pcr_i5_seq = barcodes[31:41]
+#             tagmentation_i5_seq = barcodes[21:31]
+#         else:
+#             pcr_i5_seq = barcodes[21:31]
+#             tagmentation_i5_seq = barcodes[31:41]
+#     else:
+#         barcodes = r1_name[-37:]
+# 
+#         tagmentation_i7_seq = barcodes[0:8]
+#         pcr_i7_seq = barcodes[8:18]
+# 
+#         if nextseq:
+#             pcr_i5_seq = barcodes[27:37]
+#             tagmentation_i5_seq = barcodes[19:27]
+#         else:
+#             pcr_i5_seq = barcodes[19:29]
+#             tagmentation_i5_seq = barcodes[29:37]
+# 
+#     return tagmentation_i7_seq, pcr_i7_seq, pcr_i5_seq, tagmentation_i5_seq
 
 
 def indexsplitter(indexrange):
