@@ -601,7 +601,10 @@ if __name__ == '__main__':
     #      tables.
     tagi7_to_index = barcode_to_well.barcode_index_dict( tagmentation_i7_whitelist )
     pcri7_to_index = barcode_to_well.barcode_index_dict( pcr_i7_whitelist )
-    # The set() function above does not preserve the index order.
+
+    # The set() function above does not preserve the index order so we use
+    # p5_pcr_rc_map and p5_tagmentation_rc_map below (instead of pcr_i5_whitelist
+    # and tagmentation_i5_whitelist).
     if(not args.nextseq):
         pcri5_to_index = barcode_to_well.barcode_index_dict( pcr_i5_whitelist )
         tagi5_to_index = barcode_to_well.barcode_index_dict( tagmentation_i5_whitelist )
