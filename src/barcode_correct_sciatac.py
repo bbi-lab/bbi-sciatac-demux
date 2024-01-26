@@ -554,7 +554,7 @@ if __name__ == '__main__':
     parser.add_argument('-X', '--nextseq', help='NextSeq run indicator', dest='nextseq', action="store_true")
     parser.add_argument('--no_mask', action='store_true', help='Use all four barcodes. By default, do not use (mask out) a barcode(s) when all samples have the same index set (flag).')
     parser.add_argument('--write_buffer_blocks', type=int, default=16, help='Number of 8K blocks for fastq write buffers. Default is 16.')
-    parser.add_argument('--index_recipe', required=False, default=None, help='Select index map. The index_recipes are numbered from 1 to 5. Specifying a index_recipe overrides the recipe selected implicitly by the -two_level_indexed_tn5 and -nextseq arguments. Default is None, in which case the index_recipe is selected using the -two_level_indexed_tn5 and -nextseq arguments.')
+    parser.add_argument('--index_recipe', required=False, default=None, help='Select index map. The index_recipes are numbered from 1 to 5. Specifying an index_recipe overrides the recipe selected implicitly by the -two_level_indexed_tn5 and -nextseq arguments. Default is None, in which case the index_recipe is selected using the -two_level_indexed_tn5 and -nextseq arguments.')
 
     args = parser.parse_args()
 

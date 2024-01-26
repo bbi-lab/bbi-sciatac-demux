@@ -160,7 +160,11 @@ checkDirectories( params, log_dir, tmp_dir )
 /*
 ** Read sample sheet file.
 */
+println ""
+println "INFO: read sample sheet JSON file next..."
 sampleSheetMap = readSampleSheetJson( params )
+println "INFO: read sample sheet JSON file done."
+println ""
 
 /*
 ** Test samplesheet version.
@@ -174,6 +178,7 @@ if( ! checkSamplesheetVersion( sampleSheetMap['json_file_version'], minimum_samp
 ** Report run parameter values.
 */
 reportRunParams( params, sampleSheetMap )
+println ""
 
 /*
 ** Archive configuration and samplesheet files in demux_dir.
@@ -198,7 +203,10 @@ tfile.write("${workflow.runName}")
 /*
 ** Read Illumina run information.
 */
+println "INFO: read Illumina run info next..."
 illuminaRunInfoMap = readIlluminaRunInfo( params )
+println "INFO: read Illumina run info done."
+println ""
 
 /*
 ** Check that these are paired-end reads.
@@ -261,6 +269,9 @@ if( num_threads_bcl2fasta_process / 2 < 4 ) {
 } else {
 	num_threads_bcl2fastq_io = 4
 }
+
+println "INFO: begin processing."
+println ""
 
 
 /*
