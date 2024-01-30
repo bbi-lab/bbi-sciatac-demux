@@ -154,21 +154,21 @@ Input (front-end) samplesheet format:
           No other combinations of specified rows and columns are considered.
           Consequently, the order of the rows and columns must be correct.
           Technical notes:
-            o  for each sample, the ATAC-seq pipeline takes all combinations
-               of the P7 and P5 indices specified for the sample. Consequently,
-               if the P7 rows were given as A-B and the P5 columns were given
-               as 1-2 in the input CSV file, and this program passed the
-               corresponding indices directly to the pipeline, the pipeline
-               would accept PCR index pairs for row/column pairs A/1, A/2,
-               B/1, and B/2.
-            o  in order to restrict the PCR index combinations to one P7 row
-               and one P5 column, this program expands the number of spreadsheet
-               rows per sample by the number of P7 rows given for the sample in
-               the input CSV file. For example, if for sample 'sample_1' the
-               p7_rows specification is 'A-B' and the p5_columns is '6,5', this
-               program generates (internally) two rows for 'sample_1', the
-               first with PCR row column pair A/6 and the second with PCR
-               row/column pair B/5.
+            o  by default, in order to restrict the PCR index combinations to
+               one P7 row and one P5 column, this program expands the number of
+               spreadsheet rows per sample by the number of P7 rows/P5 columns
+               pairs given for the sample in the input CSV file. For example, if
+               for sample 'sample_1' the p7_rows specification is 'A-B' and the
+               p5_columns is '6,5', this program generates (internally) two rows
+               for 'sample_1', the first with PCR row column pair A/6 and the
+               second with PCR row/column pair B/5.
+            o  if the --no_expand_pcr_rows_columns option is set, for each
+               sample, the ATAC-seq pipeline takes all combinations of the P7
+               and P5 indices specified for the sample. Consequently, if the
+               P7 rows were given as A-B and the P5 columns were given as 1-2
+               in the input CSV file, and this program passed the corresponding
+               indices directly to the pipeline, the pipeline would accept PCR
+               index pairs for row/column pairs A/1, A/2, B/1, and B/2.
   o  p7 wells and p5 wells
        o  this program converts wells to indices and passes the indices to
           the pipeline. The pipeline uses combinations of all p7 and p5
