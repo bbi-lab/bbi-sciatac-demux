@@ -254,10 +254,6 @@ make_pcr_plot_sets <- function(args, lane_list) {
   if( pcr_format != 'row_col' )
     return( 0 )
 
-  p7_rows <- unlist(sample_data$p7_row_list)
-  p5_cols <- unlist(sample_data$p5_col_list)
-  well_wise <- FALSE
-
   # set up u-titer plate data frame
   rows <- c('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
   cols <- 1:12
@@ -271,6 +267,11 @@ make_pcr_plot_sets <- function(args, lane_list) {
   p7_rows <- unlist(sample_data$p7_row_list)
   p5_cols <- unlist(sample_data$p5_col_list)
   well_wise <- FALSE
+
+  # make sure that p7 row specs are upper-case
+  for( irow in seq(length(p7_rows))) {
+    p7_rows[irow] <- toupper(p7_rows[irow])
+  }
 
   # the commented out code below is mostly obsolete because the
   # information is in the JSON file
