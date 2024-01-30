@@ -1102,6 +1102,29 @@ def check_wrap_group( column_name_list, samplesheet_row_list ):
   return( 0 )
 
 
+def get_peak_files(  column_name_list, samplesheet_row_list ):
+  peak_files_dict = {}
+
+  for row_elements in samplesheet_row_list:
+    sample_name = None
+    peak_file = None
+    for i in range( len( row_elements ) ):
+      column_name_dict = column_name_list[i]
+      element_string = row_elements[i]
+      if( column_name_dict['type'] == 'sample_name' ):
+        sample_name = element_string
+      if( column_name_dict['type'] == 'peak_file' ):
+        peak_file = element_string
+    if( sample_name != None and peak_file != None ):
+      if( peak_files_dict.get( 'sample_name' ) != None and
+          peak_file != peak_files_dict['peak_file'] ):
+        print( 'Error: inconsistent peak file names for sample: %s' % (sample_name) )
+        sys.exit( -1 )
+      else:
+        peak_files_dict[sample_name] = peak_file
+  return( peak_files_dict )
+
+
 def expand_rows( string_in, element_coordinates = [ None, None ] ):
   """
   Expand a P7 row specification to a list of rows.
@@ -1833,6 +1856,16 @@ if __name__ == '__main__':
 
   check_peak_spec( column_name_list, samplesheet_row_list )
   check_wrap_group( column_name_list, samplesheet_row_list )
+
+  # Build a peak files dict before splitting samples. Pass the
+  # peak_files_dict to write_samplesheet_json_format() and
+  # write it in the output json file. At this time (20240129),
+  # the peak_files map is made in the bbi-sciatac-demux main.nf
+  # script and stored in demux_out/args.json. Making the 
+  # peak_files_dict may make sense if we split the samples
+  # by small sets of wells in the future.
+#  peak_files_dict = get_peak_files(  column_name_list, samplesheet_row_list )
+
 
   if(not args.no_expand_pcr_rows_columns):
     samplesheet_row_list = expand_sample_rows(column_name_list, samplesheet_row_list)

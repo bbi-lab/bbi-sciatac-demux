@@ -163,8 +163,6 @@ checkDirectories( params, log_dir, tmp_dir )
 println ""
 println "INFO: read sample sheet JSON file next..."
 sampleSheetMap = readSampleSheetJson( params )
-println "INFO: read sample sheet JSON file done."
-println ""
 
 /*
 ** Test samplesheet version.
@@ -173,12 +171,6 @@ if( ! checkSamplesheetVersion( sampleSheetMap['json_file_version'], minimum_samp
   println "Error: bad samplesheet version"
   System.exit( -1 )
 }
-
-/*
-** Report run parameter values.
-*/
-reportRunParams( params, sampleSheetMap )
-println ""
 
 /*
 ** Archive configuration and samplesheet files in demux_dir.
@@ -205,8 +197,6 @@ tfile.write("${workflow.runName}")
 */
 println "INFO: read Illumina run info next..."
 illuminaRunInfoMap = readIlluminaRunInfo( params )
-println "INFO: read Illumina run info done."
-println ""
 
 /*
 ** Check that these are paired-end reads.
@@ -215,11 +205,6 @@ if( illuminaRunInfoMap['paired_end'] == false )
 {
   throw new Exception('Single-end reads detected: paired-end reads required')
 }
-
-/*
-** Write run information to args.json file.
-*/
-writeArgsJson( params, timeNow )
 
 /*
 ** Does the i5 sequence require reverse complementing?
@@ -270,8 +255,22 @@ if( num_threads_bcl2fasta_process / 2 < 4 ) {
 	num_threads_bcl2fastq_io = 4
 }
 
+/*
+** Report run parameter values.
+*/
+println ""
+reportRunParams( params, sampleSheetMap )
+println ""
+
+/*
+** Write run information to args.json file.
+*/
+writeArgsJson( params, timeNow )
+
+
 println "INFO: begin processing."
 println ""
+
 
 
 /*
