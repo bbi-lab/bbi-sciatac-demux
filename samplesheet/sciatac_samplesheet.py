@@ -158,9 +158,9 @@ Input (front-end) samplesheet format:
                one P7 row and one P5 column, this program expands the number of
                spreadsheet rows per sample by the number of P7 rows/P5 columns
                pairs given for the sample in the input CSV file. For example, if
-               for sample 'sample_1' the p7_rows specification is 'A-B' and the
+               for a sample the p7_rows specification is 'A-B' and the
                p5_columns is '6,5', this program generates (internally) two rows
-               for 'sample_1', the first with PCR row column pair A/6 and the
+               for the sample, the first with PCR row column pair A/6 and the
                second with PCR row/column pair B/5.
             o  if the --no_expand_pcr_rows_columns option is set, for each
                sample, the ATAC-seq pipeline takes all combinations of the P7
