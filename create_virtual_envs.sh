@@ -44,7 +44,6 @@ module purge
 module load modules modules-init modules-gs
 export DIR=$(dirname `readlink -f $0`)
 source $DIR/load_pypy_env_reqs.sh
-module load git/2.18.0
 
 echo 'Cleaning cache directories...'
 rm -rf ~/.cache/pip
@@ -58,11 +57,19 @@ if [ -d $DIR/src/pypy_env ]; then
         rm -rf $DIR/src/pypy_env.tmp &
 fi
 
+#
+# Drop PYTHONPATH environment variable to avoid conflicts.
+#
+export PYTHONPATH=''
+
 # First, the pypy virtualenv
+# It's probably safest to set up the virtual environment using
+# pypy3 -m venv because there may be no 'virtualenv' command
+# defined for pypy3 but there may be 'virtualenv's defined
+# elsewhere.
+#
 echo 'Building pypy virtualenv...'
-# export PYTHONPATH=''
-# virtualenv -p /net/gs/vol3/software/modules-sw-python/3.6.5/pypy/7.3.1/Linux/CentOS7/x86_64/bin/pypy3 $DIR/src/pypy_env
-virtualenv $DIR/src/pypy_env
+/usr/bin/pypy3 -m venv $DIR/bin/pypy_env
 
 if [ "$?" != 0 ]
 then
@@ -78,8 +85,8 @@ fi
 
 source $DIR/src/pypy_env/bin/activate
 
-pypy3 -m ensurepip
-pip install -r $DIR/pypy_requirements.txt
+#pypy3 -m ensurepip
+pip3 install -r $DIR/pypy_requirements.txt
 
 #
 # Clone the repository.
