@@ -178,35 +178,60 @@ make_tag_plots <- function(lane, tag_data, sent_wells, barn_wells, tag_name = c(
      
     # make plate plot with sentinel normalization (or none) 
     if (!is.null(sent_norm)) {
+#      file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_sent_norm.png')
+#      png(file = file_name, width = 6, height = 4, res = 200, units = 'in')
+#      print(ggplot_data(data = data, plot_type = 'normalized', normalization_factor = sent_norm))
+#      dev.off()
+
       file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_sent_norm.png')
-      png(file = file_name, width = 6, height = 4, res = 200, units = 'in')
-      print(ggplot_data(data = data, plot_type = 'normalized', normalization_factor = sent_norm))
-      dev.off()
+      ggp_obj <- ggplot_data(data = data, plot_type = 'normalized', normalization_factor = sent_norm)
+      ggsave(filename=file_name, plot=ggp_obj, device='png', width=6, height=4, dpi=200, units='in')
+
     } else {
+#      file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_sent_norm.png')
+#      png(file = file_name, width = 5.5, height = 4, res = 200, units = 'in')
+#      print(ggplot_data(data = data, plot_type = 'no_sample', sample_type = 'sentinel'))
+#      dev.off()
+
       file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_sent_norm.png')
-      png(file = file_name, width = 5.5, height = 4, res = 200, units = 'in')
-      print(ggplot_data(data = data, plot_type = 'no_sample', sample_type = 'sentinel'))
-      dev.off()      
+      ggp_obj <- ggplot_data(data = data, plot_type = 'no_sample', sample_type = 'sentinel')
+      ggsave(filename=file_name, plot=ggp_obj, device='png', width=5.5, height=4, dpi=200, units='in')
+
     }    
     
     # make plate plot with sentinel normalization (or none) 
     if (!is.null(barn_norm)) {
+#      file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_barn_norm.png')
+#      png(file = file_name, width = 6, height = 4, res = 200, units = 'in')
+#      print(ggplot_data(data = data, plot_type = 'normalized', normalization_factor = barn_norm))
+#      dev.off()
+
       file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_barn_norm.png')
-      png(file = file_name, width = 6, height = 4, res = 200, units = 'in')
-      print(ggplot_data(data = data, plot_type = 'normalized', normalization_factor = barn_norm))
-      dev.off()
+      ggp_obj <- ggplot_data(data = data, plot_type = 'normalized', normalization_factor = barn_norm)
+      ggsave(filename=file_name, plot=ggp_obj, device='png', width=6, height=4, dpi=200, units='in')
+
     } else {
+#      file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_barn_norm.png')
+#      png(file = file_name, width = 5.5, height = 4, res = 200, units = 'in')
+#      print(ggplot_data(data = data, plot_type = 'no_sample', sample_type = 'barnyard'))
+#      dev.off()
+
       file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate_barn_norm.png')
-      png(file = file_name, width = 5.5, height = 4, res = 200, units = 'in')
-      print(ggplot_data(data = data, plot_type = 'no_sample', sample_type = 'barnyard'))
-      dev.off()      
+      ggp_obj <- ggplot_data(data = data, plot_type = 'no_sample', sample_type = 'barnyard')
+      ggsave(filename=file_name, plot=ggp_obj, device='png', width=5.5, height=4, dpi=200, units='in')
+
     }
 
     # make plate plot (no normalization)
+#    file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate.png')
+#    png(file = file_name, width = 6, height = 4, res = 200, units = 'in')
+#    print(ggplot_data(data = data, plot_type = 'tag'))
+#    dev.off()
+
     file_name <- paste0(args$image_output_folder,'/', lane, '_', p, '.', tag_name, '_plate.png')
-    png(file = file_name, width = 6, height = 4, res = 200, units = 'in')
-    print(ggplot_data(data = data, plot_type = 'tag'))
-    dev.off()
+    ggp_obj <- ggplot_data(data = data, plot_type = 'tag')
+    ggsave(filename=file_name, plot=ggp_obj, device='png', width=6, height=4, dpi=200, units='in')
+
   }
 }
 
@@ -357,9 +382,15 @@ make_pcr_plot_sets <- function(args, lane_list) {
       data$outlier <- data$ReadCount < 0.01 * median(data$ReadCount)
 
       pcr_plate_list <- c(pcr_plate_list, paste0(rel_barc))
-      png(file = paste0(args$image_output_folder,'/', lane,'_',rel_barc, '.pcr_plate.png'), width = 6, height = 4, res = 200, units = 'in')
-      print(ggplot_data(data = data, plot_type = 'pcr'))
-      dev.off()
+#      file_name <- paste0(args$image_output_folder,'/', lane,'_',rel_barc, '.pcr_plate.png')
+#      png(file = paste0(args$image_output_folder,'/', lane,'_',rel_barc, '.pcr_plate.png'), width = 6, height = 4, res = 200, units = 'in')
+#      print(ggplot_data(data = data, plot_type = 'pcr'))
+#      dev.off()
+
+      file_name <- paste0(args$image_output_folder,'/', lane,'_',rel_barc, '.pcr_plate.png')
+      ggp_obj <- ggplot_data(data = data, plot_type = 'pcr')
+      ggsave(filename=file_name, plot=ggp_obj, device='png', width=6, height=4, dpi=200, units='in')
+
       well_df_lane <- data.frame()
     } else if (!well_wise) {
       pcr_plate_list <- c()
@@ -381,9 +412,15 @@ make_pcr_plot_sets <- function(args, lane_list) {
         
         data$outlier <- data$ReadCount < 0.01 * median(data$ReadCount)
         pcr_plate_list <- c(pcr_plate_list, paste0(p7_rows[i], p5_cols[i]))
-        png(file = paste0(args$image_output_folder,'/', lane,'_', p7_rows[i], p5_cols[i], '.pcr_plate.png'), width = 6, height = 4, res = 200, units = 'in')
-        print(ggplot_data(data = data, plot_type = 'pcr'))
-        dev.off()
+#        file_name <- paste0(args$image_output_folder,'/', lane,'_', p7_rows[i], p5_cols[i], '.pcr_plate.png')
+#        png(file = paste0(args$image_output_folder,'/', lane,'_', p7_rows[i], p5_cols[i], '.pcr_plate.png'), width = 6, height = 4, res = 200, units = 'in')
+#        print(ggplot_data(data = data, plot_type = 'pcr'))
+#        dev.off()
+
+        file_name <- paste0(args$image_output_folder,'/', lane,'_', p7_rows[i], p5_cols[i], '.pcr_plate.png')
+        ggp_obj <- ggplot_data(data = data, plot_type = 'pcr')
+        ggsave(filename=file_name, plot=ggp_obj, device='png', width=6, height=4, dpi=200, units='in')
+
         well_df_lane <- data.frame()
       }
       

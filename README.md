@@ -15,11 +15,10 @@ git clone https://github.com/bbi-lab/bbi-sciatac-demux
 git clone https://github.com/bbi-lab/bbi-sciatac-analyze
 ```
 
-For efficiency and convenience, they are written to run certain stages in python virtual environments. The environments may need to be built on a node with the CPU architecture on which you will run the scripts. In order to build the environments use the commands
+For efficiency and convenience, they are written to run certain stages in python virtual environments. The environments may need to be built on a node with the CPU architecture on which you will run the scripts. There are additional details in the create_virtual_envs.sh script. In order to build the environments use the commands
 
 ```
 qlogin -l mfree=16G
-module load git/latest
 
 cd bbi-sciatac-demux
 bash create_virtual_envs.sh
@@ -38,7 +37,7 @@ https://www.rust-lang.org/tools/install
 
 After installing the Rust compiler, build and install the programs by running the script *bbi-sciatac-analyze/install_rust_programs.sh*.
 
-In addition, a python 3 interpreter is required.
+In addition, a python3 interpreter is required.
 
 
 ## Overview

@@ -2,7 +2,7 @@
 
 #
 # Notes:
-#   o  run in sciatac_pipeline directory
+#   o  run in bbi-sciatac-demux directory
 #   o  the Shendure cluster has nodes with Intel cpuid_level=11, cpuid_level=13,
 #      and cpuid_level=22.
 #      The cpuid_level 22 nodes have instructions (vectorized) that are not
@@ -21,7 +21,34 @@
 #
 #   o  the pypy virtual environment is used only to run 'barcode_correct_sciatac.py'
 #
-
+#   o  there can be conflicts between site packages installed in the 'global'
+#      pypy package and the site packages installed in the virtual environment.
+#      I have seen this with the numpy and biopython packages.
+#        o  the problem appears to happen when the pypy module is loaded - this
+#           has the global site packages. The module must be loaded in order to
+#           build the virtual environment and again when the virtual environment
+#           is activated.
+#        o  loading the pypy3 module makes the module site packages available.
+#           One can see this using the 'pypy -m pip list' command.
+#        o  building the virtual environment is not affected by the pypy
+#           module site-packages. One can see this by looking at the
+#           packages in src/pypy_env/lib/pypy*/site-packages.
+#        o  running packages in the activated pypy virtual environment may
+#           require that the pypy module be loaded because the executables
+#           in the pypy virtual environment may require access to those
+#           libraries. The libraries are not part of the virtual environment.
+#        o  in the case that the required libraries are dynamically linked,
+#           one can avoid having to load the pypy module by setting
+#           the LD_LIBRARY_PATH environment variable to the directory in
+#           the module path that contains the libraries. For example,
+#             export LD_LIBRARY_PATH="/net/gs/vol3/software/modules-sw/pypy/3.8-7.3.9/Linux/Ubuntu22.04/x86
+_64/lib:$LD_LIBRARY_PATH"
+#        o  in order to make the pypy_requirements.txt file using 'pip freeze',
+#           use the LD_LIBRARY_PATH rather than loading the pypy module. This
+#           prevents listing the global site packages in the pypy_requirements
+#           file.
+#
+#
 
 echo "The virtual environment may depend on the CPU architecture."
 echo "Clusters with mixed node architectures may fail, possibly"
@@ -69,7 +96,7 @@ export PYTHONPATH=''
 # elsewhere.
 #
 echo 'Building pypy virtualenv...'
-/usr/bin/pypy3 -m venv $DIR/bin/pypy_env
+pypy3 -m venv $DIR/src/pypy_env
 
 if [ "$?" != 0 ]
 then
@@ -85,7 +112,7 @@ fi
 
 source $DIR/src/pypy_env/bin/activate
 
-#pypy3 -m ensurepip
+pypy3 -m ensurepip
 pip3 install -r $DIR/pypy_requirements.txt
 
 #
