@@ -76,11 +76,10 @@ The required genome-related files are specified in the *bbi-sciatac-analyze/geno
 
 #### nextflow.config file
 
-The *nextflow.config* file defines processing values such as the required modules, memory, and number of CPUs for each processing stage, which do not change typically from run-to-run. The file can be left in the bbi-sciatac-\* installation directory where Nextflow searches for it automatically when a pipeline run starts. The supplied *nextflow.config* file has two profiles: the default profile, called *standard*, defines modules used by the pipeline on CentOS 7 systems in the UW Genome Sciences cluster, and the *centos_6* profile, which defines modules used by the pipeline on CentOS 6 systems in the UW Genome Sciences cluster. In order to run the pipelines with the *centos_6* profile, add the command line parameter `-profile centos_6` to the nextflow run command, for example
-
+The *nextflow.config* file defines processing values such as the required modules, memory, and number of CPUs for each processing stage, which do not change typically from run-to-run. The file can be left in the bbi-sciatac-\* installation directory where Nextflow searches for it automatically when a pipeline run starts. The supplied *nextflow.config* file has two profiles: the default profile, called *standard*, defines modules used by the pipeline on CentOS 7 systems in the UW Genome Sciences cluster, and the *ubuntu_22_04* profile, which defines modules used by the pipeline on Ubuntu 22.04 systems in the UW Genome Sciences cluster. In order to run the pipelines with the *ubuntu_22_04* profile, add the command line parameter `-profile ubuntu_22_04` to the nextflow run command, for example
 
 ```
-nextflow run bbi-dmux -profile centos_6 -c experiment.config
+nextflow run bbi-dmux -profile ubuntu_22_04 -c experiment.config
 ```
 
 This *nextflow.config* file has comments that give additional information.
