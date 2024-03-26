@@ -4,7 +4,7 @@
 
 ## Requirements
 
-In order to run these pipeline scripts, Nextflow must be installed on the system where they will run. You can find Nextflow [installation instructions](https://www.nextflow.io/docs/latest/getstarted.html#installation) on the [Nextflow web site](https://www.nextflow.io).
+In order to run these pipeline scripts, Nextflow must be installed on the system where they will run. You can find Nextflow [installation instructions](https://www.nextflow.io/docs/latest/getstarted.html#installation) on the [Nextflow web site](https://www.nextflow.io). These scripts require Nextflow version >= 20.07.1 and <= 22.10.4.
 
 These scripts are written to run on the UW Genome Sciences computing cluster: they depend on the Univa Grid Engine and various installed modules.
 
