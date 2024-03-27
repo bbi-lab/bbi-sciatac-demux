@@ -60,9 +60,8 @@ fi
 
 # First, the pypy virtualenv
 echo 'Building pypy virtualenv...'
-# export PYTHONPATH=''
-# virtualenv -p /net/gs/vol3/software/modules-sw-python/3.6.5/pypy/7.3.1/Linux/CentOS7/x86_64/bin/pypy3 $DIR/src/pypy_env
-virtualenv $DIR/src/pypy_env
+export PYTHONPATH=''
+pypy3 -m venv $DIR/src/pypy_env
 
 if [ "$?" != 0 ]
 then
@@ -79,7 +78,7 @@ fi
 source $DIR/src/pypy_env/bin/activate
 
 pypy3 -m ensurepip
-pip install -r $DIR/pypy_requirements.txt
+pypy3 -m pip install -r $DIR/pypy_requirements.txt
 
 #
 # Clone the repository.
