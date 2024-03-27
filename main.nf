@@ -271,8 +271,6 @@ writeArgsJson( params, timeNow )
 println "INFO: begin processing."
 println ""
 
-
-
 /*
 ** Write nextflow and main.nf versions to a log file.
 */
